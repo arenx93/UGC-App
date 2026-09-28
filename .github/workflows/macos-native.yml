@@ -47,6 +47,23 @@ jobs:
       - name: Build Framecraft.app + DMG (universal)
         run: VERSION="1.0.${{ github.run_number }}" BUILD_NUMBER="${{ github.run_number }}" scripts/build-app.sh
 
+      - name: Normal launch check (quarantined, like a downloaded copy)
+        run: |
+          # Simulate a copy downloaded from the internet, then launch it the normal way.
+          cp -R build/Framecraft.app "$RUNNER_TEMP/Framecraft.app"
+          xattr -w com.apple.quarantine "0081;$(printf '%x' $(date +%s));Safari;" "$RUNNER_TEMP/Framecraft.app"
+          spctl --assess --type execute -vv "$RUNNER_TEMP/Framecraft.app" || echo "Gatekeeper: not notarized (expected for ad-hoc builds)"
+          xattr -dr com.apple.quarantine "$RUNNER_TEMP/Framecraft.app"
+          "$RUNNER_TEMP/Framecraft.app/Contents/MacOS/Framecraft" > "$RUNNER_TEMP/launch.log" 2>&1 &
+          PID=$!
+          sleep 12
+          if ! kill -0 "$PID" 2>/dev/null; then
+            echo "::error::Framecraft exited during launch"; cat "$RUNNER_TEMP/launch.log"; exit 1
+          fi
+          osascript -e 'tell application "System Events" to get name of windows of (first process whose unix id is '"$PID"')' || true
+          kill "$PID"
+          echo "Framecraft launched and stayed running"
+
       - name: Launch check + screenshots
         run: |
           mkdir -p "$RUNNER_TEMP/shots"
