@@ -5,6 +5,7 @@ struct AssistantView: View {
     @Environment(AppModel.self) private var model
 
     static let languages = ["Español", "Español rioplatense", "Inglés", "Portugués", "Sin diálogo"]
+    @State private var showEngine = true
 
     var body: some View {
         @Bindable var model = model
@@ -22,7 +23,21 @@ struct AssistantView: View {
                         .foregroundStyle(.orange)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                if !model.draft.isEmpty { result }
+                if let live = model.streamingText, model.isBuildingPrompt {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label(live.isEmpty ? "Pensando…" : "Escribiendo…", systemImage: "ellipsis.bubble")
+                            .font(.caption.weight(.semibold))
+                            .symbolEffect(.pulse)
+                        if !live.isEmpty {
+                            Text(live.suffix(1500))
+                                .font(.system(.caption, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(8)
+                                .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 8))
+                        }
+                    }
+                } else if !model.draft.isEmpty { result }
             }
             .padding(18)
         }
@@ -168,27 +183,43 @@ struct AssistantView: View {
 
     private var providerOptions: some View {
         @Bindable var model = model
-        return DisclosureGroup {
+        return DisclosureGroup(isExpanded: $showEngine) {
             VStack(alignment: .leading, spacing: 10) {
-                Picker("Proveedor", selection: $model.provider) {
+                Picker("Motor", selection: $model.provider) {
                     ForEach(PromptProvider.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
-                if model.provider == .kie {
+                .labelsHidden()
+                switch model.provider {
+                case .kie:
                     Picker("Modelo", selection: $model.promptModel) {
                         ForEach(PromptRequests.promptModels) { Text("\($0.name) · \($0.note)").tag($0.id) }
                     }
-                } else if !model.hasOpenAIKey {
-                    SettingsLink { Text("Agregar clave de OpenAI en Ajustes") }
+                    Text("Usa tus créditos de KIE. La respuesta aparece en vivo mientras se escribe.")
+                        .font(.caption).foregroundStyle(.secondary)
+                case .codex:
+                    CodexAccountRow()
+                case .openai:
+                    if !model.hasOpenAIKey {
+                        SettingsLink { Text("Agregar clave de OpenAI en Ajustes") }
+                    }
+                    Text("GPT-4.1 mini con tu clave de API de OpenAI.").font(.caption).foregroundStyle(.secondary)
                 }
-                Text("Usa créditos de \(model.provider == .kie ? "KIE" : "OpenAI"). Las referencias seleccionadas se envían para su análisis.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
             .padding(.top, 6)
         } label: {
-            Text("Motor: \(model.provider == .kie ? (PromptRequests.promptModels.first { $0.id == model.promptModel }?.name ?? "KIE") : "OpenAI")")
-                .font(.callout.weight(.semibold))
+            Text("Motor: \(engineName)").font(.callout.weight(.semibold))
+        }
+        .task(id: model.provider) {
+            if model.provider == .codex, model.codexStatus == .unknown { await model.refreshCodexStatus() }
+        }
+    }
+
+    private var engineName: String {
+        switch model.provider {
+        case .kie: PromptRequests.promptModels.first { $0.id == model.promptModel }?.name ?? "KIE"
+        case .codex: "ChatGPT (Codex)"
+        case .openai: "OpenAI"
         }
     }
 
@@ -277,5 +308,55 @@ struct AssistantView: View {
 
     private func cleanAuthor(_ author: String) -> String {
         author.replacingOccurrences(of: #"\[([^\]]+)\]\([^)]*\)"#, with: "$1", options: .regularExpression)
+    }
+}
+
+/// Codex CLI status and ChatGPT sign-in.
+struct CodexAccountRow: View {
+    @Environment(AppModel.self) private var model
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            switch model.codexStatus {
+            case .unknown, .checking:
+                HStack { ProgressView().controlSize(.small); Text("Buscando Codex CLI…").font(.caption) }
+            case .notInstalled:
+                Label("Codex CLI no está instalado", systemImage: "exclamationmark.triangle.fill")
+                    .font(.callout).foregroundStyle(.orange)
+                Text("Instalalo una vez desde Terminal con uno de estos comandos y volvé a comprobar:")
+                    .font(.caption).foregroundStyle(.secondary)
+                ForEach([CodexCLI.brewCommand, CodexCLI.installCommand], id: \.self) { command in
+                    HStack {
+                        Text(command).font(.caption.monospaced()).textSelection(.enabled)
+                        Spacer()
+                        Button("Copiar") { model.copyToPasteboard(command) }.controlSize(.small)
+                    }
+                    .padding(6)
+                    .background(Color.primary.opacity(0.05), in: RoundedRectangle(cornerRadius: 6))
+                }
+                Button("Comprobar de nuevo") { Task { await model.refreshCodexStatus() } }
+            case .loggedOut:
+                Text("Usá tu propia cuenta de ChatGPT (Plus, Pro, Team…). No gasta créditos de KIE.")
+                    .font(.caption).foregroundStyle(.secondary)
+                Button {
+                    Task { await model.codexLogin() }
+                } label: {
+                    Label("Iniciar sesión con ChatGPT", systemImage: "person.crop.circle.badge.checkmark").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(GradientButtonStyle(height: 34))
+            case .loggingIn:
+                HStack {
+                    ProgressView().controlSize(.small)
+                    Text("Terminá de iniciar sesión en el navegador que se abrió…").font(.caption)
+                }
+            case .loggedIn(let detail):
+                Label(detail, systemImage: "checkmark.seal.fill").font(.caption).foregroundStyle(Theme.success)
+                HStack {
+                    Text("Usa tu plan de ChatGPT. Puede tardar un poco más.").font(.caption).foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Cerrar sesión") { Task { await model.codexLogout() } }.controlSize(.small)
+                }
+            }
+        }
     }
 }

@@ -116,6 +116,9 @@ final class AppModel {
     var sources: [PromptExample] = []
     var feedback = ""
     var isBuildingPrompt = false
+    /// Text received so far while the assistant writes (live preview).
+    var streamingText: String?
+    var codexStatus: CodexCLI.Status = .unknown
     var assistantError: String?
 
     // MARK: Library UI
@@ -152,7 +155,7 @@ final class AppModel {
         videoDuration = min(max(p.videoDuration, Presets.videoDurationRange.lowerBound), Presets.videoDurationRange.upperBound)
         videoAudio = p.videoAudio
         provider = p.provider
-        promptModel = PromptRequests.promptModels.contains { $0.id == p.promptModel } ? p.promptModel : "gpt-5-6-sol"
+        promptModel = PromptRequests.promptModels.contains { $0.id == p.promptModel } ? p.promptModel : "gpt-5-6-terra"
         dialogueLanguage = p.dialogueLanguage
         notifyWhenDone = p.notifyWhenDone
         onboardingDone = p.onboardingDone
@@ -859,18 +862,39 @@ final class AppModel {
             assistantError = "La idea puede tener hasta 6000 caracteres."
             return
         }
-        let key: String?
+        let key: String
         switch provider {
-        case .kie: key = kieKey
-        case .openai: key = keys.read(KeyAccount.openAI)
-        }
-        guard let key else {
-            assistantError = provider == .kie ? "Conectá tu clave de KIE en Ajustes para crear prompts." : "Agregá tu clave de OpenAI en Ajustes o elegí KIE."
-            return
+        case .kie:
+            guard let value = kieKey else {
+                assistantError = "Conectá tu clave de KIE en Ajustes para crear prompts."
+                return
+            }
+            key = value
+        case .openai:
+            guard let value = keys.read(KeyAccount.openAI) else {
+                assistantError = "Agregá tu clave de OpenAI en Ajustes o elegí otro motor."
+                return
+            }
+            key = value
+        case .codex:
+            if case .loggedIn = codexStatus {} else {
+                await refreshCodexStatus()
+                guard case .loggedIn = codexStatus else {
+                    assistantError = codexStatus == .notInstalled
+                        ? "Codex CLI no está instalado en esta Mac. Mirá cómo instalarlo abajo, en Motor."
+                        : "Iniciá sesión en Codex con tu cuenta de ChatGPT (abajo, en Motor)."
+                    return
+                }
+            }
+            key = ""
         }
         assistantError = nil
         isBuildingPrompt = true
-        defer { isBuildingPrompt = false }
+        streamingText = ""
+        defer {
+            isBuildingPrompt = false
+            streamingText = nil
+        }
 
         let skill = currentSkill
         let structured = mode == .image && skill?.id == SkillLibrary.jsonProfileID
@@ -915,13 +939,36 @@ final class AppModel {
                 try checkAnalysisSize(analysisIDs)
                 let images = try await upload(analysisIDs, client: client).map(\.absoluteString)
                 let model = PromptRequests.promptModels.first { $0.id == promptModel } ?? PromptRequests.promptModels[0]
-                if model.usesCodexAPI {
-                    raw = try PromptRequests.readCodex(await client.codexResponses(body: PromptRequests.kieCodexBody(
-                        model: model.id, instructions: instructions, brief: briefText, images: images)))
-                } else {
-                    raw = try PromptRequests.readChat(await client.chatCompletion(model: model.id, body: PromptRequests.kieChatBody(
-                        instructions: instructions, brief: briefText, images: images)))
+                let live: @Sendable (String) -> Void = { [weak self] text in
+                    Task { @MainActor in if self?.isBuildingPrompt == true { self?.streamingText = text } }
                 }
+                if model.usesCodexAPI {
+                    raw = try await client.streamText("/codex/v1/responses", body: PromptRequests.kieCodexBody(
+                        model: model.id, instructions: instructions, brief: briefText, images: images),
+                        readJSON: PromptRequests.readCodex, onText: live)
+                } else {
+                    var answer: String?
+                    var lastError: Error?
+                    for slug in model.chatSlugs where answer == nil {
+                        do {
+                            answer = try await client.streamText("/\(slug)/v1/chat/completions", body: PromptRequests.kieChatBody(
+                                model: slug, instructions: instructions, brief: briefText, images: images),
+                                readJSON: PromptRequests.readChat, onText: live)
+                        } catch {
+                            lastError = error
+                        }
+                    }
+                    guard let answer else { throw lastError ?? KieError("KIE no respondió.", definite: true) }
+                    raw = answer
+                }
+                if raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    throw KieError("KIE no devolvió texto. Tu idea sigue ahí: probá de nuevo.", definite: true)
+                }
+            case .codex:
+                let images = analysisIDs.compactMap { id in references.first { $0.id == id }.map { url(for: $0) } }
+                raw = try await CodexCLI.generate(
+                    prompt: PromptRequests.codexCLIPrompt(instructions: instructions, brief: briefText),
+                    images: images, model: nil)
             case .openai:
                 try checkAnalysisSize(analysisIDs)
                 let images = try analysisIDs.compactMap { id -> String? in
@@ -945,6 +992,27 @@ final class AppModel {
         } catch {
             assistantError = error.localizedDescription
         }
+    }
+
+    func refreshCodexStatus() async {
+        codexStatus = .checking
+        codexStatus = await CodexCLI.status()
+    }
+
+    func codexLogin() async {
+        codexStatus = .loggingIn
+        do {
+            try await CodexCLI.login()
+            show("Sesión de ChatGPT iniciada en Codex.", .success)
+        } catch {
+            show(error.localizedDescription, .error)
+        }
+        await refreshCodexStatus()
+    }
+
+    func codexLogout() async {
+        await CodexCLI.logout()
+        await refreshCodexStatus()
     }
 
     private func checkAnalysisSize(_ ids: [UUID]) throws {

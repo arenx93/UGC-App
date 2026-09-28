@@ -159,6 +159,17 @@ final class PromptRequestTests: XCTestCase {
         XCTAssertEqual(nano.input["image_input"] as? [String], ["https://x/y.png"])
     }
 
+    func testPromptModels() {
+        let ids = PromptRequests.promptModels.map(\.id)
+        XCTAssertFalse(ids.contains { $0.hasPrefix("gemini-2.5") })
+        let gemini = try? XCTUnwrap(PromptRequests.promptModels.first { $0.id == "gemini-3.8-flash" })
+        XCTAssertEqual(gemini?.usesCodexAPI, false)
+        XCTAssertEqual(gemini?.chatSlugs.first, "gemini-3.8-flash")
+        let body = PromptRequests.kieChatBody(model: "gemini-3.8-flash", instructions: "i", brief: "b", images: [])
+        XCTAssertEqual(body["stream"] as? Bool, true)
+        XCTAssertTrue(PromptRequests.codexCLIPrompt(instructions: "I", brief: "B").hasSuffix("Creative brief:\nB"))
+    }
+
     func testMediaSniffer() {
         XCTAssertTrue(MediaSniffer.matches(prefix: Data([137, 80, 78, 71, 13, 10, 26, 10]), mime: "image/png", kind: .image))
         XCTAssertFalse(MediaSniffer.matches(prefix: Data([0, 0, 0, 0]), mime: "image/png", kind: .image))

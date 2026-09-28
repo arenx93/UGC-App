@@ -66,6 +66,15 @@ struct AccountSettings: View {
             }
 
             Section {
+                CodexAccountRow()
+                    .task { if model.codexStatus == .unknown { await model.refreshCodexStatus() } }
+            } header: {
+                Text("ChatGPT (Codex CLI) — opcional, para el asistente")
+            } footer: {
+                Text("Cada persona inicia sesión con su propia cuenta de ChatGPT. No se guarda ninguna clave en Framecraft.")
+            }
+
+            Section {
                 if model.hasOpenAIKey {
                     LabeledContent("Estado") {
                         Label("Guardada", systemImage: "checkmark.circle.fill").foregroundStyle(Theme.success)

@@ -84,6 +84,121 @@ public final class KieClient: @unchecked Sendable {
         try await call("/codex/v1/responses", body: body, timeout: 120)
     }
 
+    /// Streams a prompt-assistant request (server-sent events) so long answers never hit
+    /// the request timeout. `onText` receives the text accumulated so far. Falls back to a
+    /// plain JSON answer when KIE does not stream; `readJSON` extracts its text.
+    public func streamText(
+        _ path: String, body: [String: Any],
+        readJSON: ([String: Any]) throws -> String,
+        onText: @escaping @Sendable (String) -> Void
+    ) async throws -> String {
+        guard let url = URL(string: Self.apiBase + path) else { throw KieError("Ruta de KIE inválida.", definite: true) }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 300
+        request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("text/event-stream, application/json", forHTTPHeaderField: "Accept")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (bytes, response): (URLSession.AsyncBytes, URLResponse)
+        do {
+            (bytes, response) = try await Self.streamSession.bytes(for: request)
+        } catch let error as URLError where error.code == .timedOut {
+            throw KieError("KIE no respondió a tiempo. Probá de nuevo o elegí un modelo más rápido.", definite: true)
+        } catch {
+            throw KieError("No se pudo conectar con KIE. Revisá tu conexión.", definite: true)
+        }
+        let http = response as? HTTPURLResponse
+        let status = http?.statusCode ?? 0
+        let contentType = http?.value(forHTTPHeaderField: "Content-Type") ?? ""
+
+        guard contentType.contains("event-stream"), (200..<300).contains(status) else {
+            var data = Data()
+            for try await byte in bytes {
+                data.append(byte)
+                if data.count > 4_000_000 { break }
+            }
+            guard let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+                let snippet = String(decoding: data.prefix(200), as: UTF8.self)
+                throw KieError("KIE devolvió una respuesta inválida (\(status)). \(snippet)", definite: true)
+            }
+            try check(json, status: status)
+            let text = try readJSON(json)
+            onText(text)
+            return text
+        }
+
+        var text = ""
+        var finalText: String?
+        do {
+            for try await line in bytes.lines {
+                guard line.hasPrefix("data:") else { continue }
+                let payload = line.dropFirst(5).trimmingCharacters(in: .whitespaces)
+                if payload == "[DONE]" { break }
+                guard let data = payload.data(using: .utf8),
+                      let event = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+                else { continue }
+                if let choices = event["choices"] as? [[String: Any]], let first = choices.first {
+                    let delta = (first["delta"] as? [String: Any])?["content"] as? String
+                        ?? (first["message"] as? [String: Any])?["content"] as? String
+                    if let delta, !delta.isEmpty {
+                        text += delta
+                        onText(text)
+                    }
+                    continue
+                }
+                switch event["type"] as? String {
+                case "response.output_text.delta":
+                    if let delta = event["delta"] as? String {
+                        text += delta
+                        onText(text)
+                    }
+                case "response.output_text.done":
+                    if let done = event["text"] as? String, !done.isEmpty { finalText = done }
+                case "response.completed":
+                    if let completed = event["response"] as? [String: Any], let done = try? readJSON(completed), !done.isEmpty {
+                        finalText = done
+                    }
+                case "error", "response.failed":
+                    let message = (event["message"] as? String)
+                        ?? ((event["error"] as? [String: Any])?["message"] as? String)
+                        ?? (((event["response"] as? [String: Any])?["error"] as? [String: Any])?["message"] as? String)
+                        ?? "KIE no pudo completar el prompt."
+                    throw KieError(redact(message), definite: true)
+                default:
+                    if event["code"] != nil || event["msg"] != nil { try check(event, status: status) }
+                }
+            }
+        } catch let error as KieError {
+            throw error
+        } catch let error as URLError where error.code == .timedOut {
+            if text.isEmpty { throw KieError("KIE dejó de responder. Probá de nuevo o elegí un modelo más rápido.", definite: true) }
+        }
+        return finalText ?? text
+    }
+
+    private static let streamSession: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 300
+        configuration.timeoutIntervalForResource = 900
+        return URLSession(configuration: configuration)
+    }()
+
+    /// Throws when a KIE JSON answer carries an error code.
+    func check(_ json: [String: Any], status: Int) throws {
+        var codeOK = true
+        if let code = json["code"] as? NSNumber { codeOK = code.intValue == 200 }
+        if let code = json["code"] as? String { codeOK = code == "200" }
+        if !(200..<300).contains(status) || !codeOK {
+            let message = (json["msg"] as? String)
+                ?? (json["message"] as? String)
+                ?? ((json["error"] as? [String: Any])?["message"] as? String)
+                ?? "KIE no pudo completar la solicitud (\(status))."
+            throw KieError(Self.friendly(redact(message), status: status), definite: true)
+        }
+    }
+
     // MARK: Files
 
     /// Uploads a local reference file and returns KIE's temporary download URL.

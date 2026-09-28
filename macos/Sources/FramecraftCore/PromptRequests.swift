@@ -7,12 +7,26 @@ public struct PromptModel: Identifiable, Hashable, Sendable {
     public let note: String
 
     public var usesCodexAPI: Bool { id.hasPrefix("gpt-5-6-") }
+
+    /// URL slugs to try for KIE's chat endpoint (/{slug}/v1/chat/completions).
+    public var chatSlugs: [String] {
+        switch id {
+        case "gemini-3.8-flash": ["gemini-3.8-flash", "gemini-3-8-flash"]
+        default: [id]
+        }
+    }
 }
 
 public enum PromptProvider: String, Codable, Sendable, CaseIterable, Identifiable {
-    case kie, openai
+    case kie, codex, openai
     public var id: String { rawValue }
-    public var title: String { self == .kie ? "KIE" : "OpenAI · GPT-4.1 mini" }
+    public var title: String {
+        switch self {
+        case .kie: "KIE"
+        case .codex: "ChatGPT (Codex)"
+        case .openai: "OpenAI API"
+        }
+    }
 }
 
 /// Everything the assistant knows about the request.
@@ -70,8 +84,7 @@ public enum PromptRequests {
         PromptModel(id: "gpt-5-6-sol", name: "GPT-5.6 Sol", note: "La mejor calidad"),
         PromptModel(id: "gpt-5-6-terra", name: "GPT-5.6 Terra", note: "Equilibrado"),
         PromptModel(id: "gpt-5-6-luna", name: "GPT-5.6 Luna", note: "El más rápido"),
-        PromptModel(id: "gemini-2.5-pro", name: "Gemini 2.5 Pro", note: "Alternativa de Google"),
-        PromptModel(id: "gemini-2.5-flash", name: "Gemini 2.5 Flash", note: "Rápido y económico"),
+        PromptModel(id: "gemini-3.8-flash", name: "Gemini 3.8 Flash", note: "Lo último de Google, rápido"),
     ]
 
     public static let profileSections = [
@@ -158,15 +171,23 @@ public enum PromptRequests {
 
     // MARK: Request bodies
 
-    public static func kieChatBody(instructions: String, brief: String, images: [String]) -> [String: Any] {
+    /// Single prompt text for the Codex CLI (instructions + brief).
+    public static func codexCLIPrompt(instructions: String, brief: String) -> String {
+        instructions
+            + " Answer directly with the requested output only. Do not run commands, read or write files, or use tools."
+            + "\n\nCreative brief:\n" + brief
+    }
+
+    public static func kieChatBody(model: String, instructions: String, brief: String, images: [String]) -> [String: Any] {
         var user: [[String: Any]] = [["type": "text", "text": brief]]
         user += images.map { ["type": "image_url", "image_url": ["url": $0]] }
         return [
+            "model": model,
             "messages": [
                 ["role": "system", "content": [["type": "text", "text": instructions]]],
                 ["role": "user", "content": user],
             ],
-            "stream": false,
+            "stream": true,
             "include_thoughts": false,
         ]
     }
@@ -176,8 +197,8 @@ public enum PromptRequests {
         content += images.map { ["type": "input_image", "image_url": $0] }
         return [
             "model": model,
-            "stream": false,
-            "reasoning": ["effort": model == "gpt-5-6-luna" ? "medium" : "high"],
+            "stream": true,
+            "reasoning": ["effort": model == "gpt-5-6-sol" ? "high" : model == "gpt-5-6-luna" ? "low" : "medium"],
             "input": [["role": "user", "content": content]],
         ]
     }
