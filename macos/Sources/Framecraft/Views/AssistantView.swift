@@ -265,7 +265,29 @@ struct AssistantView: View {
                 Spacer()
                 Text("\(model.draft.count.formatted()) caracteres").font(.caption).foregroundStyle(.secondary)
             }
-            PromptEditor(text: $model.draft, placeholder: "", minHeight: 220, monospaced: model.draft.hasPrefix("{"), accessibilityName: "Prompt generado")
+            if let text = model.draftProfilePrompt {
+                VStack(alignment: .leading, spacing: 6) {
+                    Label("Prompt principal", systemImage: "text.quote").font(.caption.weight(.semibold))
+                    Text(text).font(.callout).textSelection(.enabled).fixedSize(horizontal: false, vertical: true)
+                    HStack {
+                        Button {
+                            model.useDraftText()
+                        } label: {
+                            Label("Usar texto simple", systemImage: "arrow.left.circle.fill").frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(GradientButtonStyle(height: 34))
+                        .help("Usa solo este prompt en texto")
+                    }
+                }
+                .padding(10)
+                .background(Theme.softGradient, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                DisclosureGroup("Perfil JSON completo (avanzado)") {
+                    PromptEditor(text: $model.draft, placeholder: "", minHeight: 220, monospaced: true, accessibilityName: "Perfil JSON generado")
+                }
+                .font(.caption)
+            } else {
+                PromptEditor(text: $model.draft, placeholder: "", minHeight: 220, monospaced: model.draft.hasPrefix("{"), accessibilityName: "Prompt generado")
+            }
             if let notes = model.notes {
                 VStack(alignment: .leading, spacing: 4) {
                     Label("Notas del asistente", systemImage: "lightbulb").font(.caption.weight(.semibold))
@@ -290,7 +312,7 @@ struct AssistantView: View {
                 Button {
                     model.useDraft()
                 } label: {
-                    Label("Usar este prompt", systemImage: "arrow.left.circle.fill").frame(maxWidth: .infinity)
+                    Label(model.draftProfilePrompt == nil ? "Usar este prompt" : "Usar perfil JSON completo", systemImage: "arrow.left.circle.fill").frame(maxWidth: .infinity)
                 }
                 .buttonStyle(GradientButtonStyle(height: 36))
                 Button {

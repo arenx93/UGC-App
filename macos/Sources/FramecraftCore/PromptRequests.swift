@@ -314,7 +314,8 @@ public enum PromptRequests {
         if structured {
             guard let object = jsonObject(in: text),
                   profileSections.allSatisfy({ object[$0] is [String: Any] }),
-                  let serialized = Presets.serialize(object)
+                  let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted, .withoutEscapingSlashes]),
+                  let serialized = String(data: data, encoding: .utf8)
             else {
                 throw KieError("El asistente devolvió un perfil JSON incompleto. Probá de nuevo.", definite: true)
             }
@@ -331,6 +332,18 @@ public enum PromptRequests {
             }
         }
         return PromptResult(prompt: text)
+    }
+
+    /// The actionable text prompt inside a JSON visual profile
+    /// (generation_parameters.prompts), or nil when `text` is not a profile.
+    public static func mainPrompt(fromProfile text: String) -> String? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.hasPrefix("{"), let object = jsonObject(in: trimmed),
+              let parameters = object["generation_parameters"] as? [String: Any] else { return nil }
+        if let list = parameters["prompts"] as? [String], let first = list.first(where: { !$0.isEmpty }) { return first }
+        if let single = parameters["prompts"] as? String, !single.isEmpty { return single }
+        if let single = parameters["prompt"] as? String, !single.isEmpty { return single }
+        return nil
     }
 
     static func stripFences(_ text: String) -> String {

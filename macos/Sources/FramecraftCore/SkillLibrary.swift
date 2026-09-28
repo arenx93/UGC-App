@@ -83,8 +83,8 @@ public enum SkillLibrary {
         var skills = [
             Skill(
                 id: jsonProfileID,
-                name: "Perfil JSON + biblioteca GPT Image 2",
-                summary: "Arma un perfil visual JSON completo, inspirado en 123 prompts de ejemplo. Ideal para fotos de producto y estilos muy controlados.",
+                name: "Perfil JSON detallado (avanzado)",
+                summary: "Devuelve un perfil técnico JSON (color, luz, composición…) inspirado en 123 prompts de GPT Image 2. Para control fino; si querés texto simple, usá General.",
                 content: "",
                 media: .image, isBuiltin: true, created: epoch
             ),

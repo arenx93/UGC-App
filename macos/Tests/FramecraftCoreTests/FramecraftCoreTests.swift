@@ -134,6 +134,11 @@ final class PromptRequestTests: XCTestCase {
         XCTAssertEqual(plain.prompt, "Just a prompt")
     }
 
+    func testMainPromptFromProfile() {
+        XCTAssertEqual(PromptRequests.mainPrompt(fromProfile: "{\"generation_parameters\":{\"prompts\":[\"A waiter\"]}}"), "A waiter")
+        XCTAssertNil(PromptRequests.mainPrompt(fromProfile: "Plain prompt"))
+    }
+
     func testStructuredProfileIsValidated() throws {
         let sections = PromptRequests.profileSections.map { "\"\($0)\": {}" }.joined(separator: ",")
         XCTAssertNoThrow(try PromptRequests.finalize("{\(sections)}", media: .image, structured: true))

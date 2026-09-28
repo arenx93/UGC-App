@@ -159,7 +159,7 @@ final class AppModel {
         dialogueLanguage = p.dialogueLanguage
         notifyWhenDone = p.notifyWhenDone
         onboardingDone = p.onboardingDone
-        skillID = p.mode == .video ? SkillLibrary.ugcID : SkillLibrary.jsonProfileID
+        skillID = p.mode == .video ? SkillLibrary.ugcID : SkillLibrary.generalID
 
         hasKieKey = keys.read(KeyAccount.kie) != nil
         hasOpenAIKey = keys.read(KeyAccount.openAI) != nil
@@ -297,8 +297,8 @@ final class AppModel {
     // MARK: Form behaviour
 
     private func modeChanged() {
-        if !(currentSkill?.media.supports(mode) ?? true) || skillID == SkillLibrary.generalID {
-            skillID = mode == .video ? SkillLibrary.ugcID : SkillLibrary.jsonProfileID
+        if !(currentSkill?.media.supports(mode) ?? true) || (mode == .video && skillID == SkillLibrary.generalID) {
+            skillID = mode == .video ? SkillLibrary.ugcID : SkillLibrary.generalID
         }
         if mode == .image && selectedImages.count > 4 {
             selectedImages = Array(selectedImages.prefix(4))
@@ -1042,6 +1042,17 @@ final class AppModel {
         }
     }
 
+    /// Main text prompt inside a JSON visual profile (nil when the draft is plain text).
+    var draftProfilePrompt: String? { PromptRequests.mainPrompt(fromProfile: draft) }
+
+    /// Uses only the readable text prompt from a JSON profile.
+    func useDraftText() {
+        guard let text = draftProfilePrompt else { return useDraft() }
+        prompt = text
+        section = .create
+        show("Prompt de texto listo en el editor.", .success)
+    }
+
     func useDraft() {
         prompt = draft
         section = .create
@@ -1091,7 +1102,7 @@ final class AppModel {
 
     func deleteSkill(_ skill: Skill) {
         customSkills.removeAll { $0.id == skill.id }
-        if skillID == skill.id { skillID = mode == .video ? SkillLibrary.ugcID : SkillLibrary.jsonProfileID }
+        if skillID == skill.id { skillID = mode == .video ? SkillLibrary.ugcID : SkillLibrary.generalID }
         persist()
     }
 
