@@ -14,6 +14,8 @@ inline std::string str(winrt::hstring const& text) { return narrow(text); }
 std::filesystem::path knownFolder(REFKNOWNFOLDERID id);
 std::filesystem::path executableDirectory();
 
+/// file:/// URI for a local path (images and media in XAML).
+winrt::Windows::Foundation::Uri fileUri(std::filesystem::path const& path);
 void openURL(std::string const& url);
 void openPath(std::filesystem::path const& path);
 /// Opens Explorer with the files selected.

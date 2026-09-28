@@ -58,6 +58,8 @@
 #include <wil/cppwinrt_helpers.h>
 
 #include <algorithm>
+#include <cmath>
+#include <cstdio>
 #include <cctype>
 #include <cwctype>
 #include <thread>

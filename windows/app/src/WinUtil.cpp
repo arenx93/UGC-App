@@ -46,6 +46,12 @@ std::filesystem::path executableDirectory() {
     return std::filesystem::path(buffer).parent_path();
 }
 
+winrt::Windows::Foundation::Uri fileUri(std::filesystem::path const& path) {
+    std::wstring text = path.wstring();
+    std::replace(text.begin(), text.end(), L'\\', L'/');
+    return winrt::Windows::Foundation::Uri(L"file:///" + text);
+}
+
 void openURL(std::string const& url) {
     ShellExecuteW(nullptr, L"open", widen(url).c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 }

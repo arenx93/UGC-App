@@ -146,7 +146,7 @@ void MainWindow::buildTitleBar() {
     logo.Width(20);
     logo.Height(20);
     auto logoPath = executableDirectory() / L"Assets" / L"AppIcon.png";
-    logo.Source(muxm::Imaging::BitmapImage(wf::Uri(logoPath.wstring())));
+    logo.Source(muxm::Imaging::BitmapImage(fileUri(logoPath)));
     brand.Children().Append(logo);
     auto title = ui::text("Framecraft", ui::Text::caption);
     title.VerticalAlignment(mux::VerticalAlignment::Center);

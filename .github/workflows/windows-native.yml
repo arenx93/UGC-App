@@ -74,6 +74,21 @@ jobs:
         shell: pwsh
         run: msbuild windows\app\Framecraft.vcxproj /p:Configuration=Release /p:Platform=x64 /m /v:m /nologo
 
+      - name: Bundle Codex CLI and the C++ runtime
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          windows\scripts\fetch-codex.ps1 -Destination windows\build\Release\codex.exe
+          # App-local Visual C++ runtime, so no redistributable installer is needed.
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          $crt = Get-ChildItem "$vs\VC\Redist\MSVC" -Directory | Sort-Object Name -Descending |
+            ForEach-Object { Get-ChildItem (Join-Path $_.FullName "x64") -Directory -Filter "Microsoft.VC*.CRT" -ErrorAction SilentlyContinue } |
+            Select-Object -First 1
+          if (-not $crt) { Write-Error "Visual C++ runtime not found"; exit 1 }
+          Copy-Item (Join-Path $crt.FullName "*.dll") windows\build\Release\ -Force
+          Get-ChildItem windows\build\Release -Filter "*140*.dll" | Select-Object Name
+
       - name: Output
         shell: pwsh
         run: Get-ChildItem windows\build\Release | Select-Object Name, Length | Format-Table -AutoSize
@@ -118,16 +133,50 @@ jobs:
           git pull --rebase origin "$env:GITHUB_REF_NAME"
           git push origin "HEAD:$env:GITHUB_REF_NAME"
 
-      - name: Package (zip)
+      - name: Version
+        id: version
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force dist | Out-Null
-          Compress-Archive -Path windows\build\Release\* -DestinationPath dist\Framecraft-Windows-x64.zip -Force
-          Get-Item dist\*.zip | Select-Object Name, Length
+          $release = "${{ inputs.release }}"
+          $version = if ($release) { $release } else { "1.0.${{ github.run_number }}" }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Package (zip + installer)
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          New-Item -ItemType Directory -Force windows\dist | Out-Null
+          Get-ChildItem windows\build\Release -Include *.pdb,*.lib,*.exp,*.ilk -Recurse | Remove-Item -Force
+          Compress-Archive -Path windows\build\Release\* -DestinationPath "windows\dist\Framecraft-$version-Windows-x64.zip" -Force
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress | Out-Null }
+          & $iscc /Qp "/DAppVersion=$version" "/DSourceDir=..\build\Release" windows\installer\Framecraft.iss
+          if ($LASTEXITCODE -ne 0) { Write-Error "Inno Setup failed"; exit 1 }
+          Get-ChildItem windows\dist | Select-Object Name, Length
 
       - uses: actions/upload-artifact@v4
         with:
           name: Framecraft-Windows-C++
-          path: dist/*
+          path: windows/dist/*
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish release
+        if: inputs.release != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: win-v${{ inputs.release }}
+          target_commitish: ${{ github.sha }}
+          name: Framecraft para Windows win-v${{ inputs.release }}
+          body: |
+            App nativa para Windows 10 (1809) y Windows 11, escrita en C++ con WinUI 3.
+
+            **Instalar:** descargá `Framecraft-Setup-${{ inputs.release }}.exe` y abrilo (no pide permisos de administrador). También está el `.zip` portable: descomprimilo y abrí `Framecraft.exe`.
+
+            **Primera apertura:** Windows SmartScreen puede avisar porque el instalador todavía no está firmado: tocá **Más información → Ejecutar de todas formas**.
+
+            Guía completa en el [README de Windows](https://github.com/${{ github.repository }}/blob/${{ github.sha }}/windows/README.md).
+          files: |
+            windows/dist/*.exe
+            windows/dist/*.zip
+          fail_on_unmatched_files: true

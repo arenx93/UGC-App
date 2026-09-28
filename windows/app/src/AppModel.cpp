@@ -1964,7 +1964,7 @@ winrt::fire_and_forget AppModel::exportStory(std::string id) {
     std::string text = fc::stories::exportText(*current, displayLines(*current));
     winrt::Windows::Storage::Pickers::FileSavePicker picker;
     picker.as<::IInitializeWithWindow>()->Initialize(hwnd);
-    auto extensions = winrt::single_threaded_vector<winrt::hstring>({L".txt"});
+    auto extensions = winrt::single_threaded_vector<winrt::hstring>(std::vector<winrt::hstring>{winrt::hstring(L".txt")});
     picker.FileTypeChoices().Insert(L"Texto", extensions);
     picker.SuggestedFileName(hs(current->title + " - pack de prompts"));
     try {

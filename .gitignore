@@ -12,3 +12,8 @@ distributions/
 *.tsbuildinfo
 Framecraft-Data/
 
+
+# Windows (C++)
+windows/build/
+windows/packages/
+windows/dist/

@@ -106,7 +106,7 @@ mux::UIElement mediaView(fs::path const& file, bool video, bool autoplay) {
         muxc::Image image;
         image.Stretch(muxm::Stretch::Uniform);
         muxm::Imaging::BitmapImage bitmap;
-        bitmap.UriSource(wf::Uri(file.wstring()));
+        bitmap.UriSource(fileUri(file));
         image.Source(bitmap);
         return image;
     }
@@ -121,7 +121,7 @@ mux::UIElement mediaView(fs::path const& file, bool video, bool autoplay) {
 // MARK: - Dialogs
 
 namespace {
-void widen(muxc::ContentDialog const& dialog, double width, double height) {
+void sizeDialog(muxc::ContentDialog const& dialog, double width, double height) {
     dialog.Resources().Insert(box_value(L"ContentDialogMaxWidth"), box_value(width));
     dialog.Resources().Insert(box_value(L"ContentDialogMaxHeight"), box_value(height));
 }
@@ -142,7 +142,7 @@ winrt::fire_and_forget showMediaViewer(mux::XamlRoot root, fs::path file, bool v
     frame.CornerRadius(mux::CornerRadiusHelper::FromUniformRadius(8));
     frame.Children().Append(mediaView(file, video, true));
     auto dialog = ui::dialog(root, narrow(file.filename().wstring()), frame, "Mostrar en la carpeta", "Cerrar");
-    widen(dialog, 1000, 800);
+    sizeDialog(dialog, 1000, 800);
     auto result = co_await dialog.ShowAsync();
     if (result == muxc::ContentDialogResult::Primary) revealInExplorer({file});
 }
@@ -204,7 +204,7 @@ winrt::fire_and_forget showJobDetail(mux::XamlRoot root, std::string jobID) {
     }
 
     auto dialog = ui::dialog(root, "Detalle", layout, "", "Cerrar");
-    widen(dialog, 1200, 900);
+    sizeDialog(dialog, 1200, 900);
     auto hide = [weak = winrt::make_weak(dialog)] {
         if (auto d = weak.get()) d.Hide();
     };
@@ -260,7 +260,7 @@ mux::UIElement onboardingContent(std::function<void()> const& onDone) {
     muxc::Image logo;
     logo.Width(64);
     logo.Height(64);
-    logo.Source(muxm::Imaging::BitmapImage(wf::Uri((executableDirectory() / L"Assets" / L"AppIcon.png").wstring())));
+    logo.Source(muxm::Imaging::BitmapImage(fileUri(executableDirectory() / L"Assets" / L"AppIcon.png")));
     top.Children().Append(logo);
     auto titles = ui::vstack(2);
     titles.Children().Append(ui::gradientTitle("Bienvenido a Framecraft", 28));
@@ -315,7 +315,7 @@ winrt::fire_and_forget showOnboarding(mux::XamlRoot root) {
     muxc::ContentDialog dialog;
     dialog.XamlRoot(root);
     if (auto s = ui::style(L"DefaultContentDialogStyle")) dialog.Style(s);
-    widen(dialog, 720, 800);
+    sizeDialog(dialog, 720, 800);
     auto weak = winrt::make_weak(dialog);
     dialog.Content(onboardingContent([weak] {
         if (auto d = weak.get()) d.Hide();
@@ -341,7 +341,7 @@ winrt::fire_and_forget showPromptPreview(mux::XamlRoot root) {
     panel.Children().Append(box);
     panel.Children().Append(ui::secondary(std::to_string(fc::characterCount(text)) + " caracteres"));
     auto dialog = ui::dialog(root, "Prompt final", panel, "Copiar", "Listo");
-    widen(dialog, 760, 700);
+    sizeDialog(dialog, 760, 700);
     auto result = co_await dialog.ShowAsync();
     if (result == muxc::ContentDialogResult::Primary) AppModel::shared().copy(text);
 }
