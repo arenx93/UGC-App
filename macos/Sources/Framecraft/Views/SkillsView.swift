@@ -109,6 +109,7 @@ struct SkillDetail: View {
     let edit: (Skill) -> Void
     let select: (String?) -> Void
     @State private var confirmDelete = false
+    @State private var showSource = false
 
     var body: some View {
         ScrollView {
@@ -157,13 +158,27 @@ struct SkillDetail: View {
                     Text("Genera un perfil visual JSON con 10 secciones (composición, color, luz, especificaciones técnicas…) y se inspira en los 3 ejemplos más parecidos a tu idea de una biblioteca de 123 prompts de GPT Image 2 (YouMind OpenLab, CC BY 4.0).")
                         .foregroundStyle(.secondary)
                 } else {
-                    Text("Instrucciones").font(.headline)
-                    Text(skill.content)
-                        .font(.system(.callout, design: .monospaced))
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(14)
-                        .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
+                    HStack {
+                        Text("Instrucciones").font(.headline)
+                        Spacer()
+                        Picker("Vista", selection: $showSource) {
+                            Text("Leer").tag(false)
+                            Text("Texto original").tag(true)
+                        }
+                        .pickerStyle(.segmented)
+                        .labelsHidden()
+                        .fixedSize()
+                    }
+                    if showSource {
+                        Text(skill.content)
+                            .font(.system(.callout, design: .monospaced))
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(14)
+                            .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
+                    } else {
+                        Card(padding: 20) { MarkdownView(text: skill.content) }
+                    }
                 }
             }
             .padding(24)

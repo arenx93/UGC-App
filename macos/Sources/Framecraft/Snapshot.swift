@@ -86,6 +86,19 @@ enum SnapshotRunner {
                     print("snapshot: \(name).png")
                 }
             }
+            // Real on-screen capture too (includes sidebar/inspector materials that
+            // cacheDisplay cannot draw). Needs screen-recording access; skipped if denied.
+            NSApp.activate(ignoringOtherApps: true)
+            window.makeKeyAndOrderFront(nil)
+            RunLoop.main.run(until: Date().addingTimeInterval(0.8))
+            let capture = Process()
+            capture.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
+            capture.arguments = ["-x", "-o", "-l\(window.windowNumber)", outputDirectory.appendingPathComponent(name + "-real.png").path]
+            if (try? capture.run()) != nil {
+                let deadline = Date().addingTimeInterval(10)
+                while capture.isRunning && Date() < deadline { RunLoop.main.run(until: Date().addingTimeInterval(0.1)) }
+                print("snapshot: \(name)-real.png (screencapture exit \(capture.isRunning ? -1 : capture.terminationStatus))")
+            }
             window.orderOut(nil)
         }
         exit(0)

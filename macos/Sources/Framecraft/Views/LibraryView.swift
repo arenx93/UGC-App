@@ -367,8 +367,12 @@ struct JobDetailView: View {
                             row("Formato", job.settings.aspect)
                             if let duration = job.settings.duration { row("Duración", "\(duration) s") }
                             if let audio = job.settings.generateAudio { row("Audio", audio ? "Sí" : "No") }
-                            if let camera = job.settings.camera, camera != Presets.none { row("Cámara", camera) }
-                            if let film = job.settings.film, film != Presets.none { row("Encuadre", film) }
+                            if let camera = job.settings.camera, camera != Presets.none {
+                                row("Cámara", Presets.cameras.first { $0.id == camera }?.title ?? camera)
+                            }
+                            if let film = job.settings.film, film != Presets.none {
+                                row("Encuadre", Presets.films.first { $0.id == film }?.title ?? film)
+                            }
                             let refs = job.settings.imageReferences.count + job.settings.videoReferences.count + job.settings.audioReferences.count
                             if refs > 0 { row("Referencias", "\(refs)") }
                         }
