@@ -10,6 +10,8 @@ Sonoma o posterior. Funciona en Macs con Apple Silicon y con Intel.
 |---|---|
 | ![Biblioteca](../docs/macos/05-biblioteca-oscuro.png) | ![Bienvenida](../docs/macos/09-bienvenida.png) |
 
+En macOS 26 o posterior la app usa **Liquid Glass** (barra de generar flotante, avisos y controles de vidrio); en macOS 14 y 15 usa materiales equivalentes.
+
 Más capturas en [`docs/macos/`](../docs/macos/) (se regeneran desde Actions → *macOS app (Swift)* → *Run workflow* con “screenshots”).
 
 ## Descargar
@@ -42,6 +44,10 @@ Más capturas en [`docs/macos/`](../docs/macos/) (se regeneran desde Actions →
 | **Referencias** | Fotos, videos (≤30 s) y audios (≤30 s). El orden de selección define @Image1, @Image2… Se pueden arrastrar desde Finder a cualquier parte de *Crear*. |
 | **Skills** | Las incluidas y las tuyas. Importá cualquier `SKILL.md` (con encabezado YAML `name`/`description`), `.md` o `.txt`, o escribí una nueva. |
 | **Guía UGC** | El método del kit de Seedance para leer dentro de la app, más el PDF base y el pack de Walter. |
+| **Historias** | Un brief → la historia dividida en escenas, cada una con su prompt, de qué trata y el orden de referencias. Storyboard, **Generar todas las escenas** (en cadena con el último fotograma cuando hace falta) y **Armar video final** en un solo MP4, en tu Mac y sin créditos. |
+| **Plantillas** | Testimonio, unboxing, GRWM, antes y después, entrevista callejera, foto de producto, flat lay… Un clic y el asistente queda listo; solo cambiás lo que está entre [corchetes]. |
+| **Paleta de comandos** (⌘K) | Escribí para ir a cualquier pantalla, usar una plantilla, abrir una historia o una creación vieja, o generar. |
+| **Barra de menús** | El progreso de tus videos y tus últimas creaciones, aunque cierres la ventana (se desactiva en Ajustes). |
 
 ### Motores del asistente
 
@@ -49,6 +55,7 @@ Más capturas en [`docs/macos/`](../docs/macos/) (se regeneran desde Actions →
 |---|---|---|
 | **KIE** | GPT‑5.6 Terra / Luna / Sol (`/codex/v1/responses`), GPT 5.2, Gemini 3.8 Flash, Gemini 3 Flash (`/…/v1/chat/completions`), Claude Opus 4.6 (`/claude/v1/messages`) | Con tu clave de KIE. Botón **Probar conexión** para verificar cada modelo. |
 | **ChatGPT (Codex)** | El modelo de tu plan de ChatGPT | Codex CLI viene **incluido en la app**: solo tocás *Iniciar sesión con ChatGPT*. No gasta créditos de KIE. |
+| **En este Mac** | Apple Intelligence (macOS 26+, Apple Silicon) | Gratis, privado y sin internet. Usa un método compacto: ideal para prompts cortos; para historias usá KIE o ChatGPT. |
 | **OpenAI API** | GPT‑4.1 mini | Con una clave de API de OpenAI (opcional). |
 
 Para imágenes, la skill por defecto es **General** (prompt en texto). El
