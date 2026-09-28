@@ -1,0 +1,38 @@
+FRAMECRAFT — CODIGO FUENTE PARA DESARROLLO
+
+Este paquete no contiene claves API, bases de datos, historial, archivos subidos,
+dependencias instaladas ni ejecutables compilados.
+
+REQUISITOS
+- Node.js 24: https://nodejs.org/
+- Conexion a Internet para instalar dependencias y utilizar KIE/OpenAI.
+
+INICIO RAPIDO EN WINDOWS
+1. Extraer completamente el ZIP.
+2. Abrir INICIAR-FRAMECRAFT.bat.
+3. En el primer inicio se ejecuta npm ci y se crean .env y .wrangler de forma local.
+
+DESARROLLO MANUAL
+1. npm ci
+2. npm run dev
+
+COMPROBACIONES
+- npm run build
+- npm run lint
+- npm run desktop:smoke
+
+EMPAQUETADO
+- Windows: npm run desktop:win
+- macOS Intel: npm run desktop:mac:x64
+- macOS Apple Silicon: npm run desktop:mac:arm64
+- Linux x64: npm run desktop:linux:x64
+- Linux ARM64: npm run desktop:linux:arm64
+
+IMPORTANTE
+- Nunca compartir ni confirmar en Git los archivos .env o la carpeta .wrangler.
+- Cada desarrollador debe usar sus propias claves KIE/OpenAI.
+- Los paquetes de macOS deben generarse en macOS y los de Linux en Linux.
+- El boton Sign in de la aplicacion de escritorio crea una sesion local dentro
+  de Framecraft. No abre ChatGPT ni sincroniza datos con una cuenta externa.
+
+Consulte tambien LEEME.txt y DISTRIBUCIONES.md.

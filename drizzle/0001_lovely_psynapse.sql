@@ -1,0 +1,1 @@
+ALTER TABLE `accounts` ADD `openai_key_cipher` text;

@@ -1,0 +1,14 @@
+node_modules/
+.env
+.wrangler/
+.next/
+.vinext/
+.sites-runtime/
+dist/
+desktop-releases*/
+release/
+distributions/
+*.log
+*.tsbuildinfo
+Framecraft-Data/
+

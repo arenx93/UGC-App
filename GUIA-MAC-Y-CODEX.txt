@@ -1,0 +1,32 @@
+FRAMECRAFT PARA NAVEGADOR — macOS Y CODEX
+
+PRIMER INICIO
+1. Extrae completamente el ZIP en una carpeta propia.
+2. Instala Node.js 24 desde https://nodejs.org/
+3. Haz clic derecho en INICIAR-FRAMECRAFT-MAC.command y selecciona Abrir.
+4. Si macOS indica que el archivo no tiene permiso, abre Terminal en la carpeta
+   y ejecuta una sola vez:
+   chmod +x INICIAR-FRAMECRAFT-MAC.command
+5. Framecraft se abrirá en el navegador predeterminado.
+6. Mantén abierta la ventana de Terminal. Para apagar el servidor pulsa Control+C.
+
+ACCESO Y DATOS
+- Sign in crea una sesion local de Framecraft. No utiliza una cuenta de ChatGPT.
+- La clave KIE, la clave OpenAI opcional y los archivos se guardan solo en ese Mac.
+- La carpeta .wrangler contiene la base y los archivos locales.
+- El archivo .env contiene la clave que protege las API keys guardadas.
+- No compartas, borres ni subas .env o .wrangler a Git.
+
+EDITAR CON CODEX
+1. Abre Codex y agrega la carpeta extraida como proyecto.
+2. Pide a Codex que revise PARA-EDITAR.txt antes de hacer cambios.
+3. Para comprobar los cambios puede ejecutar:
+   npm run build
+   npm run lint
+4. Para iniciar manualmente:
+   npm ci
+   npm run setup:local
+   npm run dev -- --host 127.0.0.1 --strictPort
+
+El ZIP no incluye claves, datos, historial, archivos generados ni node_modules.
+
