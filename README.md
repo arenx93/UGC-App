@@ -12,10 +12,11 @@ en todas las escenas de un video largo.
 | Sistema | Qué bajar | Dónde |
 |---|---|---|
 | **macOS 14+** (Apple Silicon e Intel) | `Framecraft-…-macOS.dmg` o el `.zip` | [**Releases**](https://github.com/arenx93/UGC-App/releases) (la más reciente) |
-| **Windows 10/11** | `Framecraft-Windows` (`.exe`) | Actions → *Windows app (Electron)* → Artifacts |
+| **Windows 10/11** | `Framecraft-Setup-….exe` (instalador) o el `.zip` portable | [**Releases**](https://github.com/arenx93/UGC-App/releases) (las `win-v…`) |
 
 El repositorio es privado: las Releases solo las ven las personas con acceso.
-Las compilaciones de cada cambio también quedan en **Actions → macOS app (Swift) → Artifacts**.
+Las compilaciones de cada cambio también quedan en **Actions → macOS app (Swift)** y
+**Actions → Windows app (C++)** → Artifacts.
 
 ### Instalar en Mac
 
@@ -66,15 +67,28 @@ de Apple Developer (`MACOS_CERTIFICATE_P12`, `MACOS_CERTIFICATE_PASSWORD`,
 `MACOS_SIGN_IDENTITY` y `APPLE_API_KEY_*`), la app sale firmada y notarizada y
 macOS deja de bloquearla.
 
-## Windows y versión web
+## La app de Windows
 
-La versión de Windows es una app de escritorio (Electron) sobre la versión web
-original (Next.js/vinext), que también se puede usar en el navegador.
+Nativa, escrita en **C++20** con **WinUI 3** (Windows App SDK): Mica, barra de título
+integrada, navegación de Fluent y tema claro/oscuro. Tiene las mismas pantallas que la de Mac
+(Crear con plantillas y asistente, revisión del prompt, Historias con storyboard y video final,
+Biblioteca, Referencias, Skills y Guía) y los motores KIE y ChatGPT (Codex incluido).
+El instalador no pide permisos de administrador. Detalles en [`windows/README.md`](windows/README.md).
 
-**Primera apertura en Windows:** SmartScreen puede avisar porque el instalador no
+| Crear | Historias (oscuro) |
+|---|---|
+| ![Crear en Windows](docs/windows/02-crear-video.png) | ![Historias en Windows](docs/windows/10-historias-oscuro.png) |
+
+## Versión web y app Electron (anterior)
+
+Antes de la app nativa, Windows usaba una app de escritorio (Electron) sobre la versión web
+original (Next.js/vinext), que también se puede usar en el navegador. Sigue disponible en
+**Actions → Windows app (Electron)**.
+
+**Primera apertura (Windows):** SmartScreen puede avisar porque los instaladores no
 está firmado: tocá **Más información → Ejecutar de todas formas**.
 
-### Qué hace la app de Windows
+### Qué hace la app Electron
 
 - Arranca un servidor local privado (solo accesible desde tu equipo y solo
   desde la ventana de Framecraft, protegido con un token por sesión).
@@ -86,7 +100,7 @@ está firmado: tocá **Más información → Ejecutar de todas formas**.
 
 ![Arranque](docs/captura-arranque.png)
 
-### Tus datos (Windows y versión web)
+### Tus datos (Electron y versión web)
 
 Todo se guarda solo en tu equipo:
 
@@ -100,7 +114,7 @@ Todo se guarda solo en tu equipo:
   **Si haces copia de seguridad, copia la carpeta completa**: sin
   `secrets.env` las claves guardadas no se pueden descifrar.
 
-## Desarrollo (Windows y web)
+## Desarrollo (Electron y web)
 
 Requisitos: Node.js 24.
 
