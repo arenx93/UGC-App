@@ -22,6 +22,7 @@ private:
     void buildBanner();
     void buildAccelerators();
     void select(Section section);
+    void appWindowResize();
     void refresh(Change change);
     void refreshAccount();
     void refreshSuggestions(std::string const& query);

@@ -17,6 +17,7 @@ namespace fcapp {
 
 namespace {
 std::unique_ptr<MainWindow> gMainWindow;
+bool gSnapshotMode = false;
 constexpr int kMinWidth = 1040;
 constexpr int kMinHeight = 700;
 
@@ -26,6 +27,11 @@ LRESULT CALLBACK minimumSizeProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         auto* info = reinterpret_cast<MINMAXINFO*>(lParam);
         info->ptMinTrackSize.x = static_cast<LONG>(kMinWidth * scale);
         info->ptMinTrackSize.y = static_cast<LONG>(kMinHeight * scale);
+        if (gSnapshotMode) {
+            // Screenshots: allow a window larger than the CI runner's small screen.
+            info->ptMaxTrackSize.x = 4000;
+            info->ptMaxTrackSize.y = 4000;
+        }
     }
     return DefSubclassProc(hwnd, message, wParam, lParam);
 }
@@ -61,9 +67,16 @@ wf::IAsyncAction captureElement(mux::UIElement element, fs::path file, winrt::Wi
 
 std::string demoVideoPrompt();
 
+void MainWindow::appWindowResize() {
+    HWND hwnd = AppModel::shared().hwnd;
+    double scale = snapshotFolder_ ? 1.0 : GetDpiForWindow(hwnd) / 96.0;
+    window_.AppWindow().Resize({static_cast<int32_t>(1440 * scale), static_cast<int32_t>(900 * scale)});
+}
+
 void MainWindow::Launch(std::optional<fs::path> snapshotFolder) { gMainWindow.reset(new MainWindow(snapshotFolder)); }
 
 MainWindow::MainWindow(std::optional<fs::path> snapshotFolder) : snapshotFolder_(std::move(snapshotFolder)) {
+    gSnapshotMode = snapshotFolder_.has_value();
     ui::applyTheme();
     window_ = mux::Window();
     window_.Title(L"Framecraft");
@@ -87,8 +100,6 @@ MainWindow::MainWindow(std::optional<fs::path> snapshotFolder) : snapshotFolder_
     titleRow.Height(ui::pixels(48));
     root_.RowDefinitions().Append(titleRow);
     root_.RowDefinitions().Append(muxc::RowDefinition());
-    if (model.preferences.theme == "light") root_.RequestedTheme(mux::ElementTheme::Light);
-    else if (model.preferences.theme == "dark") root_.RequestedTheme(mux::ElementTheme::Dark);
 
     buildTitleBar();
     buildNavigation();
@@ -98,9 +109,7 @@ MainWindow::MainWindow(std::optional<fs::path> snapshotFolder) : snapshotFolder_
     window_.Content(root_);
     window_.SetTitleBar(titleBar_);
 
-    double scale = GetDpiForWindow(hwnd) / 96.0;
-    if (snapshotFolder_) scale = 1.0;
-    appWindow.Resize({static_cast<int32_t>(1440 * scale), static_cast<int32_t>(900 * scale)});
+    appWindowResize();
 
     model.openJobDetail = [this](std::string const& id) {
         if (root_.XamlRoot()) showJobDetail(root_.XamlRoot(), id);
@@ -123,6 +132,7 @@ MainWindow::MainWindow(std::optional<fs::path> snapshotFolder) : snapshotFolder_
 
     root_.Loaded([this](auto&&, auto&&) {
         auto& m = AppModel::shared();
+        if (auto settings = nav_.SettingsItem().try_as<muxc::NavigationViewItem>()) settings.Content(box_value(L"Ajustes"));
         if (snapshotFolder_) {
             runSnapshots();
         } else if (m.onboardingNeeded()) {
@@ -533,7 +543,8 @@ winrt::fire_and_forget MainWindow::runSnapshots() {
         {"02-crear-video", false, configureVideo},
         {"03-crear-video-oscuro", true, configureVideo},
         {"04-biblioteca", false, [&model] { model.filter = LibraryFilter::all; model.go(Section::library); }},
-        {"05-biblioteca-oscuro", true, [&model] { model.go(Section::library); }},
+        {"05-biblioteca-oscuro", true, [&model] { model.filter = LibraryFilter::all; model.go(Section::library); }},
+        {"05b-referencias-oscuro", true, [&model] { model.go(Section::references); }},
         {"06-referencias", false, [&model] { model.go(Section::references); }},
         {"07-skills", false, [&model] { model.go(Section::skills); }},
         {"08-guia", false, [&model] { model.go(Section::guide); }},
@@ -541,23 +552,28 @@ winrt::fire_and_forget MainWindow::runSnapshots() {
              if (!model.stories.empty()) model.selectedStoryID = model.stories.front().id;
              model.go(Section::stories);
          }},
-        {"10-historias-oscuro", true, [&model] { model.go(Section::stories); }},
+        {"10-historias-oscuro", true, [&model] {
+             if (!model.stories.empty()) model.selectedStoryID = model.stories.front().id;
+             model.go(Section::stories);
+         }},
+        {"11b-ajustes-oscuro", true, [&model] { model.go(Section::settings); }},
         {"11-ajustes", false, [&model] { model.go(Section::settings); }},
     };
+    bool dark = mux::Application::Current().RequestedTheme() == mux::ApplicationTheme::Dark;
+    appWindowResize();
     for (auto const& shot : shots) {
-        root_.RequestedTheme(shot.dark ? mux::ElementTheme::Dark : mux::ElementTheme::Light);
+        if (shot.dark != dark) continue;
         shot.setup();
         co_await winrt::resume_after(std::chrono::milliseconds(2500));
         co_await wil::resume_foreground(dispatcher);
         try {
-            co_await captureElement(root_, folder / widen(shot.name + ".png"), shot.dark ? ui::rgb(32, 32, 32) : ui::rgb(243, 243, 243));
+            co_await captureElement(root_, folder / widen(shot.name + ".png"), dark ? ui::rgb(32, 32, 32) : ui::rgb(243, 243, 243));
             OutputDebugStringA(("snapshot: " + shot.name + "\n").c_str());
         } catch (...) {
         }
     }
     // Welcome screen, shown over the window like the real dialog.
-    for (bool dark : {false, true}) {
-        root_.RequestedTheme(dark ? mux::ElementTheme::Dark : mux::ElementTheme::Light);
+    {
         muxc::Grid overlay;
         overlay.Background(muxm::SolidColorBrush(dark ? ui::rgb(0, 0, 0, 120) : ui::rgb(0, 0, 0, 60)));
         muxc::Grid::SetRowSpan(overlay, 2);

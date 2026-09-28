@@ -685,6 +685,8 @@ public:
         summary_.TextWrapping(mux::TextWrapping::NoWrap);
         summary_.TextTrimming(mux::TextTrimming::CharacterEllipsis);
         hint_ = ui::secondary("");
+        hint_.TextWrapping(mux::TextWrapping::NoWrap);
+        hint_.TextTrimming(mux::TextTrimming::CharacterEllipsis);
         summary.Children().Append(summary_);
         summary.Children().Append(hint_);
         summary.VerticalAlignment(mux::VerticalAlignment::Center);
@@ -729,6 +731,8 @@ public:
         assistantHost_.Background(ui::resource(L"LayerFillColorDefaultBrush"));
         assistantHost_.Child(assistant_.root());
         ui::place(root_, assistantHost_, 1);
+        // Narrow windows: the assistant floats over the content instead of squeezing it.
+        root_.SizeChanged([this](IInspectable const&, mux::SizeChangedEventArgs const& args) { layoutAssistant(args.NewSize().Width); });
     }
 
     mux::UIElement root() override { return root_; }
@@ -755,6 +759,23 @@ public:
     }
 
 private:
+    void layoutAssistant(double width) {
+        bool narrow = width < 1120;
+        if (narrow == narrow_) return;
+        narrow_ = narrow;
+        muxc::Grid::SetColumn(assistantHost_, narrow ? 0 : 1);
+        assistantHost_.HorizontalAlignment(narrow ? mux::HorizontalAlignment::Right : mux::HorizontalAlignment::Stretch);
+        assistantHost_.Width(narrow ? std::min(400.0, width - 40) : 410);
+        assistantHost_.Background(narrow ? ui::resource(L"AcrylicInAppFillColorDefaultBrush") : ui::resource(L"LayerFillColorDefaultBrush"));
+        if (narrow) {
+            assistantHost_.Shadow(muxm::ThemeShadow());
+            assistantHost_.Translation({0, 0, 32});
+        } else {
+            assistantHost_.Shadow(nullptr);
+            assistantHost_.Translation({0, 0, 0});
+        }
+    }
+
     void refreshTemplates() {
         auto& model = AppModel::shared();
         bool expanded = model.preferences.templatesExpanded;
@@ -1240,6 +1261,7 @@ private:
     muxc::Button generate_{nullptr}, active_{nullptr}, assistantToggle_{nullptr};
     AssistantPane assistant_;
     bool updating_ = false;
+    bool narrow_ = false;
 };
 
 }  // namespace
