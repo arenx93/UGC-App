@@ -19,7 +19,10 @@ let package = Package(
         // SwiftUI app.
         .executableTarget(
             name: "Framecraft",
-            dependencies: ["FramecraftCore"]
+            dependencies: ["FramecraftCore"],
+            // Apple Intelligence (FoundationModels) exists only on macOS 26+: weak-link it so the
+            // app keeps opening on macOS 14 and 15 (the engine then reports it is unavailable).
+            linkerSettings: [.unsafeFlags(["-Xlinker", "-weak_framework", "-Xlinker", "FoundationModels"])]
         ),
         .testTarget(
             name: "FramecraftCoreTests",

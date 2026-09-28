@@ -107,6 +107,7 @@ struct AccountSettings: View {
 
 struct GeneralSettings: View {
     @Environment(AppModel.self) private var model
+    @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
 
     var body: some View {
         @Bindable var model = model
@@ -121,6 +122,9 @@ struct GeneralSettings: View {
                 Toggle("Avisarme cuando termine una generación", isOn: $model.notifyWhenDone)
                     .onChange(of: model.notifyWhenDone) { _, _ in model.persist() }
                 Text("Llega una notificación si estás en otra app. El ícono del Dock muestra cuántas hay en curso.")
+                    .font(.caption).foregroundStyle(.secondary)
+                Toggle("Mostrar Framecraft en la barra de menús", isOn: $showMenuBarExtra)
+                Text("Ves el progreso de tus videos y tus últimas creaciones aunque cierres la ventana.")
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section("Ayuda") {

@@ -137,7 +137,7 @@ struct AssistantView: View {
                 HStack(spacing: 6) {
                     ForEach(examples, id: \.self) { example in
                         Button(example) { model.idea = example }
-                            .buttonStyle(.bordered)
+                            .glassButtonStyle()
                             .controlSize(.small)
                             .help("Usar esta idea de ejemplo")
                     }
@@ -186,10 +186,11 @@ struct AssistantView: View {
         return DisclosureGroup(isExpanded: $showEngine) {
             VStack(alignment: .leading, spacing: 10) {
                 Picker("Motor", selection: $model.provider) {
-                    ForEach(PromptProvider.allCases) { Text($0.title).tag($0) }
+                    ForEach(PromptProvider.allCases) { Text(Self.shortTitle($0)).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
+                Text(model.provider.summary).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                 switch model.provider {
                 case .kie:
                     Picker("Modelo", selection: $model.promptModel) {
@@ -210,6 +211,14 @@ struct AssistantView: View {
                     }
                 case .codex:
                     CodexAccountRow()
+                case .apple:
+                    let state = OnDeviceModel.availability
+                    Label(state.message, systemImage: state == .available ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
+                        .font(.caption)
+                        .foregroundStyle(state == .available ? Theme.success : .orange)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text("Usa un método compacto (sin la skill completa): para historias largas o máxima calidad, elegí KIE o ChatGPT.")
+                        .font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                 case .openai:
                     if !model.hasOpenAIKey {
                         SettingsLink { Text("Agregar clave de OpenAI en Ajustes") }
@@ -219,17 +228,18 @@ struct AssistantView: View {
             }
             .padding(.top, 6)
         } label: {
-            Text("Motor: \(engineName)").font(.callout.weight(.semibold))
+            Text("Motor: \(model.engineName)").font(.callout.weight(.semibold))
         }
         .task(id: model.provider) {
             if model.provider == .codex, model.codexStatus == .unknown { await model.refreshCodexStatus() }
         }
     }
 
-    private var engineName: String {
-        switch model.provider {
-        case .kie: PromptRequests.promptModels.first { $0.id == model.promptModel }?.name ?? "KIE"
-        case .codex: "ChatGPT (Codex)"
+    static func shortTitle(_ provider: PromptProvider) -> String {
+        switch provider {
+        case .kie: "KIE"
+        case .codex: "ChatGPT"
+        case .apple: "Este Mac"
         case .openai: "OpenAI"
         }
     }
@@ -264,6 +274,18 @@ struct AssistantView: View {
                 Text("Tu prompt").font(.headline)
                 Spacer()
                 Text("\(model.draft.count.formatted()) caracteres").font(.caption).foregroundStyle(.secondary)
+                if model.draftHistory.count > 1 {
+                    Menu {
+                        ForEach(Array(model.draftHistory.enumerated().reversed()), id: \.offset) { index, version in
+                            Button("Versión \(index + 1): \(version.prefix(60))…") { model.restoreDraft(at: index) }
+                        }
+                    } label: {
+                        Label("Versiones", systemImage: "clock.arrow.circlepath")
+                    }
+                    .menuStyle(.borderlessButton)
+                    .fixedSize()
+                    .help("Volver a una versión anterior del prompt")
+                }
             }
             if let text = model.draftProfilePrompt {
                 VStack(alignment: .leading, spacing: 6) {
@@ -320,7 +342,7 @@ struct AssistantView: View {
                 } label: {
                     Image(systemName: "doc.on.doc")
                 }
-                .buttonStyle(.bordered)
+                .glassButtonStyle()
                 .controlSize(.large)
                 .help("Copiar el prompt")
                 .accessibilityLabel("Copiar el prompt")

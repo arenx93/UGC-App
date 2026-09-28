@@ -1,5 +1,6 @@
 import AppKit
 import AVFoundation
+import FramecraftCore
 import ImageIO
 import SwiftUI
 import UniformTypeIdentifiers
@@ -131,4 +132,58 @@ struct Thumbnail: View {
             failed = loaded == nil
         }
     }
+}
+
+// MARK: - Story final cut
+
+extension MediaTools {
+    /// Joins clips one after another (video + audio) into a single MP4.
+    static func concatenate(_ clips: [URL], to destination: URL) async throws {
+        let composition = AVMutableComposition()
+        guard let videoTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            throw KieError("No se pudo preparar el montaje.", definite: true)
+        }
+        let audioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+        var cursor = CMTime.zero
+        var transformSet = false
+        for clip in clips {
+            let asset = AVURLAsset(url: clip)
+            let duration = try await asset.load(.duration)
+            let range = CMTimeRange(start: .zero, duration: duration)
+            guard let sourceVideo = try await asset.loadTracks(withMediaType: .video).first else {
+                throw KieError("\(clip.lastPathComponent) no tiene imagen.", definite: true)
+            }
+            try videoTrack.insertTimeRange(range, of: sourceVideo, at: cursor)
+            if !transformSet {
+                videoTrack.preferredTransform = try await sourceVideo.load(.preferredTransform)
+                transformSet = true
+            }
+            if let sourceAudio = try await asset.loadTracks(withMediaType: .audio).first {
+                try audioTrack?.insertTimeRange(range, of: sourceAudio, at: cursor)
+            }
+            cursor = CMTimeAdd(cursor, duration)
+        }
+        try? FileManager.default.removeItem(at: destination)
+        guard let export = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else {
+            throw KieError("No se pudo exportar el video.", definite: true)
+        }
+        export.outputURL = destination
+        export.outputFileType = .mp4
+        export.shouldOptimizeForNetworkUse = true
+        let box = ExportBox(session: export)
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            box.session.exportAsynchronously {
+                if box.session.status == .completed {
+                    continuation.resume()
+                } else {
+                    continuation.resume(throwing: box.session.error ?? KieError("La exportación se canceló.", definite: true))
+                }
+            }
+        }
+    }
+}
+
+/// Lets the export session cross into the completion handler.
+private struct ExportBox: @unchecked Sendable {
+    let session: AVAssetExportSession
 }

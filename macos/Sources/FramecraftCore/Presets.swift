@@ -77,8 +77,12 @@ public enum Presets {
 
     public static func imageModel(_ id: String) -> ImageModel? { imageModels.first { $0.id == id } }
     public static func modelName(_ id: String) -> String {
-        id == videoModelID ? videoModelName : imageModel(id)?.name ?? id
+        if id == storyCutModelID { return "Historia montada" }
+        return id == videoModelID ? videoModelName : imageModel(id)?.name ?? id
     }
+
+    /// Model id for the final cut Framecraft assembles from a story's scenes (made locally, no credits).
+    public static let storyCutModelID = "framecraft-story"
 
     /// Longest prompt the user may type for an image model.
     public static func maxPromptLength(imageModel: String) -> Int { imageModel == "nano-banana-pro" ? 9000 : 18000 }

@@ -34,14 +34,22 @@ struct StoriesView: View {
                     StoryDetail(storyID: id)
                         .id(id)
                 } else {
-                    ContentUnavailableView {
-                        Label("Contá una historia", systemImage: "film.stack")
-                    } description: {
-                        Text("Pegá el brief (personajes, lugar, qué pasa, tono, duración) y el asistente la divide en escenas, cada una con su prompt listo, de qué trata y en qué orden cargar las referencias. Después la ajustás escena por escena.")
-                    } actions: {
-                        Button("Nueva historia") { model.newStory() }
-                            .buttonStyle(GradientButtonStyle(height: 36))
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 22) {
+                            ScreenHeader(title: "Contá una historia",
+                                         subtitle: "Pegá el brief (personajes, lugar, qué pasa, tono, duración) y el asistente la divide en escenas, cada una con su prompt listo, de qué trata y en qué orden cargar las referencias. Después la ajustás escena por escena, generás todo en cadena y armás el video final.")
+                            Button { model.newStory() } label: {
+                                Label("Historia en blanco", systemImage: "plus").frame(minWidth: 180)
+                            }
+                            .buttonStyle(GradientButtonStyle(height: 40))
+                            Text("O empezá con un formato:").font(.headline)
+                            StoryTemplateGrid()
+                        }
+                        .padding(32)
+                        .frame(maxWidth: 820, alignment: .leading)
+                        .frame(maxWidth: .infinity)
                     }
+                    .background(alignment: .top) { AuraBackground().frame(height: 380).ignoresSafeArea() }
                 }
             }
             .frame(minWidth: 560, maxWidth: .infinity, maxHeight: .infinity)
@@ -74,29 +82,36 @@ struct StoryDetail: View {
 
     var body: some View {
         if let story {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    header(story)
-                    if story.scenes.isEmpty {
-                        briefCard(story)
-                    } else {
-                        DisclosureGroup(isExpanded: $showBrief) { briefCard(story).padding(.top, 8) } label: {
-                            Text("Brief, ajustes y referencias").font(.headline)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 18) {
+                        header(story)
+                        if story.scenes.isEmpty {
+                            briefCard(story)
+                        } else {
+                            DisclosureGroup(isExpanded: $showBrief) { briefCard(story).padding(.top, 8) } label: {
+                                Text("Brief, ajustes y referencias").font(.headline)
+                            }
+                        }
+                        progress
+                        if !story.scenes.isEmpty {
+                            StoryProduction(storyID: storyID) { sceneID in
+                                withAnimation(.snappy) { proxy.scrollTo(sceneID, anchor: .top) }
+                            }
+                            overview(story)
+                            ForEach(story.scenes) { scene in
+                                SceneCard(storyID: storyID, scene: scene)
+                                    .id(scene.id)
+                            }
+                            conversation(story)
                         }
                     }
-                    progress
-                    if !story.scenes.isEmpty {
-                        overview(story)
-                        ForEach(story.scenes) { scene in
-                            SceneCard(storyID: storyID, scene: scene)
-                        }
-                        conversation(story)
-                    }
+                    .padding(24)
+                    .frame(maxWidth: 980, alignment: .leading)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(24)
-                .frame(maxWidth: 980, alignment: .leading)
-                .frame(maxWidth: .infinity)
             }
+            .background(alignment: .top) { AuraBackground(intensity: 0.6).frame(height: 260).ignoresSafeArea() }
             .onAppear { showBrief = story.scenes.isEmpty }
             .onDisappear { model.persist() }
         }
@@ -119,12 +134,12 @@ struct StoryDetail: View {
             Spacer()
             if !story.scenes.isEmpty {
                 Button { model.exportStory(storyID) } label: { Label("Exportar pack", systemImage: "square.and.arrow.up") }
-                    .buttonStyle(.bordered)
+                    .glassButtonStyle()
                     .help("Guardar todos los prompts en un .txt, como el pack de Walter")
                 Button {
                     model.copyToPasteboard(StoryRequests.exportText(story, referenceLines: model.displayLines(story)))
                 } label: { Label("Copiar todo", systemImage: "doc.on.doc") }
-                    .buttonStyle(.bordered)
+                    .glassButtonStyle()
             }
         }
     }
@@ -195,7 +210,7 @@ struct StoryDetail: View {
                 StorySlotsEditor(storyID: storyID)
                 Divider()
                 HStack {
-                    Text("Motor: \(engineName) · se cambia en el asistente de Crear")
+                    Text("Motor: \(model.engineName) · se cambia en el asistente de Crear")
                         .font(.caption).foregroundStyle(.secondary)
                     Spacer()
                     Button {
@@ -214,13 +229,6 @@ struct StoryDetail: View {
         }
     }
 
-    private var engineName: String {
-        switch model.provider {
-        case .kie: PromptRequests.promptModels.first { $0.id == model.promptModel }?.name ?? "KIE"
-        case .codex: "ChatGPT (Codex)"
-        case .openai: "OpenAI"
-        }
-    }
 
     // MARK: Progress
 
@@ -510,7 +518,7 @@ struct SceneCard: View {
                         Button { model.detailJobID = job.id } label: { Label("Ver video", systemImage: "play.circle") }
                     }
                 }
-                .buttonStyle(.bordered)
+                .glassButtonStyle()
                 HStack {
                     TextField("Ajustar esta escena: ej. “que Walter tarde más en responder”, “sacá la moza”…", text: $note, axis: .vertical)
                         .textFieldStyle(.roundedBorder)
@@ -560,5 +568,153 @@ struct JobChip: View {
             .padding(.horizontal, 8).padding(.vertical, 3)
             .background(color.opacity(0.15), in: Capsule())
             .foregroundStyle(color)
+    }
+}
+
+/// Storyboard of the scenes plus the production actions: generate everything and assemble the final video.
+struct StoryProduction: View {
+    @Environment(AppModel.self) private var model
+    let storyID: UUID
+    let onSelect: (UUID) -> Void
+
+    var body: some View {
+        if let story = model.stories.first(where: { $0.id == storyID }) {
+            let ready = story.scenes.filter { model.finishedClip(for: $0) != nil }.count
+            let running = model.storyRun?.storyID == storyID ? model.storyRun : nil
+            Card {
+                VStack(alignment: .leading, spacing: 14) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Label("Storyboard", systemImage: "rectangle.split.3x1").font(.headline)
+                        Text("\(ready) de \(story.scenes.count) escenas con video")
+                            .font(.caption).foregroundStyle(.secondary)
+                            .contentTransition(.numericText())
+                        Spacer()
+                    }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(alignment: .top, spacing: 8) {
+                            ForEach(story.scenes) { scene in
+                                StoryboardTile(scene: scene, clip: model.finishedClip(for: scene), latest: model.latestJob(for: scene),
+                                               current: running?.current == scene.number)
+                                    .frame(width: max(96, CGFloat(scene.duration) * 7))
+                                    .onTapGesture { onSelect(scene.id) }
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
+                    .scrollClipDisabled()
+                    ProgressView(value: Double(ready), total: Double(max(story.scenes.count, 1)))
+                        .tint(Theme.pink)
+                        .accessibilityLabel("\(ready) de \(story.scenes.count) escenas listas")
+                    HStack(spacing: 10) {
+                        if let running {
+                            ProgressView().controlSize(.small)
+                            Text(running.text).font(.callout).lineLimit(2)
+                            Spacer()
+                            Button("Detener") { model.cancelStoryRun() }
+                                .glassButtonStyle()
+                        } else {
+                            Button {
+                                model.generateAllScenes(storyID)
+                            } label: {
+                                Label(ready == 0 ? "Generar todas las escenas" : "Generar las que faltan", systemImage: "sparkles.rectangle.stack")
+                            }
+                            .buttonStyle(GradientButtonStyle(height: 38))
+                            .disabled(ready == story.scenes.count || !model.hasKieKey || model.storyRun != nil)
+                            .help(story.slots.contains(where: \.isLastFrame)
+                                  ? "Envía las escenas en orden: cada una espera a la anterior para usar su último fotograma."
+                                  : "Envía todas las escenas sin video a Seedance.")
+                            Button {
+                                Task { await model.assembleStory(storyID) }
+                            } label: {
+                                if model.assemblingStoryID == storyID {
+                                    HStack(spacing: 6) { ProgressView().controlSize(.small); Text("Armando…") }
+                                } else {
+                                    Label("Armar video final", systemImage: "film")
+                                }
+                            }
+                            .glassButtonStyle()
+                            .controlSize(.large)
+                            .disabled(ready < story.scenes.count || model.assemblingStoryID != nil)
+                            .help(ready < story.scenes.count
+                                  ? "Disponible cuando todas las escenas tengan video."
+                                  : "Une todas las escenas en un solo MP4 (\(story.totalDuration) s), en tu Mac y sin gastar créditos.")
+                            if let finalID = story.finalCutJobID, model.jobs.contains(where: { $0.id == finalID }) {
+                                Button {
+                                    model.detailJobID = finalID
+                                } label: {
+                                    Label("Ver video final", systemImage: "play.rectangle.fill")
+                                }
+                                .glassButtonStyle()
+                                .controlSize(.large)
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct StoryboardTile: View {
+    let scene: StoryScene
+    let clip: Job?
+    let latest: Job?
+    let current: Bool
+    @Environment(AppModel.self) private var model
+    @State private var hovering = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            ZStack {
+                if let clip, let url = model.outputURLs(clip).first {
+                    Thumbnail(url: url, video: true, maxPixel: 300)
+                } else {
+                    Theme.softGradient
+                    Text("\(scene.number)")
+                        .font(.system(size: 26, weight: .heavy, design: .rounded))
+                        .brandGradientText()
+                }
+            }
+            .frame(height: 96)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(alignment: .bottomLeading) { status.padding(5) }
+            .overlay(alignment: .topLeading) {
+                Text("\(scene.duration) s")
+                    .font(.caption2.weight(.bold).monospacedDigit())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 5).padding(.vertical, 2)
+                    .background(.black.opacity(0.45), in: Capsule())
+                    .padding(5)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .strokeBorder(current ? AnyShapeStyle(Theme.gradient) : AnyShapeStyle(hovering ? Theme.pink.opacity(0.6) : Theme.hairline),
+                                  lineWidth: current ? 2.5 : 1)
+            )
+            Text("\(scene.number). \(scene.title)").font(.caption.weight(.medium)).lineLimit(1)
+        }
+        .contentShape(Rectangle())
+        .onHover { hovering = $0 }
+        .help(scene.summary)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Escena \(scene.number): \(scene.title)")
+        .accessibilityAddTraits(.isButton)
+    }
+
+    @ViewBuilder
+    private var status: some View {
+        if clip != nil {
+            Image(systemName: "checkmark.circle.fill").foregroundStyle(.white, Theme.success).font(.callout)
+        } else if let latest, latest.status.isActive {
+            Text("\(latest.progress)%")
+                .font(.caption2.weight(.bold).monospacedDigit())
+                .foregroundStyle(.white)
+                .padding(.horizontal, 5).padding(.vertical, 2)
+                .background(Theme.pink, in: Capsule())
+        } else if let latest, latest.status == .fail || latest.status == .unknown {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.white, .orange).font(.callout)
+        }
     }
 }

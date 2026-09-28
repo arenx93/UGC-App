@@ -109,6 +109,16 @@ jobs:
           build/Framecraft.app/Contents/MacOS/codex --version
           build/Framecraft.app/Contents/MacOS/codex login status || echo "(sin sesión, esperado en CI)"
 
+      - name: Still opens on macOS 14 and 15 (Apple Intelligence weak-linked)
+        run: |
+          BIN=build/Framecraft.app/Contents/MacOS/Framecraft
+          lipo -info "$BIN"
+          vtool -show-build "$BIN" | grep -iE 'minos|platform' || true
+          otool -l "$BIN" | grep -B2 'FoundationModels' || echo "FoundationModels not linked"
+          if otool -l "$BIN" | grep -B2 'FoundationModels' | grep -q 'cmd LC_LOAD_DYLIB'; then
+            echo "::error::FoundationModels must be weak-linked or the app will not open before macOS 26"; exit 1
+          fi
+
       - name: Normal launch check (quarantined, like a downloaded copy)
         run: |
           # Simulate a copy downloaded from the internet, then launch it the normal way.

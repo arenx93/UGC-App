@@ -13,6 +13,7 @@ enum SnapshotRunner {
 
         let model = DemoData.makeModel()
         let full = CGSize(width: 1440, height: 900)
+        var savedStories: [Story] = []
 
         func configureImage() {
             model.section = .create
@@ -62,6 +63,18 @@ enum SnapshotRunner {
             ("12-detalle", CGSize(width: 1100, height: 760), .aqua, {}, {
                 AnyView(JobDetailView(jobID: model.jobs.first { $0.status == .success }?.id ?? UUID()))
             }),
+            ("13-paleta-de-comandos", CGSize(width: 640, height: 480), .aqua, {}, { AnyView(CommandPalette()) }),
+            ("14-barra-de-menus", CGSize(width: 320, height: 330), .aqua, {}, { AnyView(MenuBarPanel()) }),
+            ("15-historias-oscuro", full, .darkAqua, {
+                model.section = .stories
+                model.selectedStoryID = model.stories.first?.id
+            }, { AnyView(RootView()) }),
+            ("16-historias-plantillas", full, .aqua, {
+                savedStories = model.stories
+                model.stories = []
+                model.selectedStoryID = nil
+                model.section = .stories
+            }, { AnyView(RootView()) }),
         ]
 
         for (name, size, appearance, configure, content) in scenes {
@@ -111,6 +124,10 @@ enum SnapshotRunner {
                 }
             }
             window.orderOut(nil)
+            if !savedStories.isEmpty {
+                model.stories = savedStories
+                savedStories = []
+            }
         }
         exit(0)
     }
@@ -198,8 +215,9 @@ enum DemoData {
                 created: now.addingTimeInterval(Double(-3600 * (i + 1))), favorite: i == 1
             ))
         }
+        let generatingVideoID = UUID()
         index.jobs.insert(Job(
-            batchID: UUID(), kind: .video, model: Presets.videoModelID, prompt: "Chica recomienda su sérum frente al espejo del baño, 15 s, diálogo en inglés.",
+            id: generatingVideoID, batchID: UUID(), kind: .video, model: Presets.videoModelID, prompt: "Chica recomienda su sérum frente al espejo del baño, 15 s, diálogo en inglés.",
             finalPrompt: videoPrompt, settings: JobSettings(resolution: "1080p", aspect: "9:16", duration: 15, generateAudio: true),
             status: .generating, progress: 46, taskId: "demo", created: now.addingTimeInterval(-120)
         ), at: 0)
@@ -225,7 +243,7 @@ enum DemoData {
             referenceOrder: "Cargá @Image1 (Walter) y @Image2 (último fotograma de la escena anterior) en ese orden; @Audio1 solo como timbre.",
             scenes: [
                 StoryScene(number: 1, title: "Hook: “Eighty-two”", summary: "El cliente le pregunta la edad a Walter mientras sirve café; la respuesta abre la historia.", duration: 30,
-                           prompt: bible + "\n0–10 s: P1 pours coffee. P2 (curious, casual): \"How old are you, if you don't mind me asking?\"\n10–30 s: P1 (proud, a small laugh): \"Eighty-two.\" No music, no text.", notes: "Diálogo corto: sumar líneas para llegar a ~74 palabras."),
+                           prompt: bible + "\n0–10 s: P1 pours coffee. P2 (curious, casual): \"How old are you, if you don't mind me asking?\"\n10–30 s: P1 (proud, a small laugh): \"Eighty-two.\" No music, no text.", notes: "Diálogo corto: sumar líneas para llegar a ~74 palabras.", jobIDs: [generatingVideoID]),
                 StoryScene(number: 2, title: "La hija", summary: "Walter cuenta, sin dramatismo, que su hija falleció y por eso trabaja.", duration: 30,
                            prompt: bible + "\n@Image2 IS the first frame of this video.\n0–15 s: P1 (quiet, flat): \"My daughter passed away.\" Match @Audio1 for timbre only. No music, no cuts, no text."),
                 StoryScene(number: 3, title: "El peso", summary: "El cliente cambia de tema con humor; Walter se ríe y toma el pedido.", duration: 25,

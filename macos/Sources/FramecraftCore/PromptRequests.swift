@@ -20,13 +20,24 @@ public struct PromptModel: Identifiable, Hashable, Sendable {
 }
 
 public enum PromptProvider: String, Codable, Sendable, CaseIterable, Identifiable {
-    case kie, codex, openai
+    case kie, codex, apple, openai
     public var id: String { rawValue }
     public var title: String {
         switch self {
         case .kie: "KIE"
         case .codex: "ChatGPT (Codex)"
+        case .apple: "En este Mac"
         case .openai: "OpenAI API"
+        }
+    }
+
+    /// Short explanation shown under the engine picker.
+    public var summary: String {
+        switch self {
+        case .kie: "Modelos grandes (GPT‑5.6, Claude, Gemini) con tu clave de KIE."
+        case .codex: "Tu cuenta de ChatGPT, sin gastar créditos de KIE."
+        case .apple: "Apple Intelligence en tu Mac: gratis, privado y sin internet. Ideal para prompts cortos."
+        case .openai: "Tu clave de la API de OpenAI."
         }
     }
 }
@@ -228,6 +239,48 @@ public enum PromptRequests {
             "If the brief includes previousPrompt and feedback, revise previousPrompt following the feedback instead of starting over.",
             "Camera and film presets are appended again during image generation, so respect them without adding Framecraft-specific override fields.",
         ].joined(separator: " ")
+    }
+
+    // MARK: On-device (Apple Intelligence)
+
+    /// Compact rules for Apple's on-device model. Its context window is small, so instead of the
+    /// full skill it gets the essentials of the Seedance method.
+    public static func onDeviceInstructions(media: MediaKind, ugc: Bool) -> String {
+        var lines = ["You write prompts for an AI image and video studio. Never refuse a normal creative request. Answer with the finished prompt only: no heading, no markdown, no commentary."]
+        if media == .video {
+            lines.append("Write one video prompt for Seedance 2.5 in the language spoken in the video (English if nobody speaks).")
+            if ugc {
+                lines += [
+                    "Style: real phone footage (UGC). Start with a FORMAT line: aspect, duration, one continuous take, rear phone camera, wide lens about 26mm, handheld micro-shake, deep depth of field.",
+                    "Then time blocks like \"0-5 s:\" describing concrete physical actions and their causes, never adjectives like cinematic or beautiful.",
+                    "Dialogue goes in quotes. Direction in parentheses is never spoken. Match the target word count.",
+                    "End with AUDIO (diegetic phone microphone, room sound) and RESTRICTIONS (no music, no on-screen text, no gimbal, no bokeh, no beauty filter, not an ad).",
+                ]
+            } else {
+                lines.append("Describe subject, action, camera, lighting, pacing and sound, with time blocks when useful.")
+            }
+            lines.append("Refer to reference files only with the given tags (for example @Image1) and never invent tags.")
+        } else {
+            lines.append("Write one image prompt in English: subject, composition, lighting, texture and realistic details, under 900 characters.")
+        }
+        return lines.joined(separator: "\n")
+    }
+
+    /// Plain-language brief for the on-device model.
+    public static func onDeviceBrief(_ brief: PromptBrief) -> String {
+        var lines = ["Idea: \(brief.idea)", "Aspect ratio: \(brief.aspect)"]
+        if let duration = brief.duration {
+            lines.append("Duration: \(duration) seconds")
+            if brief.generateAudio ?? true {
+                lines.append("Target dialogue: about \(DialogueMath.targetWords(seconds: duration)) spoken words in \(brief.dialogueLanguage ?? "Spanish")")
+            }
+        }
+        if !brief.referenceTags.isEmpty { lines.append("Reference files: " + brief.referenceTags.joined(separator: "; ")) }
+        if let previous = brief.previousPrompt, !previous.isEmpty {
+            lines.append("Current prompt to revise:\n\(previous)")
+            if let feedback = brief.feedback, !feedback.isEmpty { lines.append("Change requested: \(feedback)") }
+        }
+        return lines.joined(separator: "\n")
     }
 
     // MARK: Request bodies

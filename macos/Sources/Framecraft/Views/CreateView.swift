@@ -11,6 +11,7 @@ struct CreateView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 header
+                TemplateGallery()
                 ModePicker()
                 PromptSection()
                 if model.mode == .video, let report = model.lintReport {
@@ -20,11 +21,13 @@ struct CreateView: View {
                 SettingsSection()
             }
             .padding(.horizontal, 28)
-            .padding(.vertical, 24)
+            .padding(.top, 24)
+            .padding(.bottom, 110)
             .frame(maxWidth: 880)
             .frame(maxWidth: .infinity)
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) { GenerateBar() }
+        .background(alignment: .top) { AuraBackground().frame(height: 420).ignoresSafeArea() }
+        .overlay(alignment: .bottom) { GenerateBar() }
         .overlay {
             if dropTargeted {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
@@ -62,14 +65,18 @@ struct CreateView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("¿Qué querés crear hoy?")
-                .font(.system(size: 30, weight: .bold, design: .rounded))
-                .brandGradientText()
-                .accessibilityAddTraits(.isHeader)
-            Text("Elegí imagen o video, describí la escena y generá. Todo se guarda en Imágenes ▸ Framecraft.")
-                .font(.callout)
-                .foregroundStyle(.secondary)
+        HStack(alignment: .top) {
+            ScreenHeader(title: "¿Qué querés crear hoy?",
+                         subtitle: "Elegí imagen o video, describí la escena y generá. Todo se guarda en Imágenes ▸ Framecraft.")
+            Spacer()
+            Button {
+                model.showCommandPalette = true
+            } label: {
+                Label("Buscar o hacer…", systemImage: "command")
+                    .font(.callout)
+            }
+            .glassButtonStyle()
+            .help("Paleta de comandos (⌘K): acciones, plantillas, historias y creaciones")
         }
     }
 }
@@ -183,7 +190,7 @@ struct PromptSection: View {
                         .foregroundStyle(model.prompt.count > limit ? Color.red : Color.secondary)
                         .accessibilityLabel("\(model.prompt.count) de \(limit) caracteres")
                 }
-                .buttonStyle(.bordered)
+                .glassButtonStyle()
                 .controlSize(.regular)
             }
         }
@@ -359,7 +366,7 @@ struct ReferencesSection: View {
                         } label: {
                             Label("Agregar archivos", systemImage: "plus")
                         }
-                        .buttonStyle(.bordered)
+                        .glassButtonStyle()
                         .keyboardShortcut("o")
                         .help("Elegir imágenes, videos o audios (⌘O). También podés arrastrarlos a la ventana.")
                     )
@@ -670,7 +677,7 @@ struct SettingsSection: View {
             HStack(spacing: 6) {
                 ForEach(Presets.videoDurationShortcuts, id: \.self) { seconds in
                     Button("\(seconds) s") { withAnimation(.snappy) { model.videoDuration = seconds } }
-                        .buttonStyle(.bordered)
+                        .glassButtonStyle()
                         .controlSize(.small)
                         .tint(model.videoDuration == seconds ? Theme.pink : nil)
                 }
@@ -736,7 +743,7 @@ struct GenerateBar: View {
                 } label: {
                     Label("\(model.activeJobs.count) en curso", systemImage: "hourglass")
                 }
-                .buttonStyle(.bordered)
+                .glassButtonStyle()
                 .help("Ver las generaciones en curso")
             }
             Button {
@@ -757,10 +764,13 @@ struct GenerateBar: View {
             .disabled(model.generateBlocker != nil)
             .help(model.generateBlocker ?? "Generar (⌘↩)")
         }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 12)
-        .background(.bar)
-        .overlay(alignment: .top) { Divider() }
+        .padding(.leading, 22)
+        .padding(.trailing, 8)
+        .padding(.vertical, 8)
+        .glassSurface(RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .padding(.horizontal, 20)
+        .padding(.bottom, 14)
+        .frame(maxWidth: 920)
     }
 
     private var buttonTitle: String {

@@ -30,6 +30,10 @@ struct RootView: View {
             OnboardingView()
                 .environment(model)
         }
+        .sheet(isPresented: $model.showCommandPalette) {
+            CommandPalette()
+                .environment(model)
+        }
         .sheet(isPresented: $model.showPromptPreview) {
             PromptPreviewSheet()
                 .environment(model)

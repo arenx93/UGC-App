@@ -236,3 +236,62 @@ final class StoryTests: XCTestCase {
         XCTAssertTrue(brief.contains("más corto"))
     }
 }
+
+final class TemplateTests: XCTestCase {
+    func testTemplatesAreValid() {
+        XCTAssertEqual(Set(Templates.creative.map(\.id)).count, Templates.creative.count)
+        XCTAssertEqual(Set(Templates.stories.map(\.id)).count, Templates.stories.count)
+        for template in Templates.creative {
+            XCTAssertFalse(template.placeholders.isEmpty, "\(template.id) should have [placeholders]")
+            if template.media == .video {
+                let duration = template.duration ?? 0
+                XCTAssertTrue(Presets.videoDurationRange.contains(duration), template.id)
+                XCTAssertTrue(Presets.videoAspects.contains(template.aspect), template.id)
+            }
+        }
+        XCTAssertTrue(Templates.creative.contains { $0.media == .image })
+        XCTAssertTrue(Templates.creative.contains { $0.media == .video })
+    }
+
+    func testPlaceholders() {
+        let template = CreativeTemplate(id: "x", title: "x", subtitle: "x", symbol: "x", media: .video,
+                                        idea: "Uso [tu producto] en [la cocina] y [x] no cuenta")
+        XCTAssertEqual(template.placeholders, ["[tu producto]", "[la cocina]"])
+    }
+}
+
+final class OnDeviceTests: XCTestCase {
+    func testProviderRoundTrip() throws {
+        let data = try JSONEncoder().encode([PromptProvider.apple])
+        XCTAssertEqual(try JSONDecoder().decode([PromptProvider].self, from: data), [.apple])
+        XCTAssertEqual(PromptProvider.allCases.count, 4)
+    }
+
+    func testCompactBrief() {
+        let brief = PromptBrief(idea: "Chica recomienda su sérum", media: .video, targetModel: Presets.videoModelID,
+                                aspect: "9:16", resolution: "720p", duration: 15, generateAudio: true,
+                                dialogueLanguage: "Inglés", referenceTags: ["@Image1 = frasco.png"])
+        let text = PromptRequests.onDeviceBrief(brief)
+        XCTAssertTrue(text.contains("Duration: 15 seconds"))
+        XCTAssertTrue(text.contains("about \(DialogueMath.targetWords(seconds: 15)) spoken words in Inglés"))
+        XCTAssertTrue(text.contains("@Image1 = frasco.png"))
+        let rules = PromptRequests.onDeviceInstructions(media: .video, ugc: true)
+        XCTAssertTrue(rules.contains("RESTRICTIONS"))
+        // Small context window: keep the compact rules short.
+        XCTAssertLessThan(rules.count, 2000)
+    }
+
+    func testStoryCutName() {
+        XCTAssertEqual(Presets.modelName(Presets.storyCutModelID), "Historia montada")
+    }
+
+    func testOldStoriesStillDecode() throws {
+        var story = Story(title: "Vieja")
+        story.finalCutJobID = nil
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(story)) as? [String: Any])
+        object.removeValue(forKey: "finalCutJobID")
+        let decoded = try JSONDecoder().decode(Story.self, from: JSONSerialization.data(withJSONObject: object))
+        XCTAssertEqual(decoded.title, "Vieja")
+        XCTAssertNil(decoded.finalCutJobID)
+    }
+}

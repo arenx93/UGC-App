@@ -13,7 +13,7 @@ enum Theme {
         startPoint: .topLeading, endPoint: .bottomTrailing
     )
 
-    static let cardRadius: CGFloat = 14
+    static let cardRadius: CGFloat = 18
     static let cardFill = Color(nsColor: .controlBackgroundColor)
     static let hairline = Color.primary.opacity(0.09)
 }
@@ -27,9 +27,9 @@ struct Card<Content: View>: View {
         content
             .padding(padding)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Theme.cardFill, in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
+            .background(Theme.cardFill.opacity(0.86), in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous).strokeBorder(Theme.hairline))
-            .shadow(color: .black.opacity(0.05), radius: 6, y: 2)
+            .shadow(color: .black.opacity(0.06), radius: 10, y: 4)
     }
 }
 
@@ -311,6 +311,7 @@ struct BannerView: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: icon).foregroundStyle(color).font(.title3)
+                .symbolEffect(.bounce, value: banner.id)
             Text(banner.text)
                 .font(.callout)
                 .fixedSize(horizontal: false, vertical: true)
@@ -324,9 +325,7 @@ struct BannerView: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
         .frame(maxWidth: 620)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(color.opacity(0.4)))
-        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+        .glassSurface(Capsule(), tint: color.opacity(0.35))
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isStaticText)
     }
@@ -352,5 +351,134 @@ extension View {
     /// Gradient text.
     func brandGradientText() -> some View {
         overlay(Theme.gradient).mask(self)
+    }
+}
+
+// MARK: - Liquid Glass (macOS 26+) with material fallbacks for macOS 14–15
+
+extension View {
+    /// Liquid Glass behind the view (controls, floating bars, toasts). Falls back to a material.
+    @ViewBuilder
+    func glassSurface<S: Shape>(_ shape: S, tint: Color? = nil, interactive: Bool = false) -> some View {
+        #if compiler(>=6.2)
+        if #available(macOS 26.0, *) {
+            self.glassEffect(Self.glass(tint: tint, interactive: interactive), in: shape)
+        } else {
+            self.legacyGlass(shape, tint: tint)
+        }
+        #else
+        self.legacyGlass(shape, tint: tint)
+        #endif
+    }
+
+    #if compiler(>=6.2)
+    @available(macOS 26.0, *)
+    private static func glass(tint: Color?, interactive: Bool) -> Glass {
+        var glass = Glass.regular
+        if let tint { glass = glass.tint(tint) }
+        if interactive { glass = glass.interactive() }
+        return glass
+    }
+    #endif
+
+    private func legacyGlass<S: Shape>(_ shape: S, tint: Color?) -> some View {
+        background {
+            ZStack {
+                shape.fill(.regularMaterial)
+                if let tint { shape.fill(tint.opacity(0.18)) }
+            }
+        }
+        .overlay(shape.stroke(Color.white.opacity(0.18), lineWidth: 1))
+        .shadow(color: .black.opacity(0.12), radius: 14, y: 6)
+    }
+
+    /// Secondary buttons: glass on macOS 26, bordered before.
+    @ViewBuilder
+    func glassButtonStyle() -> some View {
+        #if compiler(>=6.2)
+        if #available(macOS 26.0, *) {
+            self.buttonStyle(.glass)
+        } else {
+            self.buttonStyle(.bordered)
+        }
+        #else
+        self.buttonStyle(.bordered)
+        #endif
+    }
+
+    /// Groups nearby glass shapes so they blend and morph together (macOS 26).
+    @ViewBuilder
+    func glassGroup(spacing: CGFloat = 12) -> some View {
+        #if compiler(>=6.2)
+        if #available(macOS 26.0, *) {
+            GlassEffectContainer(spacing: spacing) { self }
+        } else {
+            self
+        }
+        #else
+        self
+        #endif
+    }
+}
+
+/// Soft brand-colored light that drifts slowly behind the content (mesh gradient on macOS 15+).
+struct AuraBackground: View {
+    var intensity: Double = 1
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        let strength = (colorScheme == .dark ? 0.30 : 0.20) * intensity
+        Group {
+            if #available(macOS 15.0, *) {
+                TimelineView(.animation(minimumInterval: 1 / 12, paused: reduceMotion)) { context in
+                    let t = reduceMotion ? 0 : context.date.timeIntervalSinceReferenceDate / 7
+                    MeshGradient(width: 3, height: 3, points: Self.points(t), colors: Self.colors(strength))
+                }
+            } else {
+                LinearGradient(colors: [Theme.pink.opacity(strength), .clear], startPoint: .top, endPoint: .bottom)
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private static func points(_ t: Double) -> [SIMD2<Float>] {
+        let x = Float(0.5 + 0.18 * sin(t))
+        let y = Float(0.45 + 0.15 * cos(t * 1.3))
+        return [
+            SIMD2(0, 0), SIMD2(0.5, 0), SIMD2(1, 0),
+            SIMD2(0, 0.5), SIMD2(x, y), SIMD2(1, 0.5),
+            SIMD2(0, 1), SIMD2(0.5, 1), SIMD2(1, 1),
+        ]
+    }
+
+    private static func colors(_ strength: Double) -> [Color] {
+        [
+            Theme.coral.opacity(strength), Theme.pink.opacity(strength * 0.7), Theme.violet.opacity(strength),
+            Theme.pink.opacity(strength * 0.5), Theme.violet.opacity(strength * 0.6), Theme.coral.opacity(strength * 0.4),
+            Color.clear, Color.clear, Color.clear,
+        ]
+    }
+}
+
+/// Big screen title with the brand gradient and an optional subtitle.
+struct ScreenHeader: View {
+    let title: String
+    var subtitle: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .brandGradientText()
+                .accessibilityAddTraits(.isHeader)
+            if let subtitle {
+                Text(subtitle)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
     }
 }

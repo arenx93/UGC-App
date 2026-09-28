@@ -40,6 +40,7 @@ struct LibraryView: View {
                     }
                     .padding(24)
                 }
+                .background(alignment: .top) { AuraBackground(intensity: 0.7).frame(height: 300).ignoresSafeArea() }
             }
         }
         .searchable(text: $model.search, placement: .toolbar, prompt: "Buscar por prompt o modelo")
@@ -136,10 +137,17 @@ struct MediaCard: View {
                     Color.black.opacity(0.9)
                     Thumbnail(url: url, video: job.kind == .video, maxPixel: 700, contentMode: .fill)
                     if job.kind == .video {
-                        Image(systemName: "play.circle.fill")
-                            .font(.system(size: 44))
-                            .foregroundStyle(.white.opacity(0.92))
-                            .shadow(radius: 8)
+                        if hovering {
+                            HoverVideoPlayer(url: url)
+                                .transition(.opacity)
+                        } else {
+                            Image(systemName: "play.fill")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 50, height: 50)
+                                .glassSurface(Circle())
+                                .transition(.opacity)
+                        }
                     }
                     if job.outputs.count > 1 {
                         VStack {
@@ -182,8 +190,9 @@ struct MediaCard: View {
         Image(systemName: job.kind == .video ? "video.fill" : "photo.fill")
             .font(.caption.weight(.semibold))
             .foregroundStyle(.white)
-            .padding(6)
-            .background(.black.opacity(0.45), in: Circle())
+            .padding(7)
+            .background(.black.opacity(0.25), in: Circle())
+            .glassSurface(Circle())
             .padding(8)
             .accessibilityHidden(true)
     }
@@ -204,8 +213,9 @@ struct MediaCard: View {
                 Image(systemName: "ellipsis")
                     .font(.callout.weight(.bold))
                     .foregroundStyle(.white)
-                    .frame(width: 28, height: 28)
-                    .background(.black.opacity(0.5), in: Circle())
+                    .frame(width: 30, height: 30)
+                    .background(.black.opacity(0.25), in: Circle())
+                    .glassSurface(Circle(), interactive: true)
             }
             .menuStyle(.button)
             .buttonStyle(.plain)
@@ -213,6 +223,7 @@ struct MediaCard: View {
             .fixedSize()
             .accessibilityLabel("Más acciones")
         }
+        .glassGroup(spacing: 6)
         .padding(8)
         .opacity(hovering || job.isFavorite ? 1 : 0)
     }
@@ -222,8 +233,9 @@ struct MediaCard: View {
             Image(systemName: symbol)
                 .font(.callout.weight(.semibold))
                 .foregroundStyle(symbol == "heart.fill" ? Theme.pink : .white)
-                .frame(width: 28, height: 28)
-                .background(.black.opacity(0.5), in: Circle())
+                .frame(width: 30, height: 30)
+                .background(.black.opacity(0.25), in: Circle())
+                .glassSurface(Circle(), interactive: true)
         }
         .buttonStyle(.plain)
         .help(help)
@@ -292,6 +304,7 @@ struct JobMenu: View {
             Button("Ver en grande") { model.detailJobID = job.id }
             Button("Vista rápida") { model.quickLookURL = urls.first }
             Button("Mostrar en Finder") { model.revealInFinder(urls) }
+            ShareLink(items: urls) { Label("Compartir…", systemImage: "square.and.arrow.up") }
             if job.kind == .video {
                 Button("Continuar desde el último fotograma") { Task { await model.continueFromLastFrame(job) } }
             } else if let first = job.outputs.first {
@@ -299,7 +312,9 @@ struct JobMenu: View {
             }
             Divider()
         }
-        Button("Reusar ajustes y prompt") { model.reuse(job) }
+        if job.model != Presets.storyCutModelID {
+            Button("Reusar ajustes y prompt") { model.reuse(job) }
+        }
         Button("Copiar prompt") { model.copyToPasteboard(job.prompt) }
         if job.status == .success {
             Button(job.isFavorite ? "Quitar de favoritos" : "Marcar como favorito") { model.toggleFavorite(job) }
@@ -340,7 +355,7 @@ struct JobDetailView: View {
                         HStack {
                             ForEach(urls.indices, id: \.self) { i in
                                 Button("\(i + 1)") { index = i }
-                                    .buttonStyle(.bordered)
+                                    .glassButtonStyle()
                                     .tint(i == index ? Theme.pink : nil)
                             }
                         }
@@ -392,12 +407,14 @@ struct JobDetailView: View {
                         }
                         Divider()
                         VStack(alignment: .leading, spacing: 8) {
-                            Button {
-                                model.reuse(job)
-                            } label: {
-                                Label("Reusar ajustes y prompt", systemImage: "arrow.uturn.backward").frame(maxWidth: .infinity)
+                            if job.model != Presets.storyCutModelID {
+                                Button {
+                                    model.reuse(job)
+                                } label: {
+                                    Label("Reusar ajustes y prompt", systemImage: "arrow.uturn.backward").frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(GradientButtonStyle(height: 36))
                             }
-                            .buttonStyle(GradientButtonStyle(height: 36))
                             if job.status == .success {
                                 if job.kind == .video {
                                     Button {
@@ -426,7 +443,7 @@ struct JobDetailView: View {
                             }
                             .disabled(!job.status.isFinished)
                         }
-                        .buttonStyle(.bordered)
+                        .glassButtonStyle()
                         .controlSize(.large)
                     }
                     .padding(20)
@@ -468,5 +485,55 @@ struct PlayerView: View {
                 player = AVPlayer(url: url)
             }
             .onDisappear { player?.pause() }
+    }
+}
+
+/// Muted, looping preview that plays while the pointer is over a video card.
+struct HoverVideoPlayer: NSViewRepresentable {
+    let url: URL
+
+    func makeNSView(context: Context) -> LoopingPlayerNSView {
+        let view = LoopingPlayerNSView()
+        view.play(url)
+        return view
+    }
+
+    func updateNSView(_ view: LoopingPlayerNSView, context: Context) {}
+
+    static func dismantleNSView(_ view: LoopingPlayerNSView, coordinator: ()) {
+        view.stop()
+    }
+
+    final class LoopingPlayerNSView: NSView {
+        private let player = AVQueuePlayer()
+        private var looper: AVPlayerLooper?
+        private let playerLayer = AVPlayerLayer()
+
+        override init(frame: NSRect) {
+            super.init(frame: frame)
+            wantsLayer = true
+            playerLayer.player = player
+            playerLayer.videoGravity = .resizeAspectFill
+            layer?.addSublayer(playerLayer)
+        }
+
+        required init?(coder: NSCoder) { nil }
+
+        override func layout() {
+            super.layout()
+            playerLayer.frame = bounds
+        }
+
+        func play(_ url: URL) {
+            player.isMuted = true
+            looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(url: url))
+            player.play()
+        }
+
+        func stop() {
+            player.pause()
+            looper = nil
+            player.removeAllItems()
+        }
     }
 }

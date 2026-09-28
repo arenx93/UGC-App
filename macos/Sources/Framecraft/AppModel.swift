@@ -47,6 +47,14 @@ enum LibraryFilter: String, CaseIterable, Identifiable {
     }
 }
 
+/// Progress of "Generar todo" in a story.
+struct StoryRun: Equatable {
+    var storyID: UUID
+    var current: Int
+    var total: Int
+    var text: String
+}
+
 struct Banner: Identifiable, Equatable {
     enum Style { case success, info, error }
     let id = UUID()
@@ -69,6 +77,7 @@ final class AppModel {
     var showAssistant = true
     var showOnboarding = false
     var showPromptPreview = false
+    var showCommandPalette = false
     var banner: Banner?
     var detailJobID: UUID?
     var quickLookURL: URL?
@@ -83,6 +92,11 @@ final class AppModel {
     var storyError: String?
     /// Scene opened in Create; the next video generated is linked to it.
     @ObservationIgnored var pendingSceneLink: (story: UUID, scene: UUID)?
+    /// "Generar todo": scenes sent one after another.
+    var storyRun: StoryRun?
+    @ObservationIgnored var storyRunTask: Task<Void, Never>?
+    /// Story whose final video is being assembled.
+    var assemblingStoryID: UUID?
     var references: [ReferenceFile] = []
     var customSkills: [Skill] = []
     let builtinSkills: [Skill]
@@ -123,6 +137,8 @@ final class AppModel {
     var dialogueLanguage: String
     var includeWalterExample = false
     var draft = ""
+    /// Every prompt the assistant wrote in this session (newest last), to go back to an earlier version.
+    var draftHistory: [String] = []
     var notes: String?
     var sources: [PromptExample] = []
     var feedback = ""
@@ -325,6 +341,39 @@ final class AppModel {
     private func fixAspect() {
         let options = Presets.ratios(model: imageModel, resolution: imageResolution)
         if !options.contains(imageAspect) { imageAspect = options.first ?? "1:1" }
+    }
+
+    /// Name of the assistant's current engine ("GPT-5.6 Terra", "ChatGPT (Codex)"…).
+    var engineName: String {
+        switch provider {
+        case .kie: PromptRequests.promptModels.first { $0.id == promptModel }?.name ?? "KIE"
+        case .codex: "ChatGPT (Codex)"
+        case .apple: "Apple Intelligence"
+        case .openai: "OpenAI"
+        }
+    }
+
+    // MARK: Templates
+
+    /// Loads a template: right mode, settings and skill, and its idea in the assistant.
+    func applyTemplate(_ template: CreativeTemplate) {
+        mode = template.media
+        if template.media == .video {
+            if let duration = template.duration {
+                videoDuration = min(max(duration, Presets.videoDurationRange.lowerBound), Presets.videoDurationRange.upperBound)
+            }
+            if Presets.videoAspects.contains(template.aspect) { videoAspect = template.aspect }
+            skillID = SkillLibrary.ugcID
+        } else {
+            if aspectOptions.contains(template.aspect) { imageAspect = template.aspect }
+            skillID = SkillLibrary.generalID
+        }
+        idea = template.idea
+        section = .create
+        withAnimation(.snappy) { showAssistant = true }
+        show(template.placeholders.isEmpty
+             ? "Plantilla “\(template.title)” lista en el asistente."
+             : "Plantilla “\(template.title)”: cambiá lo que está entre [corchetes] y tocá Crear prompt.", .success)
     }
 
     func insertTag(_ tag: String) {
@@ -789,7 +838,7 @@ final class AppModel {
         return fileName
     }
 
-    private static let fileDate: DateFormatter = {
+    static let fileDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd-HHmmss"
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -911,6 +960,17 @@ final class AppModel {
                 }
             }
             key = ""
+        case .apple:
+            if mode == .image && currentSkill?.id == SkillLibrary.jsonProfileID {
+                assistantError = "El perfil JSON es demasiado largo para el modelo del Mac. Elegí la skill General o el motor KIE / ChatGPT."
+                return
+            }
+            let state = OnDeviceModel.availability
+            guard state == .available else {
+                assistantError = state.message
+                return
+            }
+            key = ""
         }
         assistantError = nil
         isBuildingPrompt = true
@@ -975,6 +1035,10 @@ final class AppModel {
                 raw = try await CodexCLI.generate(
                     prompt: PromptRequests.codexCLIPrompt(instructions: instructions, brief: briefText),
                     images: images, model: nil)
+            case .apple:
+                raw = try await OnDeviceModel.generate(
+                    instructions: PromptRequests.onDeviceInstructions(media: mode, ugc: skill?.id == SkillLibrary.ugcID),
+                    prompt: PromptRequests.onDeviceBrief(brief))
             case .openai:
                 try checkAnalysisSize(analysisIDs)
                 let images = try analysisIDs.compactMap { id -> String? in
@@ -993,6 +1057,8 @@ final class AppModel {
                 notes = result.notes
                 sources = examples
             }
+            draftHistory.append(result.prompt)
+            if draftHistory.count > 20 { draftHistory.removeFirst() }
             if refine { feedback = "" }
             persist()
         } catch {
@@ -1077,6 +1143,11 @@ final class AppModel {
         show("Prompt de texto listo en el editor.", .success)
     }
 
+    func restoreDraft(at index: Int) {
+        guard draftHistory.indices.contains(index) else { return }
+        withAnimation(.snappy) { draft = draftHistory[index] }
+    }
+
     func useDraft() {
         prompt = draft
         section = .create
@@ -1147,7 +1218,7 @@ final class AppModel {
 
     private var notificationsAvailable: Bool { Bundle.main.bundleIdentifier != nil && !isDemo }
 
-    private func requestNotificationPermission() {
+    func requestNotificationPermission() {
         guard notifyWhenDone, notificationsAvailable, !askedNotifications else { return }
         askedNotifications = true
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
@@ -1171,8 +1242,14 @@ final class AppModel {
 extension AppModel {
     var selectedStory: Story? { stories.first { $0.id == selectedStoryID } }
 
-    func newStory() {
-        let story = Story()
+    func newStory(from template: StoryTemplate? = nil) {
+        var story = Story()
+        if let template {
+            story.title = template.title
+            story.brief = template.brief
+            story.sceneCount = template.sceneCount
+            story.sceneDuration = template.sceneDuration
+        }
         stories.insert(story, at: 0)
         selectedStoryID = story.id
         section = .stories
@@ -1233,6 +1310,8 @@ extension AppModel {
             guard case .loggedIn = codexStatus else { throw KieError("Iniciá sesión con ChatGPT (Asistente → Motor) o elegí KIE.", definite: true) }
             let images = imageIDs.prefix(4).compactMap { id in references.first { $0.id == id }.map { url(for: $0) } }
             return try await CodexCLI.generate(prompt: PromptRequests.codexCLIPrompt(instructions: instructions, brief: brief), images: Array(images), model: nil)
+        case .apple:
+            throw KieError("Las historias necesitan un modelo grande: en el asistente de Crear elegí KIE o ChatGPT como motor.", definite: true)
         case .openai:
             guard let key = keys.read(KeyAccount.openAI) else { throw KieError("Agregá tu clave de OpenAI en Ajustes o elegí otro motor.", definite: true) }
             let images = try imageIDs.prefix(4).compactMap { id -> String? in
@@ -1381,6 +1460,7 @@ extension AppModel {
         persist()
         if generate {
             await self.generate()
+            pendingSceneLink = nil
             show("Escena \(scene.number) enviada a Seedance.", .success)
         } else {
             section = .create
@@ -1404,5 +1484,106 @@ extension AppModel {
 
     func latestJob(for scene: StoryScene) -> Job? {
         scene.jobIDs.reversed().compactMap { id in jobs.first { $0.id == id } }.first
+    }
+
+    func finishedClip(for scene: StoryScene) -> Job? {
+        scene.jobIDs.reversed().compactMap { id in jobs.first { $0.id == id && $0.status == .success && !$0.outputs.isEmpty } }.first
+    }
+
+    // MARK: Generate every scene
+
+    /// Sends every scene that has no video yet. When the story uses "last frame of the previous
+    /// scene", each scene waits for the previous one to finish so its frame can be extracted.
+    func generateAllScenes(_ id: UUID) {
+        guard storyRun == nil, let story = stories.first(where: { $0.id == id }), !story.scenes.isEmpty else { return }
+        guard hasKieKey else {
+            showOnboarding = true
+            return
+        }
+        requestNotificationPermission()
+        let chained = story.slots.contains { $0.isLastFrame }
+        storyRun = StoryRun(storyID: id, current: 0, total: story.scenes.count, text: "Preparando…")
+        storyRunTask = Task { [weak self] in
+            await self?.runAllScenes(id, chained: chained)
+        }
+    }
+
+    func cancelStoryRun() {
+        storyRunTask?.cancel()
+        storyRunTask = nil
+        storyRun = nil
+        show("Se detuvo “Generar todo”. Las escenas ya enviadas siguen generándose.")
+    }
+
+    private func runAllScenes(_ id: UUID, chained: Bool) async {
+        defer {
+            storyRun = nil
+            storyRunTask = nil
+        }
+        guard let sceneIDs = stories.first(where: { $0.id == id })?.scenes.map(\.id) else { return }
+        let total = sceneIDs.count
+        var sent = 0
+        for (index, sceneID) in sceneIDs.enumerated() {
+            guard !Task.isCancelled, let scene = stories.first(where: { $0.id == id })?.scenes.first(where: { $0.id == sceneID }) else { return }
+            storyRun = StoryRun(storyID: id, current: index + 1, total: total, text: "Escena \(index + 1) de \(total)")
+            let existing = latestJob(for: scene)
+            if existing == nil || existing?.status == .fail || existing?.status == .unknown {
+                storyRun?.text = "Enviando la escena \(index + 1) de \(total)…"
+                await openScene(story: id, scene: sceneID, generate: true)
+                guard let updated = stories.first(where: { $0.id == id })?.scenes.first(where: { $0.id == sceneID }),
+                      let job = latestJob(for: updated), job.id != existing?.id else {
+                    show("No se pudo enviar la escena \(index + 1). Revisala y volvé a tocar “Generar todo”.", .error)
+                    return
+                }
+                sent += 1
+            }
+            if chained, index < total - 1 {
+                storyRun?.text = "Esperando que termine la escena \(index + 1) para encadenar la \(index + 2)…"
+                while !Task.isCancelled,
+                      let current = stories.first(where: { $0.id == id })?.scenes.first(where: { $0.id == sceneID }),
+                      let job = latestJob(for: current), job.status.isActive {
+                    try? await Task.sleep(for: .seconds(4))
+                }
+                guard !Task.isCancelled else { return }
+                if let current = stories.first(where: { $0.id == id })?.scenes.first(where: { $0.id == sceneID }), finishedClip(for: current) == nil {
+                    show("La escena \(index + 1) falló: ajustala y volvé a tocar “Generar todo” (sigue desde ahí).", .error)
+                    return
+                }
+            }
+        }
+        show(sent == 0 ? "Todas las escenas ya tenían video." : "Listo: \(sent) escena\(sent == 1 ? "" : "s") en camino. Cuando terminen, armá el video final.", .success)
+    }
+
+    // MARK: Final cut
+
+    /// Joins the latest finished video of every scene into one MP4 (made on the Mac, no credits).
+    func assembleStory(_ id: UUID) async {
+        guard assemblingStoryID == nil, let story = stories.first(where: { $0.id == id }) else { return }
+        let clips = story.scenes.map { scene in finishedClip(for: scene) }
+        let missing = zip(story.scenes, clips).filter { $0.1 == nil }.map { "\($0.0.number)" }
+        guard missing.isEmpty else {
+            show("Faltan videos de la\(missing.count == 1 ? "" : "s") escena\(missing.count == 1 ? "" : "s") \(missing.joined(separator: ", ")).", .error)
+            return
+        }
+        assemblingStoryID = id
+        defer { assemblingStoryID = nil }
+        let urls = clips.compactMap { $0?.outputs.first.map(store.outputURL) }
+        let fileName = "framecraft-historia-\(Self.fileDate.string(from: Date()))-\(id.uuidString.prefix(4).lowercased()).mp4"
+        let destination = store.outputURL(fileName)
+        do {
+            try await MediaTools.concatenate(urls, to: destination)
+            let job = Job(batchID: UUID(), kind: .video, model: Presets.storyCutModelID, prompt: "Historia completa: \(story.title)",
+                          finalPrompt: story.summary,
+                          settings: JobSettings(resolution: story.resolution, aspect: story.aspect, duration: story.totalDuration,
+                                                generateAudio: story.generateAudio),
+                          status: .success, progress: 100, outputs: [fileName])
+            withAnimation(.snappy) { jobs.insert(job, at: 0) }
+            updateStory(id) { $0.finalCutJobID = job.id }
+            persist()
+            show("Video final listo: \(story.scenes.count) escenas, \(story.totalDuration) s. Está en la Biblioteca.", .success)
+            quickLookURL = destination
+        } catch {
+            show("No se pudo armar el video final: \(error.localizedDescription)", .error)
+        }
     }
 }

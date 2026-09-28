@@ -35,6 +35,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 struct FramecraftApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @State private var model = AppModel(store: .standard(), keys: KeychainStore())
+    @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
 
     var body: some Scene {
         Window("Framecraft", id: "main") {
@@ -50,6 +51,15 @@ struct FramecraftApp: App {
             SettingsView()
                 .environment(model)
         }
+
+        MenuBarExtra(isInserted: $showMenuBarExtra) {
+            MenuBarPanel()
+                .environment(model)
+        } label: {
+            Image(systemName: model.activeJobs.isEmpty ? "sparkles" : "sparkles.rectangle.stack.fill")
+                .accessibilityLabel("Framecraft")
+        }
+        .menuBarExtraStyle(.window)
     }
 }
 
@@ -68,6 +78,11 @@ struct FramecraftCommands: Commands {
                 model.section = .create
             }
             .keyboardShortcut("n", modifiers: [.command, .shift])
+            Button("Nueva historia") { model.newStory() }
+                .keyboardShortcut("n", modifiers: [.command, .option])
+            Divider()
+            Button("Buscar o hacer…") { model.showCommandPalette = true }
+                .keyboardShortcut("k")
             Divider()
             Button("Generar") { Task { await model.generate() } }
                 .keyboardShortcut(.return, modifiers: .command)

@@ -51,6 +51,7 @@ struct OnboardingView: View {
             .padding(16)
         }
         .frame(width: 640, height: 520)
+        .background(alignment: .top) { AuraBackground(intensity: 1.3).frame(height: 300) }
         .interactiveDismissDisabled(false)
     }
 

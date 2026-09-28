@@ -80,6 +80,8 @@ public struct Story: Codable, Identifiable, Hashable, Sendable {
     public var referenceOrder: String
     public var scenes: [StoryScene]
     public var messages: [StoryMessage]
+    /// The assembled final video (all scenes joined), when there is one.
+    public var finalCutJobID: UUID?
     public var created: Date
     public var updated: Date
 
