@@ -4,6 +4,14 @@ App nativa de macOS, escrita 100 % en Swift y SwiftUI, para crear fotos y videos
 UGC con KIE (GPT Image 2, Nano Banana Pro y Seedance 2.5). Requiere macOS 14
 Sonoma o posterior. Funciona en Macs con Apple Silicon y con Intel.
 
+![Crear un video con la skill UGC y la revisión del prompt](../docs/macos/02-crear-video.png)
+
+| Biblioteca | Bienvenida |
+|---|---|
+| ![Biblioteca](../docs/macos/05-biblioteca-oscuro.png) | ![Bienvenida](../docs/macos/09-bienvenida.png) |
+
+Más capturas en [`docs/macos/`](../docs/macos/) (se regeneran desde Actions → *macOS app (Swift)* → *Run workflow* con “screenshots”).
+
 ## Descargar
 
 1. En GitHub, abrí **Actions → macOS app (Swift)** y entrá en la ejecución más

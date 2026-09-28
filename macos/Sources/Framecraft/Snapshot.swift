@@ -86,18 +86,25 @@ enum SnapshotRunner {
                     print("snapshot: \(name).png")
                 }
             }
-            // Real on-screen capture too (includes sidebar/inspector materials that
-            // cacheDisplay cannot draw). Needs screen-recording access; skipped if denied.
+            // Replace it with a real on-screen capture when allowed: cacheDisplay cannot
+            // draw the sidebar/inspector materials. Needs screen-recording access.
             NSApp.activate(ignoringOtherApps: true)
             window.makeKeyAndOrderFront(nil)
             RunLoop.main.run(until: Date().addingTimeInterval(0.8))
             let capture = Process()
             capture.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
-            capture.arguments = ["-x", "-o", "-l\(window.windowNumber)", outputDirectory.appendingPathComponent(name + "-real.png").path]
+            let real = outputDirectory.appendingPathComponent(name + "-real.png")
+            capture.arguments = ["-x", "-o", "-l\(window.windowNumber)", real.path]
             if (try? capture.run()) != nil {
                 let deadline = Date().addingTimeInterval(10)
                 while capture.isRunning && Date() < deadline { RunLoop.main.run(until: Date().addingTimeInterval(0.1)) }
-                print("snapshot: \(name)-real.png (screencapture exit \(capture.isRunning ? -1 : capture.terminationStatus))")
+                // Prefer the real capture when it worked.
+                if !capture.isRunning, capture.terminationStatus == 0, FileManager.default.fileExists(atPath: real.path) {
+                    let target = outputDirectory.appendingPathComponent(name + ".png")
+                    try? FileManager.default.removeItem(at: target)
+                    try? FileManager.default.moveItem(at: real, to: target)
+                    print("snapshot: \(name).png (on-screen capture)")
+                }
             }
             window.orderOut(nil)
         }
