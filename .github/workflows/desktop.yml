@@ -1,7 +1,8 @@
-# Builds the Framecraft desktop installers on real macOS and Windows machines.
+# Builds the Framecraft Windows installer (Electron). The macOS app is native
+# Swift now: see macos/ and .github/workflows/macos-native.yml.
 # Download them from the run's "Artifacts" section (Actions tab → this workflow).
 # Pushing a tag like v1.0.0 also attaches them to a draft GitHub Release.
-name: Desktop apps
+name: Windows app (Electron)
 
 on:
   workflow_dispatch:
@@ -37,16 +38,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: macOS (Apple Silicon)
-            os: macos-latest
-            script: desktop:mac:arm64
-            artifact: Framecraft-macOS-AppleSilicon
-            files: release/*.dmg
-          - name: macOS (Intel)
-            os: macos-15-intel
-            script: desktop:mac:x64
-            artifact: Framecraft-macOS-Intel
-            files: release/*.dmg
           - name: Windows
             os: windows-latest
             script: desktop:win

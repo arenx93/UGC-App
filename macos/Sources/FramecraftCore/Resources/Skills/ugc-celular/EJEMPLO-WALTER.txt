@@ -1,0 +1,662 @@
+================================================================================
+WALTER — SEEDANCE 2.5 / kie.ai — PACK FINAL QUE FUNCIONÓ
+8 escenas · resultado 2:45 tras cortar silencios
+================================================================================
+
+MODELO: bytedance/seedance-2-5
+ENDPOINT: POST https://api.kie.ai/api/v1/jobs/createTask
+PARAMS BASE: aspect_ratio 9:16 · resolution 1080p · generate_audio true
+             return_last_frame true (excepto S8)
+
+--------------------------------------------------------------------------------
+ORDEN DE ARCHIVOS — NUNCA CAMBIARLO
+--------------------------------------------------------------------------------
+reference_image_urls
+  [0] triptico_walter.png        -> @Image1
+  [1] model_sheet_diner.png      -> @Image2
+  [2] ultimo frame escena previa -> @Image3   (en S1: el first frame)
+
+reference_video_urls
+  [0] video_pantalla_celular.mp4 -> @Video1   (solo S7 y S8)
+
+reference_audio_urls
+  [0] walter_14s.mp3             -> @Audio1
+  [1] pov_14s.mp3                -> @Audio2
+
+El numero del @ sigue el ORDEN DEL ARRAY, no un nombre.
+Si reordenas las URLs, la referencia se liga en silencio a otro archivo.
+
+--------------------------------------------------------------------------------
+TABLA DE ESCENAS
+--------------------------------------------------------------------------------
+S1  30s  @Image3=first frame     Hook -> "Eighty-two."
+S2  30s  @Image3=last frame S1   "My daughter passed away" -> la sonrisa
+S3  30s  @Image3=last frame S2   El peso -> "what are you having for breakfast?"
+S4  30s  @Image3=last frame S3   Pedido + corte de grabacion + comida + $100
+S5  25s  @Image3=last frame S4   La reaccion -> "I'm coming back at four"
+S6  30s  SIN @Image3             Afuera: la plata, el rechazo, el abrazo
+S7  25s  @Image3=last frame S6   + @Video1   El telefono
+S8  25s  @Image3=last frame S7   + @Video1   Los $1700 y el apreton
+
+================================================================================
+LAS 3 REGLAS QUE HICIERON QUE FUNCIONARA
+================================================================================
+
+1. DENSIDAD DE DIALOGO
+   El modelo RELLENA con silencio el tiempo que le sobra. Un clip de 30s
+   necesita ~70 palabras (a 2,47 palabras/seg medidas en salidas reales).
+   Con 42 palabras te devuelve 13s de aire.
+   -> Los timestamps de cada bloque deben coincidir con el tiempo real de habla.
+
+2. DIRECCION EMOCIONAL ENTRE PARENTESIS
+   P1 (quiet, flat, stripped of everything...): "My daughter passed away."
+   Hay que aclarar explicitamente que NO se pronuncia lo que esta en parentesis.
+   Describir mecanica fisica: donde respira, donde se quiebra, donde baja volumen.
+   Nunca adjetivos vagos como "emotional".
+
+3. LOS AUDIOS SON SOLO TIMBRE
+   Hay que bloquear dos cosas: que repita palabras del audio de referencia,
+   y que copie su emocion. Ambas se declaran en el bloque de voz.
+
+================================================================================
+BLOQUE BASE — VA IDENTICO AL INICIO DE CADA ESCENA
+================================================================================
+
+FORMAT: Vertical 9:16, [DURACION] seconds, one continuous take, no cuts. Filmed on
+the rear 1x camera of a modern smartphone, wide lens equivalent to ~26mm, authentic
+phone-camera look, no color grade, no cinematic treatment.
+
+FIRST FRAME — MANDATORY: @Image3 IS the first frame of this video. Frame 1 must be
+@Image3 itself, pixel for pixel: identical framing, identical composition, identical
+camera position and lens, identical lighting and color, identical subject positions,
+identical background. Do not reinterpret it, do not recompose it, do not change the
+distance or the angle. The video begins ON that image and all motion grows out of it.
+Treat @Image3 as the locked starting state of the scene, not as a style reference.
+
+VOICE DIRECTION: Text in parentheses before a spoken line is acting direction for
+delivery only — emotion, tone, pace, breath and volume. It is NEVER spoken aloud.
+Only the words inside the quotation marks are ever said.
+
+PACING — CRITICAL: This clip is DENSE with dialogue. Someone is speaking for almost
+the entire clip. Characters answer immediately, often overlapping the last word of
+the previous speaker. The gap between one line ending and the next beginning is about
+half a second — a breath, never a hold. There is NO moment in this clip where nobody
+speaks for longer than one second. Do not stretch the delivery to fill time and do
+not insert reflective silences.
+
+POV: The camera IS P2's phone. P2 is a man in his thirties filming one-handed while
+he talks. He is never fully visible — only his hand, forearm, sleeve or the edge of
+his shoulder may enter the frame. His voice sits close to the microphone and is
+noticeably louder than everyone else's, because the phone is in his hand.
+
+WALTER (P1): Strictly follow @Image1. Black man, 82 years old, short white hair,
+deeply lined face, thin build, tan khaki short-sleeve polo with a dark red "Walter"
+name badge on the left chest, black waist apron tied in front, navy work trousers,
+black work shoes. Keep face, skin texture, hair, wardrobe and badge identical
+throughout. He carries himself with quiet dignity and moves slowly and carefully, the
+way an 82-year-old on his feet all day moves. He is a proud man who does not want
+pity and does not want to be a burden.
+
+WALTER'S VOICE: Match @Audio1 for timbre, age, accent and pitch only. Do not reproduce
+any words from @Audio1 and do not copy its emotion — the emotion of every line is set
+by the direction in parentheses. His voice is dry and slightly breathy with age and
+sandpapery on long vowels, and he runs short of air near the end of longer sentences.
+When he is moved his throat tightens and the volume drops rather than rising.
+
+P2'S VOICE: Match @Audio2 for timbre, age, accent and pitch only. Do not reproduce any
+words from @Audio2 and do not copy its emotion. P2 is warm, friendly and fully engaged,
+with real life and affection in his voice and an audible smile behind most of what he
+says. He must NEVER sound bored, tired, monotone, detached or like he is reading.
+
+LOCATION: Follow @Image2. A busy American diner at mid-morning. Red vinyl booths, beige
+and brown tiled floor, laminate tables with chrome edges, brass ceiling fans, backlit
+menu boards over the service counter, chrome stools along the counter, large windows
+showing a sunlit parking lot. Warm fluorescent ceiling panels mixed with cold daylight
+from the windows. Other customers and staff move in the background. Keep the exact
+same layout, booth, table and background throughout.
+
+CAMERA: Held in one hand at chest height, roughly 1.2 to 2 meters from Walter. Constant
+breathing micro-shake. The operator reframes half a second LATE, always after the action
+happens, never before. Small pans of a few degrees. The horizon drifts slightly and is
+never corrected. Wide depth of field — the whole background stays readable. Natural
+motion blur on quick moves. The auto-exposure visibly hunts when someone passes in front
+of the windows. NO gimbal, NO dolly, NO slider, NO crane, NO orbit, NO zoom, NO dramatic
+push-in, NO rack focus.
+
+IMAGE: Natural smartphone color science, medium contrast, moderate saturation, mixed
+white balance leaning slightly green under the fluorescents. Real skin texture with
+pores, lines and natural shine. Visible wetness in the eyes rendered realistically.
+No bokeh, no LUT, no teal and orange, no film grain, no beauty filter.
+
+AUDIO: Diegetic only, captured by the same phone that films. Close dialogue with room
+and distance on it, low diner chatter, plates, cutlery, chairs, a coffee machine, the
+short indoor reverb of a tiled room. Room noise stays constant and never ducks or fades
+under dialogue. No music, no score, no voice-over, no narrator.
+
+ACTING: Nobody performs theatrically and nobody is disengaged. Reactions arrive half a
+beat late. Emotion lives in micro-expressions — the eyes, the jaw, the breath — not in
+gestures and not in pauses. Walter holds himself together; he never sobs, never covers
+his face, never collapses.
+
+RESTRICTIONS: No cuts. No slow motion. No on-screen text, captions, titles or logos.
+No extra fingers, no warped hands, no duplicated props. Walter must not look into the
+lens. Walter does not sit down. No music of any kind. Never speak the text inside
+parentheses. P2 must never sound bored, flat or monotone. NO silent gaps longer than
+one second anywhere in the clip. The first frame must be @Image3 exactly.
+
+================================================================================
+S1 — 30s — EL HOOK
+================================================================================
+[BLOQUE BASE, duracion 30]
++ agregar: P3 speaks with a young, bright, slightly rushed American service voice.
+
+ACTION — the dialogue runs continuously with almost no gaps:
+
+P2 is seated in a booth. A young female server (P3) stands at the end of his table with
+a notepad. Walter is visible in the background working another table.
+
+0–7s: The clip opens on the exact framing of @Image3, already unsteady with breathing
+shake. P2's hand enters the lower frame and points past P3 toward Walter; the camera
+drifts after the hand and corrects back to her, late.
+P2 (curious, friendly, lowering his voice a little so Walter will not hear): "Hey, what's
+his name?"
+P3 answers immediately, glancing over her shoulder and back.
+P3 (casual, unthinking, mid-task): "Walter."
+P2 (coming straight in on top of her answer, light and hopeful): "Can he be my server?"
+P3's eyebrows lift — puzzled, nobody asks for Walter — but she answers right away.
+P3 (confused but accommodating): "Yeah, of course…" She writes it down and steps out
+of frame.
+
+7–17s: Walter is already approaching with a coffee pot and notepad. The camera finds him
+late, tilting up from the table and overshooting slightly.
+P2 (warm, open, immediate): "Hey, can I ask you something?"
+P1 (prompt, obliging, still working): "Sure."
+P2 (straight on, genuinely admiring, talking fast): "I come in here all the time and
+you're always working. How long have you been here?"
+Walter shrugs and keeps wiping the table, treating it as small talk.
+P1 (matter-of-fact, no pause before answering): "Little over a year."
+
+17–24s: P2 (jumping right in, careful but quick): "How old are you, if you don't mind me
+asking?"
+P1 (immediate, flat, unembarrassed — a number he says often): "Eighty-two."
+P2 (openly surprised, almost laughing, cutting in on the last syllable): "Eighty-two?
+Man, you should be retired.."
+
+24–30s: A faint real smile crosses Walter's face — amused, rueful, agreeing with you
+about his own life. He answers without hesitating.
+P1 (dry, a small huff of a laugh behind it, slowing only on "fifteen"): "I was. For
+almost fifteen years."
+P2 (immediately, leaning in, genuinely curious): "So why'd you come back?"
+Walter's smile drops. His eyes go down to the table. Hold the last beat on his changing
+face as the clip ends.
+
+================================================================================
+S2 — 30s — LA HIJA
+================================================================================
+[BLOQUE BASE, duracion 30]
++ en FIRST FRAME agregar: This is a direct continuation of the previous clip — same
+  booth, same table, same background customers, same light, Walter standing in the same
+  position with his notepad, his face already fallen because he has just been asked why
+  he came back to work.
++ en PACING agregar: Walter is emotional, but emotional people keep talking — he pushes
+  the words out rather than stopping. The emotion lives in HOW he says the words, not in
+  the space between them.
++ en WALTER'S VOICE agregar: ...but he keeps speaking through it and does not stop to
+  compose himself.
+
+ACTION — the dialogue runs continuously with almost no gaps:
+
+0–5s: Walter is looking down at the table. He answers within a second of the clip
+starting — no long hesitation. His jaw works once as he takes the breath.
+P1 (quiet, flat, stripped of everything — the sentence of a man who has said it many
+times and has never made it easier, the last word almost inaudible): "My daughter passed
+away."
+He swallows hard and keeps going immediately, his eyes going glassy.
+P1 (softer, breath catching once in the middle, the sentence trailing off): "She left me
+my grandkids.."
+
+5–11s: P2 comes in right away, thrown.
+P2 (low, sincere, genuinely caught off guard): "Man... I'm sorry."
+Walter gives a small dismissive wave of the hand and answers on top of it, wanting to
+release the younger man from the discomfort more than himself.
+P1 (gentle, reassuring P2, then hardening with love — volume dropping on the last three
+words as the voice catches): "It's alright. Those kids are everything I got..."
+He blinks fast, holding it back, and does not stop.
+
+11–17s: P1 (flat and factual, no bitterness, a small hesitation before "So" as he chooses
+how much to say, then finishing the sentence steadily): "Their dad pretty much
+disappeared. So... it's just me and them now."
+He says it the way people say things they have stopped being angry about. His hands stay
+busy with the notepad.
+
+17–21s: P2 (soft, drawn in, quietly admiring, coming straight in): "So you're raising
+them?"
+P1 (immediate, simple, the first warmth returning to his voice): "Yeah."
+
+21–30s: His whole face changes as he thinks about the grandchildren — the shoulders drop,
+the eyes lift, the tiredness lifts off him. This is his one genuinely happy moment, and
+he speaks faster and lighter here than anywhere else in the clip.
+P1 (warm, brightening, noticeably quicker and lighter, a real smile breaking through,
+almost shy about how much he means it): "I can't complain, I honestly love spending time
+with them. That's my favorite part of the day."
+Hold the last beat on that smile as the clip ends.
+
++ RESTRICTIONS agregar: No sobbing and no long pause to compose himself — he talks
+  through the emotion.
+
+================================================================================
+S3 — 30s — EL PESO
+================================================================================
+[BLOQUE BASE, duracion 30]
++ en FIRST FRAME agregar: This is a direct continuation of the previous clip — same
+  booth, same light, Walter standing in the same position with his notepad, and the warm
+  smile from the end of the previous clip still on his face.
+
+ACTION — the dialogue runs continuously with almost no gaps:
+
+0–11s: The smile fades as he starts speaking — not into sadness, into tiredness. He
+begins within the first second, no hesitation. On the second sentence he glances away and
+there is a flicker of embarrassment, as if admitting something he would rather not say
+out loud.
+P1 (resigned, tired, frustrated with the situation rather than with anyone, dropping in
+volume and slowing slightly on the second sentence but never stopping): "But now I'm here
+working most of the time. I actually have to pay somebody to watch them while I'm here."
+
+11–14s: P2 comes straight in, no gap.
+P2 (quietly astonished, the respect fully audible — this is the moment he understands
+what Walter has done): "You came out of retirement for them?"
+
+14–19s: Walter answers right away, counting the items off loosely, without emphasis, as
+plain arithmetic.
+P1 (matter-of-fact, no self-pity, a tired exhale through the nose on the final word):
+"Had to. Rent, food, the car... everything adds up."
+He shifts his weight off one leg the way someone does after hours standing.
+
+19–22s: P2 (gentle, checking, already thinking about something): "You need the car for
+the kids?"
+
+22–26s: P1 (immediate and emphatic on "Every day," then listing quickly and letting the
+last word trail off): "Every day. School, appointments, groceries, church... everything."
+He gestures lightly with the notepad as if this is simply his daily reality, nothing
+remarkable about it.
+
+26–30s: A clear shift — he remembers he is at work. He straightens up slightly, lifts the
+notepad and pen into position, and his whole tone changes back to professional in an
+instant.
+P1 (brisk, friendly, the practiced work voice snapping back on, noticeably brighter and
+faster than the previous line): "Anyway, what are you having for breakfast?"
+
++ RESTRICTIONS agregar: He keeps the notepad in his hand the whole time.
+
+================================================================================
+S4 — 30s — EL PEDIDO, LA COMIDA Y LOS $100
+================================================================================
+[BLOQUE BASE, duracion 30]
++ en FIRST FRAME agregar: This is a direct continuation of the previous clip — same
+  booth, same background customers, same light, Walter standing in the same position with
+  his notepad raised, having just asked what the customer wants for breakfast.
++ AGREGAR ESTE BLOQUE NUEVO despues de FIRST FRAME:
+
+STRUCTURE — ONE RECORDING BREAK: This clip contains exactly ONE hard jump cut, at 10
+seconds, and none anywhere else. It is not an edit — it is the person who is filming
+stopping the recording while he eats and starting it again afterwards. Render it as an
+abrupt frame-to-frame jump with no transition, no fade, no dissolve and no motion match.
+The audio jumps with it. Everything before the jump and everything after it is one
+continuous handheld take. Same diner, same booth, same table, same light on both sides
+of the jump.
+
++ en PACING agregar: Outside the six seconds of eating, someone is speaking almost
+  continuously.
++ en IMAGE agregar: Real food texture — glossy egg yolk, greasy bacon, buttered toast.
++ en AUDIO agregar: chewing close to the microphone.
+
+ACTION:
+
+0–4s: Walter is standing with his notepad and pen raised, waiting. P2 answers immediately.
+P2 (easy, friendly, a little offhand — he already knows what he wants): "The classic with
+a black coffee please."
+Walter writes it down, glancing at the pad rather than at P2.
+
+4–10s: P1 (brisk, warm, the practiced service voice, no pause before it): "I will get
+this sent to the kitchen right away."
+He gives a small polite nod, turns and starts walking slowly toward the kitchen. The
+camera follows him a beat too late and loses him partly behind a booth.
+
+10–16s: HARD JUMP CUT — the recording has been stopped and restarted. The frame is now
+low over the table: a plate of eggs, bacon, toast and hash browns, a white mug of black
+coffee, the shakers and napkin dispenser from @Image2. No dialogue here. P2's hands enter
+the frame, cut into the eggs, lift a forkful toward the camera and set the fork down. The
+phone drifts because the other hand is busy. Only cutlery, chewing close to the microphone
+and room noise. Walter is visible far in the background working another table.
+
+16–19s: Walter arrives at the end of the booth holding a check folder. The camera finds
+him late, tilting up from the plate to his face and settling.
+P1 (warm, professional, a little tired — a question he has asked ten thousand times):
+"How was everything?"
+
+19–22s: P2 (bright, mouth slightly full, genuinely pleased, coming straight in): "Amazing,
+I love the eggs here!"
+
+22–26s: A small real smile — the pleasure of a compliment he was not expecting.
+P1 (lifting on the first two words, then dropping back into flat work rhythm, no pause
+between the sentences): "Great choice! Anyways, here's your check."
+He sets the folder down on the table beside the plate.
+
+26–30s: P2's hand enters the lower frame holding a folded one hundred dollar bill, places
+it into the open folder and withdraws. The hand moves easily and openly, not secretively.
+P2 (warm and sincere, slightly quieter, a real smile audible in it — he means it):
+"Thank you."
+Walter picks up the folder without looking at it properly, still in work rhythm. Then he
+glances down — and stops. His hand goes still. His eyebrows pull together. This is
+CONFUSION, not joy.
+P1 (uncertain, pitched slightly higher than his normal voice, the last two words rising
+into a real question — he genuinely believes there has been a mistake): "Wait... a hundred
+dollars?"
+End the clip on his confused face.
+
++ RESTRICTIONS reemplazar la primera linea por: Exactly ONE hard jump cut, at 10 seconds —
+  no other cuts, no fades, no dissolves, no transitions anywhere.
+
+================================================================================
+S5 — 25s — LA REACCION
+================================================================================
+[BLOQUE BASE, duracion 25]
++ en FIRST FRAME agregar: This is a direct continuation of the previous clip — same booth,
+  same table, same empty plate and mug, same background customers, same light, Walter
+  standing in the same position holding the open check folder, his face confused, having
+  just asked whether it really is a hundred dollars.
++ en PACING agregar: There is NO moment in this clip where nobody speaks for longer than
+  one and a half seconds, and that single longer beat is the one marked below.
+
+ACTION — the dialogue runs continuously with almost no gaps:
+
+0–3s: P2 answers immediately, without letting the confusion hang.
+P2 (gentle and openly happy for him, a soft breath of a laugh before the words, reassuring
+rather than announcing — the tone of telling a friend good news): "Yeah. That's yours."
+Walter lowers the folder slightly.
+
+3–8s: This is the one longer beat in the clip, and it is not empty — his face is working
+through it. The confusion drops away and the understanding lands: the eyes fill and stay
+wet, the mouth softens, the chin trembles very slightly, the jaw stays tight. He is
+fighting it and losing a little. Then he speaks.
+P1 (thin and breathy, almost no air behind it, slowing on the last word and letting it
+break — the voice of someone pushing words past a closed throat): "Man, thank you.
+Seriously."
+
+8–12s: P2 (soft, curious, not prying — asking because he already suspects the answer,
+coming straight in): "What are you gonna use it for?"
+Walter glances down at the money in his hand.
+
+12–18s: He answers without hesitation. There is no fantasy in it, no treat for himself —
+the money was spent in his head the instant he saw it.
+P1 (quiet, steady, warming on the word "kids", a small nod to himself): "Probably the car.
+Gotta keep it running for the kids."
+He folds the bill carefully with both hands and holds it rather than stuffing it into his
+apron, the way people handle money that matters.
+
+18–22s: P2 (light, a little playful, deliberately casual to hide that he is planning
+something): "Weird question but, at what time do you get off?"
+P1 (simple, prompt, unsuspecting, still half in work mode): "Four."
+
+22–25s: P2 (friendly and firm, a small smile in it, stating it as a fact rather than a
+promise): "Alright. I'm coming back at four."
+Walter's brow creases. He looks at P2 for a beat longer than normal, completely puzzled,
+and says nothing. End the clip on his confused face.
+
++ RESTRICTIONS agregar: Apart from the single marked beat between 3 and 8 seconds, NO
+  silent gaps longer than one second. No tears running down the face yet.
+
+================================================================================
+S6 — 30s — AFUERA: LA PLATA Y EL ABRAZO
+================================================================================
+[BLOQUE BASE, duracion 30]
++ QUITAR el bloque FIRST FRAME — esta escena NO lleva @Image3.
++ REEMPLAZAR el bloque LOCATION por:
+
+NEW LOCATION AND TIME — build this opening from the description, do NOT continue any
+previous framing: outside the same diner, late afternoon, around four o'clock. Low warm
+sunlight raking across a parking lot. The diner's windows, glass door and sign are behind
+them; parked cars, light poles and a wide sky fill the background. Use @Image1 for
+Walter's identity and wardrobe and @Image2 only for the look of the building behind them.
+Walter has just finished his shift and looks physically spent — shoulders lower, steps
+slower, the day visibly on him. Same tan khaki polo with the "Walter" name badge and same
+navy work trousers, but the black apron is removed and he carries a small bag in one hand.
+
++ en PACING agregar: the exchanges overlap — this is a fast, emotional back-and-forth, not
+  a measured conversation. There is NO moment where nobody speaks for longer than one
+  second, including during the hug.
++ en WALTER'S VOICE agregar: ...and the words come out broken but he keeps pushing them out.
++ en CAMERA reemplazar por: Held in one hand, walking, so the shake is larger than indoors
+  and the framing swings and swims. The horizon drifts badly and is never corrected. Heavy
+  natural motion blur on the fast swings. The auto-exposure visibly hunts and briefly blows
+  out when the lens turns toward the low sun.
++ en AUDIO reemplazar por: Outdoor ambience — distant traffic, wind moving across the
+  microphone, footsteps on asphalt, a car door somewhere, the diner's door closing. Voices
+  are close and unprotected, with no room reverb. During the hug Walter's voice is very
+  close to the microphone and muffled against fabric.
+
+ACTION — the dialogue runs continuously with almost no gaps:
+
+0–6s: The frame is moving and badly aimed at the asphalt and parked cars, swinging up to
+find Walter as P2 calls out across the lot.
+P2 (bright, loud, delighted — shouting across a parking lot): "Hey!"
+Walter turns. Recognition lands and his whole tired face opens up — he truly did not
+expect this.
+P1 (delighted and disbelieving, laughing slightly on "man", warm): "Oh, man... you actually
+came back."
+P2 (grinning, easy, a small laugh in it, coming straight in): "Told you I would."
+
+6–12s: P2's hand enters frame holding a folded stack of cash and pushes it forward.
+P2 (simple, direct, quieter now): "Here."
+Walter looks down at it and the smile collapses into disbelief. He physically pulls back
+half a step and raises a hand to push it away — this is a proud man refusing charity,
+immediate and instinctive.
+P1 (protesting, almost pained, shaking his head): "No... come on."
+P2 (steady, kind, no room for argument, still warm): "Take it."
+Walter stops. He looks directly at P2 for the first time all day, searching his face.
+P1 (barely above a whisper, cracking on "serious", eyes filling fast): "Are you serious?"
+P2 (soft, certain, one word): "Yeah."
+
+12–19s: Walter's face breaks. He steps in immediately and pulls P2 into a long hug, holding
+on tightly with one arm, the bag still in the other hand. Because P2 is holding the phone
+the framing collapses — the lens swings, catches his shoulder and the bright sky, goes
+partly dark against his shirt, and settles roughly. Heavy motion blur. Walter's voice is
+now very close to the microphone, muffled against fabric, and he starts speaking almost
+immediately.
+P1 (broken, wet, the word dragged out on an exhale): "Man..."
+
+19–24s: Still holding on, he pushes the rest out fast, before he loses the ability to.
+P1 (thick with tears, rushed and unsteady, running out of air at the end): "Thank you. You
+don't know how much this helps."
+
+24–30s: They separate. He wipes a tear quickly with the back of his hand, embarrassed at
+himself, breathing hard.
+P2 (warm, focused, leading him somewhere, coming straight in): "You told me you need that
+car every day for your grandkids, right?"
+P1 (immediate, nodding before he speaks, voice still unsteady): "Yeah."
+P2 (light, a little conspiratorial, enjoying this): "Pull out your phone real quick."
+P1 (baffled, blinking, wiping his eye): "My phone?"
+End the clip on his confused face.
+
++ RESTRICTIONS agregar: Walter's refusal must read as pride, not politeness. No sobbing,
+  no collapsing, no hands over the face.
+
+================================================================================
+S7 — 25s — EL TELEFONO   (lleva @Video1)
+================================================================================
+[BLOQUE BASE, duracion 25]
++ en FIRST FRAME agregar: This is a direct continuation of the previous clip — same parking
+  lot outside the diner, same late afternoon light and long shadows, same wardrobe, Walter
+  still emotional from the hug, having just asked "My phone?".
++ AGREGAR ESTE BLOQUE NUEVO:
+
+SCREEN CONTENT — @Video1: Walter's phone screen displays @Video1. Render @Video1 playing
+inside the phone's screen rectangle, correctly inset and perspective-warped to match the
+angle at which the phone is held, with realistic screen brightness, glare from the low sun,
+a faint reflection and the phone's bezel visible around it. Use @Video1 ONLY as the content
+of that screen. Do NOT let @Video1's style, color grading, framing, camera motion, pacing
+or subject matter influence the rest of the shot in any way. Everything outside the phone
+screen is the parking lot scene described here.
+
++ en WALTER agregar: His hands are weathered and slightly stiff; he types slowly with one
+  index finger, squinting at the screen.
++ en LOCATION reemplazar por: Outside the diner, late afternoon, parking lot, the building
+  and its windows behind them, parked cars and light poles in the background, long shadows
+  across the asphalt.
++ en CAMERA agregar: When the camera moves toward the phone screen it is a physical
+  handheld lean — the arm extending — never a zoom, and the frame wobbles and overshoots
+  slightly before settling on the screen.
++ en AUDIO agregar: Soft taps as Walter types. Any audio belonging to @Video1 is NOT heard
+  — the phone screen plays silently.
+
+ACTION — the dialogue runs continuously with almost no gaps:
+
+0–4s: P2 (light, a little conspiratorial, enjoying this, coming straight in): "Yeah. I
+wanna show you something."
+Walter takes a phone from his pocket, fumbling slightly with stiff fingers. The camera
+drops from his face down to his hands and the phone and STAYS THERE — from this point
+until the screen reveal, the shot is on his hands and the phone, not on his face.
+
+4–9s: P2 (patient, guiding, gentle): "Put your car information in right there."
+P1 (concentrating, distracted, still unsteady): "Alright."
+He starts typing, slowly, one index finger, squinting down at the screen. Only his hands,
+the phone and his forearms are in frame.
+
+9–13s: P2 (helpful, brief): "Year, make, model."
+Walter keeps typing without answering, taking his time, occasionally pausing to find a key.
+The frame drifts with the operator's breathing. His hands fill most of the frame.
+
+13–17s: He finishes and lifts his thumb off the screen. A short load beat — he watches it,
+not understanding what he is waiting for.
+P1 (half to himself, still lost): "Alright..."
+
+17–21s: P2 (quiet, anticipating): "Look."
+The camera leans in toward Walter's phone — a physical handheld lean, the arm extending,
+the frame wobbling and overshooting before settling. The phone screen now fills a large
+part of the frame, held at a slight angle, and @Video1 is playing on it. Walter leans
+toward the screen and squints, making sure he is reading it right.
+
+21–25s: P1 (flat with disbelief, reading it out rather than reacting, pitched up into a
+question): "seventeen hundred?"
+He looks up sharply from the screen.
+P2 (warm, proud, smiling, coming straight in): "Yeah. That's your savings right there."
+P1 (stunned, almost laughing, shaking his head): "No way."
+He looks back down at the screen. End the clip there.
+
++ RESTRICTIONS agregar: No on-screen text anywhere except inside the phone screen, which
+  shows @Video1. During the typing section the camera must stay on Walter's hands and the
+  phone, not on his face. @Video1 appears ONLY inside the phone screen and must not
+  influence the style of the rest of the shot.
+
+================================================================================
+S8 — 25s — LOS $1700 Y EL CIERRE   (lleva @Video1)
+================================================================================
+[BLOQUE BASE, duracion 25]  ·  return_last_frame FALSE
++ en FIRST FRAME agregar: This is a direct continuation of the previous clip — same parking
+  lot, same late afternoon light and long shadows, same wardrobe, the camera still close to
+  Walter's phone, Walter looking down at the screen having just said "No way."
++ AGREGAR el mismo bloque SCREEN CONTENT — @Video1 de S7.
++ en WALTER agregar: He is exhausted, emotional, and for the first time all day, visibly
+  relieved.
++ en ACTING agregar: This is relief, not grief: the tears here are happy ones.
++ en IMAGE agregar: Tears rendered realistically, catching the low sun as they roll.
++ en POV agregar: ...until the handshake at the end.
++ en CAMERA agregar: During the handshake the camera jerks hard with the movement of the
+  arm and the framing collapses.
+
+ACTION — the dialogue runs continuously with almost no gaps:
+
+0–8s: P2 (gentle, explaining, letting the numbers do the work, unhurried but not slow):
+"Look underneath it. Your new rate is forty seven a month, instead of the hundred fifty you
+were paying…"
+Walter reads silently while P2 talks, his lips moving very slightly. His eyebrows lift as
+he reaches the number. He does not look up.
+
+8–13s: Another tear forms — but this time he is smiling through it, the first tears of
+relief instead of grief. He nods slowly at the phone.
+P1 (wet, soft, overwhelmed, exhaling the word rather than saying it): "Man..."
+P1 (quiet, cracking slightly, still nodding at the screen): "This will help me a lot."
+
+13–19s: P2 (warm, sincere, landing it softly, coming straight in): "Hopefully it means you
+get a little more time with those grandkids too."
+
+19–25s: That line hits him harder than the money did. He stops looking at the phone and
+lowers it. He looks down at the ground for a second, and smiles while his eyes fill again.
+A second small tear rolls down his cheek naturally, catching the light. He does not wipe
+this one. Then he reaches out and grips P2's hand in a strong, firm handshake, holding it a
+beat longer than a normal handshake, shaking it once hard — and laughs. A real, tired,
+relieved laugh, audible and close to the microphone. The camera jerks with the handshake
+and ends imperfectly — tilted, his shoulder partly covering the lens, the parking lot
+swinging past.
+
++ RESTRICTIONS agregar: The laugh at the end must be audible and real, not polite.
+
+================================================================================
+TEXTOS DE OVERLAY — MONTAJE FINAL (sobre el corte de 2:45)
+================================================================================
+
+DOS ESTILOS, INVERTIDOS ENTRE SI:
+
+HOOK        caja NEGRA  / texto BLANCO / MAYUSCULAS
+COMENTARIOS caja BLANCA / texto NEGRO  / Title case o minuscula
+
+Los emojis van SIEMPRE dentro de la caja, al final de la ultima linea.
+Todos los overlays van ARRIBA de los subtitulos quemados.
+
+ESPECIFICACIONES 1080x1920
+  Hook        sans bold ~64px · radio 8px  · padding 20/12px · centro y≈1080
+  Comentarios sans semibold ~54px · radio 14px · padding 24/16px · centro y≈1060
+
+LOGICA DE EMOJIS (mantenerla da coherencia)
+  💔 duele   ·   🥺 conmueve   ·   💚 el narrador actua   ·   👀 se viene algo
+
+--------------------------------------------------------------------------------
+TIMECODE     TEXTO                                                    ESTILO
+--------------------------------------------------------------------------------
+0:00–0:06    MILLIONAIRE GAVE GRANDPA                                 caja negra
+             A SECOND CHANCE 🥺❤️
+
+0:31–0:36    His daughter passed away and                             caja blanca
+             left him with her kids 💔🥺
+
+1:02–1:05    He basically works just for them.. 💔                    caja blanca
+
+1:05–1:09    I had to do something 💚                                 caja blanca
+
+1:24–1:28    I gave him $100 💚                                       caja blanca
+
+1:45–1:50    4PM. He didn't think I'd show up 🥺                      caja blanca
+
+1:56–2:02    $500 more.. he tried to say no 🥺                        caja blanca
+
+2:01–2:05    he wouldn't let go 🥺                                    caja blanca
+
+2:06–2:10    — LIMPIO, sin texto —                    (primer plano de la lagrima)
+
+2:11–2:16    but I wasn't done.. 👀                                   caja blanca
+
+2:32         (pendiente) el numero del ahorro en grande
+
+2:45         (pendiente) CTA
+--------------------------------------------------------------------------------
+
+REGLA DE ORO DE LOS OVERLAYS
+  Durante caras y reacciones: texto corto o nada.
+  Durante movimiento, lentes tapados, manos, objetos y transiciones: ahi si texto
+  largo, porque no le sacas atencion a nada.
+  El abrazo (2:01) es el MEJOR lugar del video para texto: el hombro tapa el lente
+  y la imagen esta vacia.
+  El primer plano de la lagrima (2:06) es el PEOR: la cara lo dice todo.
+
+================================================================================
+NOTAS DE POST
+================================================================================
+- Timeline 1080x1920 @30fps.
+- Uniones sobre accion fisica: cuerpo cruzando el lente, hombro tapando cuadro,
+  swing con motion blur, el operador bajando el telefono.
+- Room tone continuo de diner bajo S1–S5, ambiente exterior continuo bajo S6–S8.
+  J/L cuts de 150–500 ms en cada union.
+- Variantes recomendadas: 2 para S1 y S3; 4–5 para S2, S4, S6 y S8.
+- La URL del resultado en kie.ai es presignada y EXPIRA A LAS 24 H: descargar el
+  archivo, nunca guardar el link.
+- Conviene que la pieza lleve una indicacion de recreacion donde se publique.

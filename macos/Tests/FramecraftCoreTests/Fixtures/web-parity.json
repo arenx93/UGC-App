@@ -1,0 +1,1505 @@
+{
+ "ratios": [
+  {
+   "model": "gpt-image-2",
+   "resolution": "1K",
+   "ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "5:4",
+    "4:5",
+    "16:9",
+    "9:16",
+    "2:1",
+    "1:2",
+    "3:1",
+    "1:3",
+    "21:9",
+    "9:21"
+   ]
+  },
+  {
+   "model": "gpt-image-2",
+   "resolution": "2K",
+   "ratios": [
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "2:1",
+    "1:2",
+    "21:9"
+   ]
+  },
+  {
+   "model": "gpt-image-2",
+   "resolution": "4K",
+   "ratios": [
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "5:4",
+    "4:5",
+    "16:9",
+    "9:16",
+    "2:1",
+    "1:2",
+    "21:9"
+   ]
+  },
+  {
+   "model": "gpt-image-2-5-flare",
+   "resolution": "1K",
+   "ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "21:9",
+    "27:16",
+    "16:27",
+    "9:8",
+    "8:9"
+   ]
+  },
+  {
+   "model": "gpt-image-2-5-flare",
+   "resolution": "2K",
+   "ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "21:9"
+   ]
+  },
+  {
+   "model": "gpt-image-2-5-flare",
+   "resolution": "4K",
+   "ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "21:9"
+   ]
+  },
+  {
+   "model": "gpt-image-2-5-sunburst",
+   "resolution": "1K",
+   "ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "21:9",
+    "27:16",
+    "16:27",
+    "9:8",
+    "8:9"
+   ]
+  },
+  {
+   "model": "gpt-image-2-5-sunburst",
+   "resolution": "2K",
+   "ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "21:9"
+   ]
+  },
+  {
+   "model": "gpt-image-2-5-sunburst",
+   "resolution": "4K",
+   "ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "21:9"
+   ]
+  },
+  {
+   "model": "nano-banana-pro",
+   "resolution": "1K",
+   "ratios": [
+    "1:1",
+    "2:3",
+    "3:2",
+    "3:4",
+    "4:3",
+    "4:5",
+    "5:4",
+    "9:16",
+    "16:9",
+    "21:9"
+   ]
+  },
+  {
+   "model": "nano-banana-pro",
+   "resolution": "2K",
+   "ratios": [
+    "1:1",
+    "2:3",
+    "3:2",
+    "3:4",
+    "4:3",
+    "4:5",
+    "5:4",
+    "9:16",
+    "16:9",
+    "21:9"
+   ]
+  },
+  {
+   "model": "nano-banana-pro",
+   "resolution": "4K",
+   "ratios": [
+    "1:1",
+    "2:3",
+    "3:2",
+    "3:4",
+    "4:3",
+    "4:5",
+    "5:4",
+    "9:16",
+    "16:9",
+    "21:9"
+   ]
+  }
+ ],
+ "compose": [
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee"
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee"
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee"
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "A candid photo of a woman holding a coffee",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "A candid photo of a woman holding a coffee\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "spaced prompt with newline"
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline"
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "",
+   "result": "spaced prompt with newline"
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nLow-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nCandid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFirst-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "  spaced prompt with newline\n  ",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "spaced prompt with newline\n\nLocal television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\n\nFront-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance."
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"wide\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"wide\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"wide\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"wide\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\",\"aspect_ratio\":\"9:16\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"composition\":{\"framing\":\"wide\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null}",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"lighting\":{\"key\":\"soft\"},\"flag\":true,\"n\":null,\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\"},\"subject_analysis\":\"x\",\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\"},\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\"},\"subject_analysis\":\"x\",\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"sharpness\":\"Slightly soft focus and subtle motion blur\",\"grain\":\"Visible digital noise\",\"texture\":\"Compressed detail, imperfect exposure\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Low-quality Android phone snapshot: slightly soft focus, subtle motion blur, visible digital noise, compressed detail and imperfect exposure. Natural, unpolished everyday photography.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\"},\"subject_analysis\":\"x\",\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\"},\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\"},\"subject_analysis\":\"x\",\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"sharpness\":\"Natural smartphone detail, realistic skin texture\",\"grain\":\"Subtle natural phone noise\",\"texture\":\"Unretouched candid detail\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Candid iPhone snapshot with natural smartphone processing, realistic skin texture, available light and spontaneous everyday framing. Avoid a polished studio look.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\"},\"subject_analysis\":\"x\",\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\"},\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\"},\"subject_analysis\":\"x\",\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"First-person eye-level handheld phone, 1x magnification\",\"motion_blur\":\"Slight handheld motion blur\"},\"subject_analysis\":{\"hands_and_gestures\":{\"left_hand\":\"Outside the frame, holding the phone\",\"right_hand\":\"The only visible hand; natural gesture consistent with the scene\",\"finger_positions\":\"Natural anatomy, no extra fingers\",\"interaction\":\"Exactly one visible hand; phone-holding hand stays out of frame\",\"visible_hand_count\":1}},\"composition\":{\"framing\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"First-person POV through a handheld phone at 1× magnification. Exactly one hand is visible; the other hand is holding the phone outside the frame. Slight handheld motion blur, eye-level perspective and natural framing. No extra hands or fingers.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"aspect_ratio\":\"9:16\",\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{\"technical_specs\":[1,2],\"subject_analysis\":\"x\"}",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{\"technical_specs\":{\"camera_style\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"sharpness\":\"Slightly compressed broadcast video detail\",\"texture\":\"Local-news documentary footage\",\"perspective\":\"Front-facing phone selfie at arm’s length, imperfect off-center framing\"},\"subject_analysis\":\"x\",\"composition\":{\"framing\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"},\"framecraft_overrides\":{\"priority\":\"These selected camera and framing constraints override conflicting descriptions elsewhere in this profile, including generation_parameters.prompts.\",\"camera\":\"Local television news camera footage captured as a still: documentary framing, on-location broadcast lighting, slightly compressed video detail and realistic local-news color. No station logo, lower third or text unless requested.\",\"film\":\"Front-facing phone selfie, candid expression, imperfect slightly off-center framing, natural arm-length perspective and spontaneous composition. Unretouched everyday appearance.\"}}"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "POV",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "N/A",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "Android Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "iPhone Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "N/A",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "POV",
+   "aspect": "",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "auto",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "9:16",
+   "result": "{broken json"
+  },
+  {
+   "prompt": "{broken json",
+   "camera": "TV / News Camera",
+   "film": "Selfie",
+   "aspect": "",
+   "result": "{broken json"
+  }
+ ],
+ "examples": [
+  {
+   "idea": "product poster for sneakers",
+   "titles": [
+    "Product Marketing - Didi OpenClaw Ride Skill Poster",
+    "Product Marketing - School Commercial Kids Advertisement Poster",
+    "VR Headset Exploded View Poster"
+   ]
+  },
+  {
+   "idea": "Una selfie en un café lluvioso",
+   "titles": [
+    "Profile / Avatar - Off-Duty Spider-Man Elevator Selfie",
+    "Profile / Avatar - Ethereal Night Selfie Portrait",
+    "Social Media Post - Cozy Couple Selfie Doodle Illustration"
+   ]
+  },
+  {
+   "idea": "cinematic portrait with neon light",
+   "titles": [
+    "Profile / Avatar - Censored Cinematic Bob Portrait",
+    "Profile / Avatar - Neon Cyber-Kawaii VTuber Portrait",
+    "Profile / Avatar - Minimalist Silhouette Portrait"
+   ]
+  },
+  {
+   "idea": "xyzzy",
+   "titles": []
+  },
+  {
+   "idea": "food magazine cover burger",
+   "titles": [
+    "Product Marketing - Elegant SIGHT Beauty Magazine Cover",
+    "Illustrated City Food Map",
+    "Social Media Post - Candid Night Market Food Stall Friends"
+   ]
+  }
+ ]
+}
