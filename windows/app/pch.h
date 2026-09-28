@@ -56,6 +56,9 @@
 #include <wil/cppwinrt_helpers.h>
 
 #include <algorithm>
+#include <cctype>
+#include <cwctype>
+#include <thread>
 #include <chrono>
 #include <filesystem>
 #include <functional>
