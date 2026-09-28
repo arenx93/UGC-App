@@ -1,0 +1,99 @@
+# Native Windows app (C++ / WinUI 3): core tests, build, launch check, screenshots and package.
+# Download it from the run's "Artifacts" (Framecraft-Windows-C++).
+name: Windows app (C++)
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "windows/**"
+      - "macos/Sources/FramecraftCore/Resources/**"
+      - ".github/workflows/windows-native.yml"
+  workflow_dispatch:
+    inputs:
+      screenshots:
+        description: "Commit screenshots to docs/windows"
+        type: boolean
+        default: false
+      release:
+        description: "Publish a Release with this version (e.g. 1.0.0); empty = no release"
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-native-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  core:
+    name: Core tests (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test the portable core
+        run: |
+          cmake -S windows/core -B build-core -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-core -j4
+          ctest --test-dir build-core --output-on-failure
+
+  build:
+    name: Build, test & package
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: microsoft/setup-msbuild@v2
+      - uses: NuGet/setup-nuget@v2
+
+      - name: Toolchain
+        shell: pwsh
+        run: |
+          msbuild -version
+          & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property catalog_productDisplayVersion
+          [System.Environment]::OSVersion.Version
+
+      - name: Core tests (MSVC)
+        shell: pwsh
+        run: |
+          cmake -S windows/core -B build-core
+          cmake --build build-core --config Release
+          ctest --test-dir build-core -C Release --output-on-failure
+
+      - name: Restore NuGet packages
+        run: nuget restore windows\app\packages.config -PackagesDirectory windows\packages
+
+      - name: Build Framecraft.exe
+        shell: pwsh
+        run: msbuild windows\app\Framecraft.vcxproj /p:Configuration=Release /p:Platform=x64 /m /v:m /nologo
+
+      - name: Output
+        shell: pwsh
+        run: Get-ChildItem windows\build\Release | Select-Object Name, Length | Format-Table -AutoSize
+
+      - name: Launch check
+        shell: pwsh
+        run: |
+          $exe = Resolve-Path windows\build\Release\Framecraft.exe
+          $p = Start-Process -FilePath $exe -PassThru
+          Start-Sleep -Seconds 15
+          if ($p.HasExited) { Write-Error "Framecraft exited during launch (code $($p.ExitCode))"; exit 1 }
+          Stop-Process -Id $p.Id -Force
+          Write-Host "Framecraft launched and stayed running"
+
+      - name: Package (zip)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Compress-Archive -Path windows\build\Release\* -DestinationPath dist\Framecraft-Windows-x64.zip -Force
+          Get-Item dist\*.zip | Select-Object Name, Length
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Framecraft-Windows-C++
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 30

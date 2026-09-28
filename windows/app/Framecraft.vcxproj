@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Framecraft for Windows: native C++ app (C++/WinRT + WinUI 3 / Windows App SDK).
+  Unpackaged and self-contained: the output folder runs on its own, no MSIX and no runtime installer.
+  Build:  nuget restore packages.config -PackagesDirectory ..\packages
+          msbuild Framecraft.vcxproj /p:Configuration=Release /p:Platform=x64
+-->
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PackagesDir>$(MSBuildThisFileDirectory)..\packages\</PackagesDir>
+    <CppWinRTPackage>$(PackagesDir)Microsoft.Windows.CppWinRT.2.0.250303.1</CppWinRTPackage>
+    <WasdkPackage>$(PackagesDir)Microsoft.WindowsAppSDK.1.7.260224002</WasdkPackage>
+    <BuildToolsPackage>$(PackagesDir)Microsoft.Windows.SDK.BuildTools.10.0.26100.7705</BuildToolsPackage>
+    <WebView2Package>$(PackagesDir)Microsoft.Web.WebView2.1.0.2903.40</WebView2Package>
+    <WilPackage>$(PackagesDir)Microsoft.Windows.ImplementationLibrary.1.0.250325.1</WilPackage>
+  </PropertyGroup>
+  <Import Project="$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.props" Condition="Exists('$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.props')" />
+  <Import Project="$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.props" Condition="Exists('$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.props')" />
+  <PropertyGroup Label="Globals">
+    <CppWinRTOptimized>true</CppWinRTOptimized>
+    <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
+    <MinimalCoreWin>true</MinimalCoreWin>
+    <ProjectGuid>{6F3C2B7A-3A1E-4E5D-9C44-0F1A2B3C4D5E}</ProjectGuid>
+    <ProjectName>Framecraft</ProjectName>
+    <RootNamespace>Framecraft</RootNamespace>
+    <DefaultLanguage>es-AR</DefaultLanguage>
+    <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>false</AppContainerApplication>
+    <AppxPackage>false</AppxPackage>
+    <ApplicationType>Windows Store</ApplicationType>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.17763.0</WindowsTargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <DesktopCompatible>true</DesktopCompatible>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <PropertyGroup>
+    <OutDir>$(MSBuildThisFileDirectory)..\build\$(Configuration)\</OutDir>
+    <IntDir>$(MSBuildThisFileDirectory)..\build\obj\$(Configuration)\</IntDir>
+    <TargetName>Framecraft</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory);$(MSBuildThisFileDirectory)..\core\include;$(MSBuildThisFileDirectory)..\core\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj /utf-8</AdditionalOptions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>winhttp.lib;crypt32.lib;advapi32.lib;dwmapi.lib;shell32.lib;ole32.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Manifest Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="App.xaml.h">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="src\*.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="App.xaml.cpp">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="src\*.cpp" />
+    <ClCompile Include="..\core\src\*.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Framecraft.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <Content Include="Assets\AppIcon.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Content>
+  </ItemGroup>
+  <!-- Skills, the Seedance guide and the Walter pack: shared with the macOS app. -->
+  <ItemGroup>
+    <SkillFiles Include="..\..\macos\Sources\FramecraftCore\Resources\Skills\**\*" />
+  </ItemGroup>
+  <Target Name="CopySkillFiles" AfterTargets="Build">
+    <Copy SourceFiles="@(SkillFiles)" DestinationFiles="@(SkillFiles->'$(OutDir)Skills\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="Assets\AppIcon.png" DestinationFolder="$(OutDir)Assets" SkipUnchangedFiles="true" />
+  </Target>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.targets" Condition="Exists('$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.targets')" />
+    <Import Project="$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="$(WebView2Package)\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('$(WebView2Package)\build\native\Microsoft.Web.WebView2.targets')" />
+    <Import Project="$(WilPackage)\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('$(WilPackage)\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
+    <Import Project="$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.targets" Condition="Exists('$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Faltan paquetes NuGet: ejecutá "nuget restore packages.config -PackagesDirectory ..\packages". Falta {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', 'CppWinRT'))" />
+    <Error Condition="!Exists('$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.props')" Text="$([System.String]::Format('$(ErrorText)', 'WindowsAppSDK'))" />
+    <Error Condition="!Exists('$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', 'SDK.BuildTools'))" />
+  </Target>
+</Project>

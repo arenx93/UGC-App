@@ -1,0 +1,39 @@
+// Icon and version information.
+#include <winres.h>
+
+1 ICON "Assets\\Framecraft.ico"
+
+#ifndef FC_VERSION_MAJOR
+#define FC_VERSION_MAJOR 1
+#define FC_VERSION_MINOR 0
+#define FC_VERSION_PATCH 0
+#define FC_VERSION_TEXT "1.0.0"
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION FC_VERSION_MAJOR,FC_VERSION_MINOR,FC_VERSION_PATCH,0
+ PRODUCTVERSION FC_VERSION_MAJOR,FC_VERSION_MINOR,FC_VERSION_PATCH,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "0c0a04b0"
+        BEGIN
+            VALUE "CompanyName", "Framecraft"
+            VALUE "FileDescription", "Framecraft Studio"
+            VALUE "FileVersion", FC_VERSION_TEXT
+            VALUE "InternalName", "Framecraft"
+            VALUE "OriginalFilename", "Framecraft.exe"
+            VALUE "ProductName", "Framecraft Studio"
+            VALUE "ProductVersion", FC_VERSION_TEXT
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0xc0a, 1200
+    END
+END
