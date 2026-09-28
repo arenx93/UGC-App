@@ -17,10 +17,19 @@ Más capturas en [`docs/macos/`](../docs/macos/) (se regeneran desde Actions →
 1. En GitHub, abrí **Actions → macOS app (Swift)** y entrá en la ejecución más
    reciente con ✅.
 2. En **Artifacts**, descargá **Framecraft-macOS** (trae el `.dmg`).
-3. Abrí el `.dmg` y arrastrá **Framecraft** a **Aplicaciones**.
-4. La primera vez: **clic derecho → Abrir → Abrir** (la app todavía no está
-   firmada con un certificado de Apple). Si macOS dice que "está dañada":
-   `xattr -cr /Applications/Framecraft.app` en Terminal.
+3. Descomprimí el `.zip`, abrí el `.dmg` y arrastrá **Framecraft** a
+   **Aplicaciones**. Abrila siempre desde **Aplicaciones**.
+4. **La primera vez** macOS la bloquea porque todavía no está firmada con un
+   certificado de Apple Developer. En macOS 15 (Sequoia) o posterior el truco de
+   "clic derecho → Abrir" ya no funciona; usá una de estas dos opciones:
+   - **Ajustes del Sistema:** intentá abrirla (aparece el aviso → *OK*), andá a
+     **Ajustes del Sistema → Privacidad y seguridad**, bajá hasta
+     *"Se bloqueó Framecraft…"* y tocá **Abrir igualmente**. Confirmá con tu
+     contraseña o Touch ID.
+   - **Terminal**, una sola vez:
+     `xattr -dr com.apple.quarantine /Applications/Framecraft.app`
+
+   Después abre normalmente. Requiere macOS 14 Sonoma o posterior.
 
 ## Qué hay adentro
 
