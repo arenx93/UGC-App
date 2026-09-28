@@ -79,7 +79,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          windows\scripts\fetch-codex.ps1 -Destination windows\build\Release\codex.exe
+          windows\scripts\fetch-codex.ps1 -Destination (Join-Path (Resolve-Path windows\build\Release) "codex")
           # App-local Visual C++ runtime, so no redistributable installer is needed.
           $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
           $crt = Get-ChildItem "$vs\VC\Redist\MSVC" -Directory | Sort-Object Name -Descending |

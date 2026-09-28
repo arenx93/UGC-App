@@ -1,5 +1,5 @@
-# Downloads the official Codex CLI for Windows x64 and saves it as $Destination (codex.exe),
-# bundled next to Framecraft.exe so users only need to sign in with ChatGPT.
+# Downloads the official Codex CLI for Windows x64 into $Destination (a "codex" folder next to
+# Framecraft.exe: bin\codex.exe plus the sandbox helpers), so users only need to sign in with ChatGPT.
 # Source: github.com/openai/codex releases, with the @openai/codex npm package as a fallback.
 param([Parameter(Mandatory = $true)][string]$Destination)
 $ErrorActionPreference = "Stop"
@@ -23,25 +23,36 @@ function From-Release {
         $exe = Get-Item $file
     }
     if (-not $exe) { return $false }
-    Copy-Item $exe.FullName $Destination -Force
+    New-Item -ItemType Directory -Force (Join-Path $Destination "bin") | Out-Null
+    Copy-Item $exe.FullName (Join-Path $Destination "bin\codex.exe") -Force
     return $true
 }
 
 function From-Npm {
+    # The binaries live in a platform build of the package: @openai/codex@<version>-win32-x64.
+    $version = (npm view "@openai/codex" version).Trim()
     Push-Location $work
-    npm pack "@openai/codex@latest" | Out-Null
-    $tgz = Get-ChildItem -Filter "openai-codex-*.tgz" | Select-Object -First 1
+    npm pack "@openai/codex@$version-win32-x64" | Out-Null
+    $tgz = Get-ChildItem -Filter "*.tgz" | Select-Object -First 1
     tar -xzf $tgz.FullName
     Pop-Location
-    $exe = Get-ChildItem $work -Recurse -Filter "codex.exe" | Where-Object { $_.FullName -match "x86_64-pc-windows-msvc" } | Select-Object -First 1
-    if (-not $exe) { return $false }
-    Copy-Item $exe.FullName $Destination -Force
+    $vendor = Get-ChildItem $work -Recurse -Directory -Filter "x86_64-pc-windows-msvc" | Select-Object -First 1
+    if (-not $vendor) { return $false }
+    New-Item -ItemType Directory -Force (Join-Path $Destination "bin") | Out-Null
+    Copy-Item (Join-Path $vendor.FullName "bin\codex.exe") (Join-Path $Destination "bin\codex.exe") -Force
+    foreach ($folder in @("codex-path", "codex-resources")) {
+        $source = Join-Path $vendor.FullName $folder
+        if (Test-Path $source) { Copy-Item $source (Join-Path $Destination $folder) -Recurse -Force }
+    }
+    # Voice support is not used by Framecraft.
+    Remove-Item (Join-Path $Destination "codex-resources\voice") -Recurse -Force -ErrorAction SilentlyContinue
     return $true
 }
 
 $ok = $false
-try { $ok = From-Release } catch { Write-Warning "Release download failed: $_" }
-if (-not $ok) { $ok = From-Npm }
+try { $ok = From-Npm } catch { Write-Warning "npm download failed: $_" }
+if (-not $ok) { $ok = From-Release }
 if (-not $ok) { throw "No se pudo descargar Codex para Windows" }
-& $Destination --version
+& (Join-Path $Destination "bin\codex.exe") --version
+Get-ChildItem $Destination -Recurse -File | Select-Object @{n="File";e={$_.FullName.Substring($Destination.Length)}}, Length
 Remove-Item $work -Recurse -Force -ErrorAction SilentlyContinue

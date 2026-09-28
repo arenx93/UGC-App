@@ -329,8 +329,8 @@ std::string lastLines(std::string const& text) {
 
 std::optional<std::filesystem::path> binary() {
     std::error_code error;
-    auto bundled = executableDirectory() / L"codex.exe";
-    if (std::filesystem::exists(bundled, error)) return bundled;
+    for (auto const& bundled : {executableDirectory() / L"codex" / L"bin" / L"codex.exe", executableDirectory() / L"codex.exe"})
+        if (std::filesystem::exists(bundled, error)) return bundled;
     for (wchar_t const* name : {L"codex.exe", L"codex.cmd"}) {
         wchar_t found[MAX_PATH];
         if (SearchPathW(nullptr, name, nullptr, MAX_PATH, found, nullptr)) return std::filesystem::path(found);
