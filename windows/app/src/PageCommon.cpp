@@ -54,7 +54,7 @@ winrt::fire_and_forget loadThumbnail(winrt::weak_ref<muxc::Image> weakImage, fs:
         source = it->second;
     } else {
         source = co_await media::thumbnail(file, video, pixels);
-        if (source) cache[key] = source;
+        if (source) cache.insert_or_assign(key, source);
     }
     if (auto image = weakImage.get()) {
         if (source) {

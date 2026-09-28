@@ -1049,7 +1049,7 @@ private:
             duration.Margin(ui::uniform(6));
             media.Children().Append(duration);
         }
-        media.CornerRadius(mux::CornerRadiusHelper::FromValues(11, 11, 0, 0));
+        media.CornerRadius(mux::CornerRadius{11, 11, 0, 0});
         body.Children().Append(media);
         auto name = ui::text(r.name, ui::Text::caption);
         name.TextWrapping(mux::TextWrapping::NoWrap);
