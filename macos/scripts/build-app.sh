@@ -21,6 +21,11 @@ APP="$OUT/Framecraft.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN_DIR/Framecraft" "$APP/Contents/MacOS/Framecraft"
 cp -R "$BIN_DIR/Framecraft_FramecraftCore.bundle" "$APP/Contents/Resources/"
+if [ -x build-cache/codex ]; then
+  # Bundled Codex CLI (scripts/fetch-codex.sh), signed together with the app.
+  cp build-cache/codex "$APP/Contents/MacOS/codex"
+  echo "▸ Codex CLI incluido"
+fi
 sed -e "s/__VERSION__/$VERSION/" -e "s/__BUILD__/$BUILD_NUMBER/" Assets/Info.plist > "$APP/Contents/Info.plist"
 
 echo "▸ Ícono…"

@@ -352,11 +352,11 @@ struct CodexAccountRow: View {
         VStack(alignment: .leading, spacing: 8) {
             switch model.codexStatus {
             case .unknown, .checking:
-                HStack { ProgressView().controlSize(.small); Text("Buscando Codex CLI…").font(.caption) }
+                HStack { ProgressView().controlSize(.small); Text("Comprobando tu sesión de ChatGPT…").font(.caption) }
             case .notInstalled:
-                Label("Codex CLI no está instalado", systemImage: "exclamationmark.triangle.fill")
+                Label("No se encontró Codex en esta copia de la app", systemImage: "exclamationmark.triangle.fill")
                     .font(.callout).foregroundStyle(.orange)
-                Text("Instalalo una vez desde Terminal con uno de estos comandos y volvé a comprobar:")
+                Text("Descargá la versión más reciente de Framecraft (ya lo incluye) o instalalo desde Terminal:")
                     .font(.caption).foregroundStyle(.secondary)
                 ForEach([CodexCLI.brewCommand, CodexCLI.installCommand], id: \.self) { command in
                     HStack {

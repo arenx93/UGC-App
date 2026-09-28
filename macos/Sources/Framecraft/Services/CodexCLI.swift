@@ -1,9 +1,8 @@
 import Foundation
 import FramecraftCore
 
-/// Uses the OpenAI Codex CLI installed on the Mac, signed in with the user's own
-/// ChatGPT account (`codex login`). Runs through a login shell so the user's PATH
-/// (Homebrew, npm) is available to a GUI app.
+/// Uses the OpenAI Codex CLI bundled with the app (or installed on the Mac), signed in
+/// with the user's own ChatGPT account (`codex login`).
 enum CodexCLI {
     static let installCommand = "npm install -g @openai/codex"
     static let brewCommand = "brew install --cask codex"
@@ -19,12 +18,25 @@ enum CodexCLI {
         let stderr: String
     }
 
+    /// Codex CLI bundled inside Framecraft.app (Contents/MacOS/codex).
+    static var bundledBinary: URL? {
+        guard let folder = Bundle.main.executableURL?.deletingLastPathComponent() else { return nil }
+        let binary = folder.appendingPathComponent("codex")
+        return FileManager.default.isExecutableFile(atPath: binary.path) ? binary : nil
+    }
+
     /// Runs `codex <arguments>` and waits (up to `timeout` seconds).
     static func run(_ arguments: [String], timeout: TimeInterval) async throws -> Output {
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        // $0 = "codex", "$@" = arguments: no shell quoting issues.
-        process.arguments = ["-lc", "exec codex \"$@\"", "codex"] + arguments
+        if let bundled = bundledBinary {
+            process.executableURL = bundled
+            process.arguments = arguments
+        } else {
+            // Development builds: use a Codex installed on the Mac, via a login shell for the user's PATH.
+            // $0 = "codex", "$@" = arguments: no shell quoting issues.
+            process.executableURL = URL(fileURLWithPath: "/bin/zsh")
+            process.arguments = ["-lc", "exec codex \"$@\"", "codex"] + arguments
+        }
         process.currentDirectoryURL = FileManager.default.temporaryDirectory
         var environment = ProcessInfo.processInfo.environment
         environment["NO_COLOR"] = "1"

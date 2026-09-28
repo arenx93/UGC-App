@@ -881,7 +881,7 @@ final class AppModel {
                 await refreshCodexStatus()
                 guard case .loggedIn = codexStatus else {
                     assistantError = codexStatus == .notInstalled
-                        ? "Codex CLI no está instalado en esta Mac. Mirá cómo instalarlo abajo, en Motor."
+                        ? "No se encontró Codex en esta copia de la app. Descargá la última versión de Framecraft."
                         : "Iniciá sesión en Codex con tu cuenta de ChatGPT (abajo, en Motor)."
                     return
                 }
