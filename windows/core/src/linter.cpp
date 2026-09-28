@@ -36,7 +36,7 @@ size_t quoteAt(const std::string& text, size_t index, const char* const (&set)[2
     return 0;
 }
 
-bool anyContains(const std::string& text, std::initializer_list<const char*> needles) {
+bool anyContains(const std::string& text, const std::vector<const char*>& needles) {
     for (const char* needle : needles)
         if (contains(text, needle)) return true;
     return false;
@@ -282,7 +282,7 @@ LintReport lintVideo(const std::string& text, int duration, ReferenceCounts refe
         }
 
         // 7. Restrictions.
-        const std::pair<const char*, std::initializer_list<const char*>> restrictions[] = {
+        const std::pair<const char*, std::vector<const char*>> restrictions[] = {
             {"sin música", {"no music", "without music", "sin música", "sin musica", "no background music"}},
             {"sin cortes", {"no cuts", "no cut", "sin cortes", "continuous take", "continuous shot", "one take", "jump cut", "un solo plano"}},
             {"sin texto", {"no text", "no on-screen text", "no subtitles", "no captions", "sin texto", "sin subtítulos", "no overlays", "no graphics"}},
