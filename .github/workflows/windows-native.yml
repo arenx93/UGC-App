@@ -88,6 +88,36 @@ jobs:
           Stop-Process -Id $p.Id -Force
           Write-Host "Framecraft launched and stayed running"
 
+      - name: Screenshots (demo data)
+        shell: pwsh
+        run: |
+          $shots = Join-Path $env:RUNNER_TEMP "shots"
+          New-Item -ItemType Directory -Force $shots | Out-Null
+          $p = Start-Process -FilePath (Resolve-Path windows\build\Release\Framecraft.exe) -ArgumentList "--snapshot", "`"$shots`"" -PassThru
+          if (-not $p.WaitForExit(240000)) { Stop-Process -Id $p.Id -Force; Write-Warning "Snapshot run timed out" }
+          Get-ChildItem $shots | Select-Object Name, Length | Format-Table -AutoSize
+          if ((Get-ChildItem $shots -Filter *.png).Count -lt 5) { Write-Error "Too few screenshots"; exit 1 }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Framecraft-Windows-screenshots
+          path: ${{ runner.temp }}/shots/*.png
+          retention-days: 14
+
+      - name: Commit screenshots
+        if: github.event_name == 'workflow_dispatch' && inputs.screenshots
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force docs\windows | Out-Null
+          Copy-Item "$env:RUNNER_TEMP\shots\*.png" docs\windows\ -Force
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/windows
+          git commit -m "Update Windows screenshots"
+          if ($LASTEXITCODE -ne 0) { exit 0 }
+          git pull --rebase origin "$env:GITHUB_REF_NAME"
+          git push origin "HEAD:$env:GITHUB_REF_NAME"
+
       - name: Package (zip)
         shell: pwsh
         run: |

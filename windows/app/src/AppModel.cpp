@@ -959,7 +959,6 @@ wf::IAsyncAction AppModel::pollOnce() {
     markInterruptedSubmissions();
     persist();
     notify(Change::jobs);
-    notify(Change::stories);
     if (gotCredits) refreshCredits();
 }
 

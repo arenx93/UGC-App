@@ -10,6 +10,7 @@
 #include <wincred.h>
 #include <winhttp.h>
 #include <dwmapi.h>
+#include <commctrl.h>
 #include <microsoft.ui.xaml.window.h>
 
 // GetCurrentTime is a macro in windows.h that collides with Storyboard::GetCurrentTime.
