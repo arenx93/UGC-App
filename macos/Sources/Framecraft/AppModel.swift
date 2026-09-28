@@ -1203,6 +1203,11 @@ extension AppModel {
         return StoryRequests.referenceLines(story, names: names)
     }
 
+    func displayLines(_ story: Story) -> [String] {
+        let names = Dictionary(uniqueKeysWithValues: references.map { ($0.id, $0.name) })
+        return StoryRequests.displayLines(story, names: names)
+    }
+
     private func skillPayload(for id: String) -> [String: Any]? {
         guard let skill = allSkills.first(where: { $0.id == id }), skill.id != SkillLibrary.jsonProfileID else { return nil }
         var content = skill.content
@@ -1390,7 +1395,7 @@ extension AppModel {
         panel.allowedContentTypes = [.plainText]
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
-            try StoryRequests.exportText(story, referenceLines: referenceLines(story)).write(to: url, atomically: true, encoding: .utf8)
+            try StoryRequests.exportText(story, referenceLines: displayLines(story)).write(to: url, atomically: true, encoding: .utf8)
             show("Pack exportado.", .success)
         } catch {
             show("No se pudo exportar: \(error.localizedDescription)", .error)

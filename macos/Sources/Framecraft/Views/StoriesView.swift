@@ -122,7 +122,7 @@ struct StoryDetail: View {
                     .buttonStyle(.bordered)
                     .help("Guardar todos los prompts en un .txt, como el pack de Walter")
                 Button {
-                    model.copyToPasteboard(StoryRequests.exportText(story, referenceLines: model.referenceLines(story)))
+                    model.copyToPasteboard(StoryRequests.exportText(story, referenceLines: model.displayLines(story)))
                 } label: { Label("Copiar todo", systemImage: "doc.on.doc") }
                     .buttonStyle(.bordered)
             }
@@ -265,7 +265,7 @@ struct StoryDetail: View {
             Card {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Orden de referencias — nunca cambiarlo", systemImage: "list.number").font(.headline)
-                    let lines = model.referenceLines(story)
+                    let lines = model.displayLines(story)
                     if lines.isEmpty {
                         Text("Esta historia no usa referencias.").font(.callout).foregroundStyle(.secondary)
                     } else {

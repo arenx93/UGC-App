@@ -154,6 +154,16 @@ public enum StoryRequests {
         }
     }
 
+    /// Same lines, in Spanish, for the interface and the exported pack.
+    public static func displayLines(_ story: Story, names: [UUID: String]) -> [String] {
+        story.slots.map { slot in
+            let tag = story.tag(for: slot)
+            if slot.isLastFrame { return "\(tag) = último fotograma de la escena anterior (se carga solo desde la escena 2)" }
+            let name = slot.referenceID.flatMap { names[$0] } ?? "archivo"
+            return "\(tag) = \(name)" + (slot.note.isEmpty ? "" : " — \(slot.note)")
+        }
+    }
+
     public static func storyInstructions() -> String {
         [
             "You are the story director inside Framecraft, a studio for UGC videos. Never generate media yourself.",
