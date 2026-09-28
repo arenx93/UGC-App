@@ -15,7 +15,7 @@ struct Preferences: Codable, Equatable {
     var videoDuration = 10
     var videoAudio = true
     var provider: PromptProvider = .kie
-    var promptModel = "gpt-5-6-sol"
+    var promptModel = PromptRequests.defaultPromptModel
     var dialogueLanguage = "Español"
     var notifyWhenDone = true
     var onboardingDone = false

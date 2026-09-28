@@ -1,20 +1,20 @@
 import Foundation
 
+/// How a KIE chat model is called (see docs.kie.ai: routes and formats differ by model).
+public enum PromptAPI: Hashable, Sendable {
+    /// OpenAI-style Chat Completions at /{slug}/v1/chat/completions (model chosen by the path).
+    /// Several slugs are tried in order when the exact spelling is uncertain.
+    case chat(slugs: [String])
+    /// Claude Messages at /claude/v1/messages with "model" in the body.
+    case claude(model: String)
+}
+
 /// Prompt models available through KIE.
 public struct PromptModel: Identifiable, Hashable, Sendable {
     public let id: String
     public let name: String
     public let note: String
-
-    public var usesCodexAPI: Bool { id.hasPrefix("gpt-5-6-") }
-
-    /// URL slugs to try for KIE's chat endpoint (/{slug}/v1/chat/completions).
-    public var chatSlugs: [String] {
-        switch id {
-        case "gemini-3.8-flash": ["gemini-3.8-flash", "gemini-3-8-flash"]
-        default: [id]
-        }
-    }
+    public let api: PromptAPI
 }
 
 public enum PromptProvider: String, Codable, Sendable, CaseIterable, Identifiable {
@@ -81,11 +81,52 @@ public struct PromptResult: Sendable, Equatable {
 /// Port of lib/prompt-request.ts and lib/openai-prompt.ts, extended for video skills.
 public enum PromptRequests {
     public static let promptModels: [PromptModel] = [
-        PromptModel(id: "gpt-5-6-sol", name: "GPT-5.6 Sol", note: "La mejor calidad"),
-        PromptModel(id: "gpt-5-6-terra", name: "GPT-5.6 Terra", note: "Equilibrado"),
-        PromptModel(id: "gpt-5-6-luna", name: "GPT-5.6 Luna", note: "El más rápido"),
-        PromptModel(id: "gemini-3.8-flash", name: "Gemini 3.8 Flash", note: "Lo último de Google, rápido"),
+        PromptModel(id: "gpt-5-2", name: "GPT 5.2", note: "Muy buena calidad", api: .chat(slugs: ["gpt-5-2"])),
+        PromptModel(id: "gemini-3.8-flash", name: "Gemini 3.8 Flash", note: "Lo último de Google, rápido",
+                    api: .chat(slugs: ["gemini-3.8-flash", "gemini-3-8-flash"])),
+        PromptModel(id: "gemini-3-flash", name: "Gemini 3 Flash", note: "Rápido y económico", api: .chat(slugs: ["gemini-3-flash"])),
+        PromptModel(id: "claude-opus-4-6", name: "Claude Opus 4.6", note: "Excelente siguiendo métodos largos", api: .claude(model: "claude-opus-4-6")),
     ]
+    public static let defaultPromptModel = "gpt-5-2"
+
+    /// Requests to try in order for a KIE prompt model: (path, body).
+    public static func kieRequests(for model: PromptModel, instructions: String, brief: String, images: [String]) -> [(path: String, body: [String: Any])] {
+        switch model.api {
+        case .chat(let slugs):
+            return slugs.map { ("/\($0)/v1/chat/completions", kieChatBody(model: $0, instructions: instructions, brief: brief, images: images)) }
+        case .claude(let name):
+            return [("/claude/v1/messages", claudeBody(model: name, instructions: instructions, brief: brief, images: images))]
+        }
+    }
+
+    /// Reads a non-streamed answer for the model's format.
+    public static func reader(for model: PromptModel) -> ([String: Any]) throws -> String {
+        switch model.api {
+        case .chat: readChat
+        case .claude: readClaude
+        }
+    }
+
+    public static func claudeBody(model: String, instructions: String, brief: String, images: [String]) -> [String: Any] {
+        var content: [[String: Any]] = [["type": "text", "text": brief]]
+        content += images.map { ["type": "image", "source": ["type": "url", "url": $0]] }
+        return [
+            "model": model,
+            "max_tokens": 8000,
+            "stream": true,
+            "system": instructions,
+            "messages": [["role": "user", "content": content]],
+        ]
+    }
+
+    public static func readClaude(_ json: [String: Any]) throws -> String {
+        let root = json["data"] as? [String: Any] ?? json
+        let text = (root["content"] as? [[String: Any]] ?? [])
+            .filter { $0["type"] as? String == "text" }
+            .compactMap { $0["text"] as? String }
+            .joined()
+        return try nonEmpty(text, provider: "Claude")
+    }
 
     public static let profileSections = [
         "metadata", "composition", "color_profile", "lighting", "technical_specs",
@@ -192,17 +233,6 @@ public enum PromptRequests {
         ]
     }
 
-    public static func kieCodexBody(model: String, instructions: String, brief: String, images: [String]) -> [String: Any] {
-        var content: [[String: Any]] = [["type": "input_text", "text": instructions + "\n\nCreative brief:\n" + brief]]
-        content += images.map { ["type": "input_image", "image_url": $0] }
-        return [
-            "model": model,
-            "stream": true,
-            "reasoning": ["effort": model == "gpt-5-6-sol" ? "high" : model == "gpt-5-6-luna" ? "low" : "medium"],
-            "input": [["role": "user", "content": content]],
-        ]
-    }
-
     public static func openAIBody(instructions: String, brief: String, images: [String], media: MediaKind, structured: Bool) -> [String: Any] {
         var content: [[String: Any]] = [["type": "input_text", "text": brief]]
         content += images.map { ["type": "input_image", "image_url": $0, "detail": "auto"] }
@@ -220,6 +250,7 @@ public enum PromptRequests {
     // MARK: Reading answers
 
     public static func readChat(_ json: [String: Any]) throws -> String {
+        let json = (json["data"] as? [String: Any])?["choices"] != nil ? json["data"] as! [String: Any] : json
         let message = ((json["choices"] as? [[String: Any]])?.first?["message"] as? [String: Any])
         var text = ""
         if let content = message?["content"] as? String {

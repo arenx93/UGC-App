@@ -154,6 +154,11 @@ public final class KieClient: @unchecked Sendable {
                         text += delta
                         onText(text)
                     }
+                case "content_block_delta":
+                    if let delta = (event["delta"] as? [String: Any])?["text"] as? String {
+                        text += delta
+                        onText(text)
+                    }
                 case "response.output_text.done":
                     if let done = event["text"] as? String, !done.isEmpty { finalText = done }
                 case "response.completed":

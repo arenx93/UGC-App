@@ -197,6 +197,17 @@ struct AssistantView: View {
                     }
                     Text("Usa tus créditos de KIE. La respuesta aparece en vivo mientras se escribe.")
                         .font(.caption).foregroundStyle(.secondary)
+                    HStack {
+                        Button(model.isTestingConnection ? "Probando…" : "Probar conexión") {
+                            Task { await model.testPromptModel() }
+                        }
+                        .controlSize(.small)
+                        .disabled(model.isTestingConnection)
+                        if let result = model.connectionTest {
+                            Text(result).font(.caption).foregroundStyle(result.hasPrefix("✓") ? Theme.success : .orange)
+                                .lineLimit(3)
+                        }
+                    }
                 case .codex:
                     CodexAccountRow()
                 case .openai:

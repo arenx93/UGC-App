@@ -159,12 +159,19 @@ final class PromptRequestTests: XCTestCase {
         XCTAssertEqual(nano.input["image_input"] as? [String], ["https://x/y.png"])
     }
 
-    func testPromptModels() {
+    func testPromptModels() throws {
         let ids = PromptRequests.promptModels.map(\.id)
         XCTAssertFalse(ids.contains { $0.hasPrefix("gemini-2.5") })
-        let gemini = try? XCTUnwrap(PromptRequests.promptModels.first { $0.id == "gemini-3.8-flash" })
-        XCTAssertEqual(gemini?.usesCodexAPI, false)
-        XCTAssertEqual(gemini?.chatSlugs.first, "gemini-3.8-flash")
+        let gemini = PromptRequests.promptModels.first { $0.id == "gemini-3.8-flash" }
+        XCTAssertEqual(gemini?.api, .chat(slugs: ["gemini-3.8-flash", "gemini-3-8-flash"]))
+        let claude = try XCTUnwrap(PromptRequests.promptModels.first { $0.id == "claude-opus-4-6" })
+        let requests = PromptRequests.kieRequests(for: claude, instructions: "i", brief: "b", images: ["https://x/y.png"])
+        XCTAssertEqual(requests.map(\.path), ["/claude/v1/messages"])
+        XCTAssertEqual(requests[0].body["model"] as? String, "claude-opus-4-6")
+        XCTAssertEqual(try PromptRequests.readClaude(["content": [["type": "text", "text": "hola"]]]), "hola")
+        XCTAssertEqual(try PromptRequests.readChat(["code": 200, "data": ["choices": [["message": ["content": "x"]]]]]), "x")
+        let gpt = try XCTUnwrap(PromptRequests.promptModels.first { $0.id == PromptRequests.defaultPromptModel })
+        XCTAssertEqual(PromptRequests.kieRequests(for: gpt, instructions: "i", brief: "b", images: []).map(\.path), ["/gpt-5-2/v1/chat/completions"])
         let body = PromptRequests.kieChatBody(model: "gemini-3.8-flash", instructions: "i", brief: "b", images: [])
         XCTAssertEqual(body["stream"] as? Bool, true)
         XCTAssertTrue(PromptRequests.codexCLIPrompt(instructions: "I", brief: "B").hasSuffix("Creative brief:\nB"))

@@ -155,7 +155,7 @@ final class AppModel {
         videoDuration = min(max(p.videoDuration, Presets.videoDurationRange.lowerBound), Presets.videoDurationRange.upperBound)
         videoAudio = p.videoAudio
         provider = p.provider
-        promptModel = PromptRequests.promptModels.contains { $0.id == p.promptModel } ? p.promptModel : "gpt-5-6-terra"
+        promptModel = PromptRequests.promptModels.contains { $0.id == p.promptModel } ? p.promptModel : PromptRequests.defaultPromptModel
         dialogueLanguage = p.dialogueLanguage
         notifyWhenDone = p.notifyWhenDone
         onboardingDone = p.onboardingDone
@@ -942,25 +942,7 @@ final class AppModel {
                 let live: @Sendable (String) -> Void = { [weak self] text in
                     Task { @MainActor in if self?.isBuildingPrompt == true { self?.streamingText = text } }
                 }
-                if model.usesCodexAPI {
-                    raw = try await client.streamText("/codex/v1/responses", body: PromptRequests.kieCodexBody(
-                        model: model.id, instructions: instructions, brief: briefText, images: images),
-                        readJSON: PromptRequests.readCodex, onText: live)
-                } else {
-                    var answer: String?
-                    var lastError: Error?
-                    for slug in model.chatSlugs where answer == nil {
-                        do {
-                            answer = try await client.streamText("/\(slug)/v1/chat/completions", body: PromptRequests.kieChatBody(
-                                model: slug, instructions: instructions, brief: briefText, images: images),
-                                readJSON: PromptRequests.readChat, onText: live)
-                        } catch {
-                            lastError = error
-                        }
-                    }
-                    guard let answer else { throw lastError ?? KieError("KIE no respondió.", definite: true) }
-                    raw = answer
-                }
+                raw = try await runKie(model, client: client, instructions: instructions, brief: briefText, images: images, onText: live)
                 if raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     throw KieError("KIE no devolvió texto. Tu idea sigue ahí: probá de nuevo.", definite: true)
                 }
@@ -991,6 +973,44 @@ final class AppModel {
             persist()
         } catch {
             assistantError = error.localizedDescription
+        }
+    }
+
+    /// Tries each documented route for the model until one answers.
+    private func runKie(_ model: PromptModel, client: KieClient, instructions: String, brief: String, images: [String],
+                        onText: @escaping @Sendable (String) -> Void) async throws -> String {
+        var lastError: Error?
+        for request in PromptRequests.kieRequests(for: model, instructions: instructions, brief: brief, images: images) {
+            do {
+                return try await client.streamText(request.path, body: request.body, readJSON: PromptRequests.reader(for: model), onText: onText)
+            } catch {
+                lastError = error
+            }
+        }
+        throw lastError ?? KieError("KIE no respondió.", definite: true)
+    }
+
+    /// Result of "Probar conexión" for the selected KIE prompt model.
+    var connectionTest: String?
+    var isTestingConnection = false
+
+    func testPromptModel() async {
+        guard let key = kieKey else {
+            connectionTest = "Conectá tu clave de KIE primero."
+            return
+        }
+        let model = PromptRequests.promptModels.first { $0.id == promptModel } ?? PromptRequests.promptModels[0]
+        isTestingConnection = true
+        connectionTest = nil
+        defer { isTestingConnection = false }
+        let start = Date()
+        do {
+            let answer = try await runKie(model, client: KieClient(key: key), instructions: "Reply with the single word OK.",
+                                          brief: "ping", images: [], onText: { _ in })
+            let seconds = Date().timeIntervalSince(start)
+            connectionTest = "✓ \(model.name) responde (\(String(format: "%.1f", seconds)) s): \(answer.prefix(40))"
+        } catch {
+            connectionTest = "✗ \(model.name): \(error.localizedDescription)"
         }
     }
 
