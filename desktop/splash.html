@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:">
+<title>Framecraft</title>
+<style>
+  :root { --grad: linear-gradient(120deg, #ff8a4c 0%, #ff3d9a 48%, #8b5cf6 100%); color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: grid; place-items: center; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", Inter, sans-serif;
+    color: #f3f1fa; background: #0b0a12; user-select: none; -webkit-app-region: drag;
+  }
+  body.material { background: linear-gradient(160deg, rgb(11 10 18 / 0.5), rgb(11 10 18 / 0.8)); }
+  .aurora { position: fixed; inset: -20vmax; z-index: -1;
+    background:
+      radial-gradient(38vmax 30vmax at 20% 20%, rgb(255 61 154 / 0.28), transparent 70%),
+      radial-gradient(34vmax 28vmax at 80% 25%, rgb(139 92 246 / 0.3), transparent 70%),
+      radial-gradient(40vmax 26vmax at 60% 90%, rgb(255 138 76 / 0.18), transparent 70%);
+    animation: drift 12s ease-in-out infinite alternate; }
+  @keyframes drift { to { transform: translate3d(3vmax, -2vmax, 0) rotate(6deg) scale(1.08); } }
+  main { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .logo { width: 108px; height: 108px; border-radius: 30px; display: grid; place-items: center; background: var(--grad);
+    box-shadow: 0 30px 80px -20px rgb(255 61 154 / 0.8), inset 0 1px 0 rgb(255 255 255 / 0.4);
+    animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { transform: scale(1.05) rotate(-3deg); box-shadow: 0 40px 100px -20px rgb(139 92 246 / 0.9), inset 0 1px 0 rgb(255 255 255 / 0.4); } }
+  h1 { font-size: 34px; letter-spacing: -0.045em; margin: 30px 0 4px; font-weight: 750; }
+  .tag { font-size: 10px; letter-spacing: 0.24em; font-weight: 700; padding: 5px 10px; border-radius: 99px; color: #ffd4e8;
+    border: 1px solid rgb(255 61 154 / 0.35); background: rgb(255 61 154 / 0.1); }
+  p { color: #a8a3bd; font-size: 14px; margin: 26px 0 0; min-height: 20px; }
+  .bar { width: 220px; height: 4px; border-radius: 99px; margin-top: 18px; background: rgb(255 255 255 / 0.08); overflow: hidden; }
+  .bar span { display: block; width: 40%; height: 100%; border-radius: 99px; background: var(--grad); animation: slide 1.3s ease-in-out infinite; }
+  @keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+  .error { display: none; max-width: 460px; }
+  .error p { color: #ffb3c1; line-height: 1.6; }
+  .actions { display: flex; gap: 10px; justify-content: center; margin-top: 22px; -webkit-app-region: no-drag; }
+  button { font: inherit; font-size: 13px; font-weight: 650; padding: 10px 18px; border-radius: 99px; cursor: pointer; color: #fff;
+    border: 1px solid rgb(255 255 255 / 0.16); background: rgb(255 255 255 / 0.06); }
+  button.primary { border: 0; background: var(--grad); box-shadow: 0 10px 30px -10px rgb(255 61 154 / 0.9); }
+  body.failed .loading { display: none; }
+  body.failed .error { display: block; }
+  body.failed .logo { animation: none; filter: saturate(0.5); }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</head>
+<body>
+  <div class="aurora"></div>
+  <main>
+    <div class="logo">
+      <svg width="54" height="54" viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 22V14a4 4 0 0 1 4-4h8M42 10h8a4 4 0 0 1 4 4v8M54 42v8a4 4 0 0 1-4 4h-8M22 54h-8a4 4 0 0 1-4-4v-8"/>
+        <path d="M27 23.5v17a1.5 1.5 0 0 0 2.3 1.3l13.4-8.5a1.5 1.5 0 0 0 0-2.6l-13.4-8.5a1.5 1.5 0 0 0-2.3 1.3Z" fill="#fff" stroke-width="3"/>
+      </svg>
+    </div>
+    <h1>framecraft</h1>
+    <span class="tag">UGC STUDIO</span>
+    <div class="loading">
+      <p id="status">Preparando tu estudio…</p>
+      <div class="bar"><span></span></div>
+    </div>
+    <div class="error">
+      <p id="error"></p>
+      <div class="actions">
+        <button class="primary" id="retry">Reintentar</button>
+        <button id="logs">Ver registro</button>
+        <button id="data">Carpeta de datos</button>
+      </div>
+    </div>
+  </main>
+<script>
+  const params = new URLSearchParams(location.search);
+  const platform = params.get("platform");
+  if (platform === "mac" || platform === "win") document.body.classList.add("material");
+  const error = params.get("error");
+  if (error) {
+    document.body.classList.add("failed");
+    document.getElementById("error").textContent = "No se pudo iniciar Framecraft: " + error;
+  } else {
+    const steps = ["Preparando tu estudio…", "Abriendo tu biblioteca local…", "Encendiendo el motor de render…", "Casi listo…"];
+    let i = 0;
+    setInterval(() => { i = Math.min(i + 1, steps.length - 1); document.getElementById("status").textContent = steps[i]; }, 1800);
+  }
+  document.getElementById("retry").onclick = () => { location.search = "?platform=" + (platform || ""); window.framecraft?.retry(); };
+  document.getElementById("logs").onclick = () => window.framecraft?.openLogs();
+  document.getElementById("data").onclick = () => window.framecraft?.openData();
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff8a4c"/>
+      <stop offset="0.5" stop-color="#ff3d9a"/>
+      <stop offset="1" stop-color="#7c4dff"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0.3" cy="0.15" r="0.9">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.35"/>
+      <stop offset="0.6" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="phone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1330"/>
+      <stop offset="1" stop-color="#0b0a12"/>
+    </linearGradient>
+    <linearGradient id="play" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb08a"/>
+      <stop offset="0.5" stop-color="#ff5fb0"/>
+      <stop offset="1" stop-color="#a98bff"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#2a0a2e" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+  <!-- macOS icon grid: 824px body with ~185px corner radius -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#shine)"/>
+  <!-- vertical phone (UGC 9:16) -->
+  <g filter="url(#shadow)" transform="rotate(-8 512 520)">
+    <rect x="352" y="232" width="320" height="576" rx="70" fill="url(#phone)" stroke="#fff" stroke-opacity="0.9" stroke-width="14"/>
+    <rect x="472" y="262" width="80" height="16" rx="8" fill="#fff" fill-opacity="0.25"/>
+    <path d="M470 440v160a14 14 0 0 0 21.5 11.8l126-80a14 14 0 0 0 0-23.6l-126-80A14 14 0 0 0 470 440Z" fill="url(#play)"/>
+  </g>
+  <!-- sparkles -->
+  <path d="M760 250l14 38 38 14-38 14-14 38-14-38-38-14 38-14z" fill="#fff"/>
+  <circle cx="258" cy="770" r="18" fill="#fff" fill-opacity="0.9"/>
+</svg>

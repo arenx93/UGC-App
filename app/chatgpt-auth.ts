@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -25,9 +26,7 @@ export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const email = requestHeaders.get(USER_EMAIL_HEADER);
   if (!userId || !email) {
     const host = (requestHeaders.get("host") ?? "").split(":")[0];
-    const isDesktop =
-      requestHeaders.get("x-framecraft-desktop") === "1" &&
-      (host === "127.0.0.1" || host === "localhost");
+    const isDesktop = isDesktopRequest(requestHeaders, host);
     const localSession = isDesktop
       ? (await cookies()).get(LOCAL_AUTH_COOKIE)?.value === "1"
       : false;
@@ -53,6 +52,18 @@ export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
     email,
     fullName,
   };
+}
+
+/**
+ * True for requests from the Framecraft desktop window. The desktop app sends a
+ * per-launch token (DESKTOP_TOKEN, set by desktop/server.cjs) so other local
+ * programs cannot act as the desktop user.
+ */
+export function isDesktopRequest(requestHeaders: Headers, host: string): boolean {
+  if (requestHeaders.get("x-framecraft-desktop") !== "1") return false;
+  if (host !== "127.0.0.1" && host !== "localhost") return false;
+  const expected = (env as { DESKTOP_TOKEN?: string }).DESKTOP_TOKEN;
+  return !expected || requestHeaders.get("x-framecraft-desktop-token") === expected;
 }
 
 export async function requireChatGPTUser(

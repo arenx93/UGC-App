@@ -17,9 +17,12 @@ ACCESO Y DATOS
 - El archivo .env contiene la clave que protege las API keys guardadas.
 - No compartas, borres ni subas .env o .wrangler a Git.
 
+APP DE ESCRITORIO
+- Tambien existe una app nativa para macOS y Windows: consulta README.md.
+
 EDITAR CON CODEX
 1. Abre Codex y agrega la carpeta extraida como proyecto.
-2. Pide a Codex que revise PARA-EDITAR.txt antes de hacer cambios.
+2. Pide a Codex que revise README.md y PARA-EDITAR.txt antes de hacer cambios.
 3. Para comprobar los cambios puede ejecutar:
    npm run build
    npm run lint

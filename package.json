@@ -1,8 +1,10 @@
 {
   "name": "framecraft-studio",
   "version": "1.0.0",
-  "description": "Framecraft local browser studio for KIE image and Seedance video generation",
+  "description": "Framecraft UGC studio for KIE image and Seedance video generation — desktop app for macOS and Windows",
   "author": "Framecraft",
+  "homepage": "https://github.com/arenx93/UGC-App",
+  "main": "desktop/main.cjs",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -13,8 +15,14 @@
     "dev": "node scripts/run-framework.mjs dev",
     "build": "node scripts/run-framework.mjs build",
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern release",
+    "db:generate": "drizzle-kit generate",
+    "desktop:dev": "npm run build && electron .",
+    "desktop:smoke": "npm run build && electron . --smoke-test",
+    "desktop:mac:arm64": "npm run build && electron-builder --mac --arm64 --publish never",
+    "desktop:mac:x64": "npm run build && electron-builder --mac --x64 --publish never",
+    "desktop:win": "npm run build && electron-builder --win --x64 --publish never",
+    "desktop:linux": "npm run build && electron-builder --linux --x64 --publish never"
   },
   "dependencies": {
     "wrangler": "4.92.0"
@@ -38,6 +46,8 @@
     "date-fns": "^4.4.0",
     "drizzle-kit": "0.31.10",
     "drizzle-orm": "0.45.2",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
     "embla-carousel-react": "^8.6.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.4",

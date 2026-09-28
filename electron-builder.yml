@@ -1,0 +1,57 @@
+# Desktop installers for Framecraft (see LEEME-ESCRITORIO.md).
+appId: app.framecraft.studio
+productName: Framecraft
+copyright: Copyright © 2026 Framecraft
+directories:
+  output: release
+  buildResources: desktop/assets
+files:
+  - package.json
+  - desktop/**/*
+  - "!desktop/assets/*.svg"
+  - dist/**/*
+  - "!dist/server/.wrangler/**"
+  - drizzle/**/*
+  - wrangler.local.json
+  # Duplicate of the platform binary in @cloudflare/workerd-*; unused at runtime.
+  - "!**/node_modules/workerd/bin/**"
+# Wrangler launches the native workerd binary, which cannot run from inside an
+# asar archive, so the app ships as plain files.
+asar: false
+# Only Wrangler (pure JS + prebuilt workerd) is bundled; nothing to recompile.
+npmRebuild: false
+artifactName: "${productName}-${version}-${os}-${arch}.${ext}"
+
+mac:
+  category: public.app-category.video
+  icon: desktop/assets/icon.png
+  target: dmg
+  darkModeSupport: true
+  # Ad-hoc signature so Apple Silicon Macs can launch the unsigned build.
+  # Replace with a Developer ID identity (CSC_LINK / CSC_NAME) to notarize.
+  identity: "-"
+  hardenedRuntime: false
+  extendInfo:
+    NSHumanReadableCopyright: Copyright © 2026 Framecraft
+dmg:
+  title: "Framecraft ${version}"
+  window:
+    width: 540
+    height: 380
+
+win:
+  icon: desktop/assets/icon-win.png
+  target: nsis
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: Framecraft
+  uninstallDisplayName: Framecraft
+
+linux:
+  icon: desktop/assets/icon-win.png
+  category: Graphics
+  target: AppImage

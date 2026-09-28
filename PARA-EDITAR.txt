@@ -1,38 +1,37 @@
 FRAMECRAFT — CODIGO FUENTE PARA DESARROLLO
 
-Este paquete no contiene claves API, bases de datos, historial, archivos subidos,
-dependencias instaladas ni ejecutables compilados.
+Lee primero README.md (instrucciones completas, estructura y descargas).
+
+Este repositorio no contiene claves API, bases de datos, historial, archivos
+subidos, dependencias instaladas ni ejecutables compilados.
 
 REQUISITOS
 - Node.js 24: https://nodejs.org/
 - Conexion a Internet para instalar dependencias y utilizar KIE/OpenAI.
 
-INICIO RAPIDO EN WINDOWS
-1. Extraer completamente el ZIP.
-2. Abrir INICIAR-FRAMECRAFT.bat.
-3. En el primer inicio se ejecuta npm ci y se crean .env y .wrangler de forma local.
-
-DESARROLLO MANUAL
+DESARROLLO
 1. npm ci
-2. npm run dev
+2. npm run desktop:dev        (app de escritorio)
+   o bien
+   npm run setup:local && npm run dev -- --host 127.0.0.1 --strictPort
+   (modo navegador en http://localhost:5173)
 
 COMPROBACIONES
 - npm run build
 - npm run lint
 - npm run desktop:smoke
 
-EMPAQUETADO
-- Windows: npm run desktop:win
-- macOS Intel: npm run desktop:mac:x64
+EMPAQUETADO (cada sistema en su propia maquina, o automatico en GitHub Actions)
 - macOS Apple Silicon: npm run desktop:mac:arm64
-- Linux x64: npm run desktop:linux:x64
-- Linux ARM64: npm run desktop:linux:arm64
+- macOS Intel:         npm run desktop:mac:x64
+- Windows:             npm run desktop:win
 
 IMPORTANTE
-- Nunca compartir ni confirmar en Git los archivos .env o la carpeta .wrangler.
+- Nunca compartir ni confirmar en Git los archivos .env, secrets.env ni la
+  carpeta .wrangler.
 - Cada desarrollador debe usar sus propias claves KIE/OpenAI.
-- Los paquetes de macOS deben generarse en macOS y los de Linux en Linux.
-- El boton Sign in de la aplicacion de escritorio crea una sesion local dentro
-  de Framecraft. No abre ChatGPT ni sincroniza datos con una cuenta externa.
-
-Consulte tambien LEEME.txt y DISTRIBUCIONES.md.
+- La app de escritorio crea una sesion local dentro de Framecraft. No abre
+  ChatGPT ni sincroniza datos con una cuenta externa.
+- Los estilos de la app de escritorio dependen de los atributos data-desktop,
+  data-platform y data-material de <html> (ver app/layout.tsx y el final de
+  app/globals.css).

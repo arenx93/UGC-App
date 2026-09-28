@@ -1,12 +1,10 @@
-import { LOCAL_AUTH_COOKIE } from "@/app/chatgpt-auth";
+import { LOCAL_AUTH_COOKIE, isDesktopRequest } from "@/app/chatgpt-auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const desktop =
-    request.headers.get("x-framecraft-desktop") === "1" &&
-    (url.hostname === "127.0.0.1" || url.hostname === "localhost");
+  const desktop = isDesktopRequest(request.headers, url.hostname);
   if (!desktop) return new Response("Not found", { status: 404 });
   return new Response(null, {
     status: 303,
