@@ -36,12 +36,23 @@ Más capturas en [`docs/macos/`](../docs/macos/) (se regeneran desde Actions →
 | Pantalla | Para qué |
 |---|---|
 | **Crear** | Tres pasos: 1) describí tu idea, 2) referencias, 3) ajustes. Imagen o video, con vista previa del prompt final y ⌘↩ para generar. |
-| **Asistente** (panel lateral, ⌥⌘I) | Convierte una idea suelta en un prompt listo, siguiendo una *skill*. Podés pedirle ajustes ("más corto", "cambiá la locación") sin empezar de cero. |
+| **Asistente** (panel lateral, ⌥⌘I) | Convierte una idea suelta en un prompt listo, siguiendo una *skill*. Muestra el texto en vivo mientras se escribe y podés pedirle ajustes ("más corto", "cambiá la locación") sin empezar de cero. |
 | **Revisión del prompt** | En video, chequea en vivo el checklist del kit: bloques de tiempo, densidad de diálogo (2,47 palabras/s), etiquetas @Image/@Video/@Audio que no existen, lenguaje de anuncio, restricciones y audios de referencia. |
 | **Biblioteca** | Todo lo generado, con filtros, búsqueda, favoritos, Vista rápida (espacio), arrastrar a Finder, reusar ajustes y **continuar desde el último fotograma** para encadenar clips. |
 | **Referencias** | Fotos, videos (≤30 s) y audios (≤30 s). El orden de selección define @Image1, @Image2… Se pueden arrastrar desde Finder a cualquier parte de *Crear*. |
 | **Skills** | Las incluidas y las tuyas. Importá cualquier `SKILL.md` (con encabezado YAML `name`/`description`), `.md` o `.txt`, o escribí una nueva. |
 | **Guía UGC** | El método del kit de Seedance para leer dentro de la app, más el PDF base y el pack de Walter. |
+
+### Motores del asistente
+
+| Motor | Modelos | Cómo se usa |
+|---|---|---|
+| **KIE** | GPT‑5.6 Terra / Luna / Sol (`/codex/v1/responses`), GPT 5.2, Gemini 3.8 Flash, Gemini 3 Flash (`/…/v1/chat/completions`), Claude Opus 4.6 (`/claude/v1/messages`) | Con tu clave de KIE. Botón **Probar conexión** para verificar cada modelo. |
+| **ChatGPT (Codex)** | El modelo de tu plan de ChatGPT | Codex CLI viene **incluido en la app**: solo tocás *Iniciar sesión con ChatGPT*. No gasta créditos de KIE. |
+| **OpenAI API** | GPT‑4.1 mini | Con una clave de API de OpenAI (opcional). |
+
+Para imágenes, la skill por defecto es **General** (prompt en texto). El
+**Perfil JSON detallado** es opcional y muestra también el prompt principal en texto.
 
 ### Skills incluidas
 
