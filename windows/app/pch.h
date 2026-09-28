@@ -24,6 +24,7 @@
 #include <winrt/Windows.Media.Core.h>
 #include <winrt/Windows.Media.Editing.h>
 #include <winrt/Windows.Media.Playback.h>
+#include <winrt/Windows.Media.Transcoding.h>
 #include <winrt/Windows.Storage.h>
 #include <winrt/Windows.Storage.FileProperties.h>
 #include <winrt/Windows.Storage.Pickers.h>

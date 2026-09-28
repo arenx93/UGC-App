@@ -7,16 +7,16 @@
 -->
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <PackagesDir>$(MSBuildThisFileDirectory)..\packages\</PackagesDir>
-    <CppWinRTPackage>$(PackagesDir)Microsoft.Windows.CppWinRT.2.0.250303.1</CppWinRTPackage>
-    <WasdkPackage>$(PackagesDir)Microsoft.WindowsAppSDK.1.7.260224002</WasdkPackage>
-    <BuildToolsPackage>$(PackagesDir)Microsoft.Windows.SDK.BuildTools.10.0.26100.7705</BuildToolsPackage>
-    <WebView2Package>$(PackagesDir)Microsoft.Web.WebView2.1.0.2903.40</WebView2Package>
-    <WilPackage>$(PackagesDir)Microsoft.Windows.ImplementationLibrary.1.0.250325.1</WilPackage>
+    <FcPackagesDir>$(MSBuildThisFileDirectory)..\packages\</FcPackagesDir>
+    <FcCppWinRTDir>$(FcPackagesDir)Microsoft.Windows.CppWinRT.2.0.250303.1</FcCppWinRTDir>
+    <FcWasdkDir>$(FcPackagesDir)Microsoft.WindowsAppSDK.1.7.260224002</FcWasdkDir>
+    <FcBuildToolsDir>$(FcPackagesDir)Microsoft.Windows.SDK.BuildTools.10.0.26100.7705</FcBuildToolsDir>
+    <FcWebView2Dir>$(FcPackagesDir)Microsoft.Web.WebView2.1.0.2903.40</FcWebView2Dir>
+    <FcWilDir>$(FcPackagesDir)Microsoft.Windows.ImplementationLibrary.1.0.250325.1</FcWilDir>
   </PropertyGroup>
-  <Import Project="$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.props')" />
-  <Import Project="$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.props" Condition="Exists('$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.props')" />
-  <Import Project="$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.props" Condition="Exists('$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.props')" />
+  <Import Project="$(FcCppWinRTDir)\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(FcCppWinRTDir)\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="$(FcWasdkDir)\build\native\Microsoft.WindowsAppSDK.props" Condition="Exists('$(FcWasdkDir)\build\native\Microsoft.WindowsAppSDK.props')" />
+  <Import Project="$(FcBuildToolsDir)\build\Microsoft.Windows.SDK.BuildTools.props" Condition="Exists('$(FcBuildToolsDir)\build\Microsoft.Windows.SDK.BuildTools.props')" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
@@ -147,18 +147,18 @@
   </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.targets" Condition="Exists('$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.targets')" />
-    <Import Project="$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.targets')" />
-    <Import Project="$(WebView2Package)\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('$(WebView2Package)\build\native\Microsoft.Web.WebView2.targets')" />
-    <Import Project="$(WilPackage)\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('$(WilPackage)\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
-    <Import Project="$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.targets" Condition="Exists('$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.targets')" />
+    <Import Project="$(FcBuildToolsDir)\build\Microsoft.Windows.SDK.BuildTools.targets" Condition="Exists('$(FcBuildToolsDir)\build\Microsoft.Windows.SDK.BuildTools.targets')" />
+    <Import Project="$(FcCppWinRTDir)\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(FcCppWinRTDir)\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="$(FcWebView2Dir)\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('$(FcWebView2Dir)\build\native\Microsoft.Web.WebView2.targets')" />
+    <Import Project="$(FcWilDir)\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('$(FcWilDir)\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
+    <Import Project="$(FcWasdkDir)\build\native\Microsoft.WindowsAppSDK.targets" Condition="Exists('$(FcWasdkDir)\build\native\Microsoft.WindowsAppSDK.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Faltan paquetes NuGet: ejecutá "nuget restore packages.config -PackagesDirectory ..\packages". Falta {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('$(CppWinRTPackage)\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', 'CppWinRT'))" />
-    <Error Condition="!Exists('$(WasdkPackage)\build\native\Microsoft.WindowsAppSDK.props')" Text="$([System.String]::Format('$(ErrorText)', 'WindowsAppSDK'))" />
-    <Error Condition="!Exists('$(BuildToolsPackage)\build\Microsoft.Windows.SDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', 'SDK.BuildTools'))" />
+    <Error Condition="!Exists('$(FcCppWinRTDir)\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', 'CppWinRT'))" />
+    <Error Condition="!Exists('$(FcWasdkDir)\build\native\Microsoft.WindowsAppSDK.props')" Text="$([System.String]::Format('$(ErrorText)', 'WindowsAppSDK'))" />
+    <Error Condition="!Exists('$(FcBuildToolsDir)\build\Microsoft.Windows.SDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', 'SDK.BuildTools'))" />
   </Target>
 </Project>
