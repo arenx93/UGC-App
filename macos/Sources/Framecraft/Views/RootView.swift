@@ -46,6 +46,7 @@ struct RootView: View {
     private var detail: some View {
         switch model.section ?? .create {
         case .create: CreateView()
+        case .stories: StoriesView()
         case .library: LibraryView()
         case .references: ReferencesView()
         case .skills: SkillsView()
@@ -68,7 +69,7 @@ struct Sidebar: View {
         @Bindable var model = model
         List(selection: $model.section) {
             Section("Estudio") {
-                ForEach([SidebarItem.create, .library, .references, .skills]) { item in
+                ForEach([SidebarItem.create, .stories, .library, .references, .skills]) { item in
                     Label(item.title, systemImage: item.symbol)
                         .badge(badge(for: item))
                         .tag(item)
@@ -98,6 +99,7 @@ struct Sidebar: View {
         switch item {
         case .library: model.completedCount
         case .references: model.references.count
+        case .stories: model.stories.count
         default: 0
         }
     }

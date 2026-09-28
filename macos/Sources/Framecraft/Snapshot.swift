@@ -52,6 +52,10 @@ enum SnapshotRunner {
             ("06-referencias", full, .aqua, { model.section = .references }, { AnyView(RootView()) }),
             ("07-skills", full, .aqua, { model.section = .skills }, { AnyView(RootView()) }),
             ("08-guia", full, .aqua, { model.section = .guide }, { AnyView(RootView()) }),
+            ("08b-historias", full, .aqua, {
+                model.section = .stories
+                model.selectedStoryID = model.stories.first?.id
+            }, { AnyView(RootView()) }),
             ("09-bienvenida", CGSize(width: 640, height: 520), .aqua, {}, { AnyView(OnboardingView()) }),
             ("10-bienvenida-oscuro", CGSize(width: 640, height: 520), .darkAqua, {}, { AnyView(OnboardingView()) }),
             ("11-ajustes", CGSize(width: 560, height: 470), .aqua, {}, { AnyView(SettingsView()) }),
@@ -206,6 +210,30 @@ enum DemoData {
         ), at: 1)
         store.save(index)
 
+        let firstImage = index.references.first?.id
+        let audio = index.references.first { $0.kind == .audio }?.id
+        let bible = "FORMAT: Vertical 9:16, one continuous take, no cuts. Rear 1x phone camera held by P2 (the customer). Deep depth of field.\nP1 WALTER: 82-year-old African American waiter, beige polo, red name tag, black half apron."
+        index.stories = [Story(
+            title: "Walter, 82 años", brief: "Un mozo de 82 años en un diner cuenta su historia al cliente que lo filma.",
+            sceneDuration: 30, slots: [
+                StoryReferenceSlot(kind: .image, referenceID: firstImage, note: "Identidad de Walter (tres vistas)"),
+                StoryReferenceSlot(kind: .image, isLastFrame: true, note: "Primer fotograma clavado"),
+                StoryReferenceSlot(kind: .audio, referenceID: audio, note: "Timbre de voz de Walter"),
+            ],
+            summary: "Un cliente filma a Walter, un mozo de 82 años, mientras le cuenta por qué sigue trabajando. La propina, el rechazo y el abrazo.",
+            continuity: bible,
+            referenceOrder: "Cargá @Image1 (Walter) y @Image2 (último fotograma de la escena anterior) en ese orden; @Audio1 solo como timbre.",
+            scenes: [
+                StoryScene(number: 1, title: "Hook: “Eighty-two”", summary: "El cliente le pregunta la edad a Walter mientras sirve café; la respuesta abre la historia.", duration: 30,
+                           prompt: bible + "\n0–10 s: P1 pours coffee. P2 (curious, casual): \"How old are you, if you don't mind me asking?\"\n10–30 s: P1 (proud, a small laugh): \"Eighty-two.\" No music, no text.", notes: "Diálogo corto: sumar líneas para llegar a ~74 palabras."),
+                StoryScene(number: 2, title: "La hija", summary: "Walter cuenta, sin dramatismo, que su hija falleció y por eso trabaja.", duration: 30,
+                           prompt: bible + "\n@Image2 IS the first frame of this video.\n0–15 s: P1 (quiet, flat): \"My daughter passed away.\" Match @Audio1 for timbre only. No music, no cuts, no text."),
+                StoryScene(number: 3, title: "El peso", summary: "El cliente cambia de tema con humor; Walter se ríe y toma el pedido.", duration: 25,
+                           prompt: bible + "\n@Image2 IS the first frame of this video.\n0–25 s: P2 (lighter): \"So what are you having for breakfast?\" No music, no text."),
+            ],
+            messages: [StoryMessage(role: .assistant, text: "Historia creada: 3 escenas, 85 s en total.")]
+        )]
+        store.save(index)
         let model = AppModel(store: store, keys: keys, isDemo: true)
         model.credits = 1250
         return model

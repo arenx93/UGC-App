@@ -194,3 +194,45 @@ final class PromptRequestTests: XCTestCase {
         XCTAssertEqual(MediaSniffer.classify(URL(fileURLWithPath: "/a/b.MOV"))?.mime, "video/quicktime")
     }
 }
+
+final class StoryTests: XCTestCase {
+    func testParsesStoryAndScene() throws {
+        let raw = """
+        ```json
+        {"title":"Walter","summary":"Un mozo de 82 años.","continuity":"BIBLE","referenceOrder":"Cargá @Image1 primero.",
+         "scenes":[{"number":1,"title":"Hook","summary":"Presentación","duration":30,"prompt":"BIBLE\\n0–5 s: …","notes":"70 palabras"},
+                   {"number":2,"title":"La hija","summary":"","duration":"25 s","prompt":"BIBLE 2"},
+                   {"number":3,"title":"Vacía","prompt":""}]}
+        ```
+        """
+        let draft = try StoryRequests.parseStory(raw, defaultDuration: 20)
+        XCTAssertEqual(draft.title, "Walter")
+        XCTAssertEqual(draft.scenes.count, 2)
+        XCTAssertEqual(draft.scenes[1].duration, 25)
+        XCTAssertEqual(draft.scenes[0].notes, "70 palabras")
+        XCTAssertThrowsError(try StoryRequests.parseStory("no json", defaultDuration: 20))
+        let scene = try StoryRequests.parseSingleScene("{\"title\":\"T\",\"summary\":\"S\",\"duration\":99,\"prompt\":\"P\"}", defaultDuration: 10)
+        XCTAssertEqual(scene.duration, 30)
+    }
+
+    func testTagsAndExport() {
+        let image = UUID(), audio = UUID()
+        var story = Story(title: "Walter", brief: "b", slots: [
+            StoryReferenceSlot(kind: .image, referenceID: image, note: "tríptico"),
+            StoryReferenceSlot(kind: .audio, referenceID: audio),
+            StoryReferenceSlot(kind: .image, isLastFrame: true),
+        ])
+        XCTAssertEqual(story.tag(for: story.slots[2]), "@Image2")
+        XCTAssertEqual(story.tag(for: story.slots[1]), "@Audio1")
+        let lines = StoryRequests.referenceLines(story, names: [image: "walter.png", audio: "voz.mp3"])
+        XCTAssertEqual(lines[0], "@Image1 = walter.png — tríptico")
+        XCTAssertTrue(lines[2].hasPrefix("@Image2 = the last frame"))
+        story.scenes = [StoryScene(number: 1, title: "Hook", summary: "s", duration: 30, prompt: "PROMPT 1")]
+        let text = StoryRequests.exportText(story, referenceLines: lines)
+        XCTAssertTrue(text.contains("ESCENA 1 — Hook (30s)"))
+        XCTAssertTrue(text.contains("PROMPT 1"))
+        let brief = StoryRequests.storyBrief(story, referenceLines: lines, skill: nil, previous: true, feedback: "más corto")
+        XCTAssertTrue(brief.contains("previousStory"))
+        XCTAssertTrue(brief.contains("más corto"))
+    }
+}

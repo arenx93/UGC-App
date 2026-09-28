@@ -95,12 +95,12 @@ public enum PromptRequests {
     public static let defaultPromptModel = "gpt-5-6-terra"
 
     /// Requests to try in order for a KIE prompt model: (path, body).
-    public static func kieRequests(for model: PromptModel, instructions: String, brief: String, images: [String]) -> [(path: String, body: [String: Any])] {
+    public static func kieRequests(for model: PromptModel, instructions: String, brief: String, images: [String], maxTokens: Int = 8000) -> [(path: String, body: [String: Any])] {
         switch model.api {
         case .chat(let slugs):
             return slugs.map { ("/\($0)/v1/chat/completions", kieChatBody(model: $0, instructions: instructions, brief: brief, images: images)) }
         case .claude(let name):
-            return [("/claude/v1/messages", claudeBody(model: name, instructions: instructions, brief: brief, images: images))]
+            return [("/claude/v1/messages", claudeBody(model: name, instructions: instructions, brief: brief, images: images, maxTokens: maxTokens))]
         case .responses(let name):
             return [("/codex/v1/responses", responsesBody(model: name, instructions: instructions, brief: brief, images: images))]
         }
@@ -127,12 +127,12 @@ public enum PromptRequests {
         ]
     }
 
-    public static func claudeBody(model: String, instructions: String, brief: String, images: [String]) -> [String: Any] {
+    public static func claudeBody(model: String, instructions: String, brief: String, images: [String], maxTokens: Int = 8000) -> [String: Any] {
         var content: [[String: Any]] = [["type": "text", "text": brief]]
         content += images.map { ["type": "image", "source": ["type": "url", "url": $0]] }
         return [
             "model": model,
-            "max_tokens": 8000,
+            "max_tokens": maxTokens,
             "stream": true,
             "system": instructions,
             "messages": [["role": "user", "content": content]],
@@ -253,13 +253,13 @@ public enum PromptRequests {
         ]
     }
 
-    public static func openAIBody(instructions: String, brief: String, images: [String], media: MediaKind, structured: Bool) -> [String: Any] {
+    public static func openAIBody(instructions: String, brief: String, images: [String], media: MediaKind, structured: Bool, maxOutputTokens: Int? = nil) -> [String: Any] {
         var content: [[String: Any]] = [["type": "input_text", "text": brief]]
         content += images.map { ["type": "input_image", "image_url": $0, "detail": "auto"] }
         var body: [String: Any] = [
             "model": OpenAIClient.model,
             "store": false,
-            "max_output_tokens": media == .video ? 6000 : 3600,
+            "max_output_tokens": maxOutputTokens ?? (media == .video ? 6000 : 3600),
             "instructions": instructions,
             "input": [["role": "user", "content": content]],
         ]

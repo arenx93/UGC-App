@@ -1,15 +1,17 @@
 import AppKit
 import FramecraftCore
 import SwiftUI
+import UniformTypeIdentifiers
 import UserNotifications
 
 enum SidebarItem: String, Hashable, CaseIterable, Identifiable {
-    case create, library, references, skills, guide
+    case create, stories, library, references, skills, guide
     var id: String { rawValue }
 
     var title: String {
         switch self {
         case .create: "Crear"
+        case .stories: "Historias"
         case .library: "Biblioteca"
         case .references: "Referencias"
         case .skills: "Skills"
@@ -20,6 +22,7 @@ enum SidebarItem: String, Hashable, CaseIterable, Identifiable {
     var symbol: String {
         switch self {
         case .create: "wand.and.stars"
+        case .stories: "film.stack"
         case .library: "photo.stack"
         case .references: "paperclip"
         case .skills: "brain.head.profile"
@@ -72,6 +75,14 @@ final class AppModel {
 
     // MARK: Library
     var jobs: [Job] = []
+    var stories: [Story] = []
+    var selectedStoryID: UUID?
+    /// What the story director is doing right now ("Escribiendo la historia…").
+    var storyStatus: String?
+    var storyStreaming: String?
+    var storyError: String?
+    /// Scene opened in Create; the next video generated is linked to it.
+    @ObservationIgnored var pendingSceneLink: (story: UUID, scene: UUID)?
     var references: [ReferenceFile] = []
     var customSkills: [Skill] = []
     let builtinSkills: [Skill]
@@ -143,6 +154,7 @@ final class AppModel {
         jobs = index.jobs.sorted { $0.created > $1.created }
         references = index.references.sorted { $0.created > $1.created }
         customSkills = index.skills
+        stories = (index.stories ?? []).sorted { $0.updated > $1.updated }
         mode = p.mode
         imageModel = Presets.imageModel(p.imageModel) == nil ? "gpt-image-2" : p.imageModel
         imageResolution = Presets.imageResolutions.contains(p.imageResolution) ? p.imageResolution : "1K"
@@ -278,6 +290,7 @@ final class AppModel {
         index.jobs = jobs
         index.references = references
         index.skills = customSkills
+        index.stories = stories
         index.preferences = Preferences(
             mode: mode, imageModel: imageModel, imageResolution: imageResolution, imageAspect: imageAspect,
             quantity: quantity, camera: camera, film: film, videoResolution: videoResolution, videoAspect: videoAspect,
@@ -497,17 +510,24 @@ final class AppModel {
     }
 
     /// Extracts the last frame of a generated video so the next clip can start exactly there.
+    /// Saves the last frame of a generated video as an image reference.
+    func lastFrameReference(of job: Job, name: String? = nil) async throws -> ReferenceFile {
+        guard let output = job.outputs.first else { throw KieError("Ese video todavía no tiene archivo.", definite: true) }
+        let frame = try await MediaTools.lastFrame(of: store.outputURL(output))
+        guard let png = MediaTools.pngData(frame) else { throw KieError("No se pudo guardar el fotograma.", definite: true) }
+        let id = UUID()
+        let fileName = "\(id.uuidString.lowercased()).png"
+        try png.write(to: store.referencesDir.appendingPathComponent(fileName))
+        let reference = ReferenceFile(id: id, name: name ?? "Último fotograma · \(job.prompt.prefix(40))", kind: .image, mime: "image/png",
+                                      fileName: fileName, bytes: Int64(png.count))
+        references.insert(reference, at: 0)
+        return reference
+    }
+
+    /// Extracts the last frame of a generated video so the next clip can start exactly there.
     func continueFromLastFrame(_ job: Job) async {
-        guard let output = job.outputs.first else { return }
         do {
-            let frame = try await MediaTools.lastFrame(of: store.outputURL(output))
-            guard let png = MediaTools.pngData(frame) else { throw KieError("No se pudo guardar el fotograma.", definite: true) }
-            let id = UUID()
-            let fileName = "\(id.uuidString.lowercased()).png"
-            try png.write(to: store.referencesDir.appendingPathComponent(fileName))
-            let reference = ReferenceFile(id: id, name: "Último fotograma · \(job.prompt.prefix(40))", kind: .image, mime: "image/png",
-                                          fileName: fileName, bytes: Int64(png.count))
-            references.insert(reference, at: 0)
+            let reference = try await lastFrameReference(of: job)
             mode = .video
             if selectedImages.count < selectionLimit(.image) { selectedImages.append(reference.id) }
             persist()
@@ -610,6 +630,10 @@ final class AppModel {
                                    imageReferences: images, videoReferences: videos, audioReferences: audios)
         let job = Job(batchID: UUID(), kind: .video, model: Presets.videoModelID, prompt: text, finalPrompt: text, settings: settings)
         withAnimation(.snappy) { jobs.insert(job, at: 0) }
+        if let link = pendingSceneLink {
+            updateScene(story: link.story, scene: link.scene) { $0.jobIDs.append(job.id) }
+            pendingSceneLink = nil
+        }
         persist()
         let input = GenerationInputs.video(prompt: text, resolution: videoResolution, aspect: videoAspect, duration: videoDuration,
                                            generateAudio: videoAudio, images: imageURLs, videos: videoURLs, audios: audioURLs)
@@ -978,9 +1002,9 @@ final class AppModel {
 
     /// Tries each documented route for the model until one answers.
     private func runKie(_ model: PromptModel, client: KieClient, instructions: String, brief: String, images: [String],
-                        onText: @escaping @Sendable (String) -> Void) async throws -> String {
+                        maxTokens: Int = 8000, onText: @escaping @Sendable (String) -> Void) async throws -> String {
         var lastError: Error?
-        for request in PromptRequests.kieRequests(for: model, instructions: instructions, brief: brief, images: images) {
+        for request in PromptRequests.kieRequests(for: model, instructions: instructions, brief: brief, images: images, maxTokens: maxTokens) {
             do {
                 return try await client.streamText(request.path, body: request.body, readJSON: PromptRequests.reader(for: model), onText: onText)
             } catch {
@@ -1139,5 +1163,241 @@ final class AppModel {
         content.body = String(job.prompt.prefix(120))
         content.sound = .default
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: id.uuidString, content: content, trigger: nil))
+    }
+}
+
+// MARK: - Stories
+
+extension AppModel {
+    var selectedStory: Story? { stories.first { $0.id == selectedStoryID } }
+
+    func newStory() {
+        let story = Story()
+        stories.insert(story, at: 0)
+        selectedStoryID = story.id
+        section = .stories
+        persist()
+    }
+
+    func deleteStory(_ id: UUID) {
+        stories.removeAll { $0.id == id }
+        if selectedStoryID == id { selectedStoryID = stories.first?.id }
+        persist()
+    }
+
+    func updateStory(_ id: UUID, _ change: (inout Story) -> Void) {
+        guard let index = stories.firstIndex(where: { $0.id == id }) else { return }
+        change(&stories[index])
+        stories[index].updated = Date()
+    }
+
+    func updateScene(story: UUID, scene: UUID, _ change: (inout StoryScene) -> Void) {
+        updateStory(story) { story in
+            guard let index = story.scenes.firstIndex(where: { $0.id == scene }) else { return }
+            change(&story.scenes[index])
+        }
+    }
+
+    func referenceLines(_ story: Story) -> [String] {
+        let names = Dictionary(uniqueKeysWithValues: references.map { ($0.id, $0.name) })
+        return StoryRequests.referenceLines(story, names: names)
+    }
+
+    private func skillPayload(for id: String) -> [String: Any]? {
+        guard let skill = allSkills.first(where: { $0.id == id }), skill.id != SkillLibrary.jsonProfileID else { return nil }
+        var content = skill.content
+        if skill.id == SkillLibrary.ugcID {
+            // Stories always get the worked example: it is the model of a full pack.
+            content += "\n\n---\n\n# Ejemplo trabajado completo (pack de Walter, 8 escenas que funcionaron)\n\n" + SkillLibrary.walterExample(resources)
+        }
+        return ["name": skill.name, "content": content]
+    }
+
+    /// Runs the assistant with the selected engine (KIE, ChatGPT/Codex or OpenAI) and returns its raw text.
+    private func runEngine(instructions: String, brief: String, imageIDs: [UUID], maxTokens: Int,
+                           onText: @escaping @Sendable (String) -> Void) async throws -> String {
+        switch provider {
+        case .kie:
+            guard let key = keys.read(KeyAccount.kie) else { throw KieError("Conectá tu clave de KIE en Ajustes.", definite: true) }
+            let client = KieClient(key: key)
+            let images = try await upload(Array(imageIDs.prefix(4)), client: client).map(\.absoluteString)
+            let model = PromptRequests.promptModels.first { $0.id == promptModel } ?? PromptRequests.promptModels[0]
+            return try await runKie(model, client: client, instructions: instructions, brief: brief, images: images, maxTokens: maxTokens, onText: onText)
+        case .codex:
+            if case .loggedIn = codexStatus {} else { await refreshCodexStatus() }
+            guard case .loggedIn = codexStatus else { throw KieError("Iniciá sesión con ChatGPT (Asistente → Motor) o elegí KIE.", definite: true) }
+            let images = imageIDs.prefix(4).compactMap { id in references.first { $0.id == id }.map { url(for: $0) } }
+            return try await CodexCLI.generate(prompt: PromptRequests.codexCLIPrompt(instructions: instructions, brief: brief), images: Array(images), model: nil)
+        case .openai:
+            guard let key = keys.read(KeyAccount.openAI) else { throw KieError("Agregá tu clave de OpenAI en Ajustes o elegí otro motor.", definite: true) }
+            let images = try imageIDs.prefix(4).compactMap { id -> String? in
+                guard let reference = references.first(where: { $0.id == id }) else { return nil }
+                return "data:\(reference.mime);base64," + (try Data(contentsOf: url(for: reference))).base64EncodedString()
+            }
+            return try PromptRequests.readOpenAI(await OpenAIClient(key: key).responses(body: PromptRequests.openAIBody(
+                instructions: instructions, brief: brief, images: images, media: .video, structured: false, maxOutputTokens: maxTokens)))
+        }
+    }
+
+    private func storyImageIDs(_ story: Story) -> [UUID] {
+        story.slots.filter { $0.kind == .image && !$0.isLastFrame }.compactMap(\.referenceID)
+    }
+
+    private func liveStoryText() -> @Sendable (String) -> Void {
+        { [weak self] text in Task { @MainActor in if self?.storyStatus != nil { self?.storyStreaming = text } } }
+    }
+
+    /// Writes (or rewrites, with `feedback`) the whole story as a pack of scene prompts.
+    func generateStory(_ id: UUID, feedback: String? = nil) async {
+        guard let story = stories.first(where: { $0.id == id }), storyStatus == nil else { return }
+        guard !story.brief.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            storyError = "Escribí el brief de la historia."
+            return
+        }
+        let revising = feedback != nil && !story.scenes.isEmpty
+        storyError = nil
+        storyStatus = revising ? "Reescribiendo la historia…" : "Escribiendo la historia…"
+        storyStreaming = ""
+        defer {
+            storyStatus = nil
+            storyStreaming = nil
+        }
+        if let feedback { updateStory(id) { $0.messages.append(StoryMessage(role: .user, text: feedback)) } }
+        let brief = StoryRequests.storyBrief(story, referenceLines: referenceLines(story), skill: skillPayload(for: story.skillID),
+                                             previous: revising, feedback: feedback)
+        do {
+            let raw = try await runEngine(instructions: StoryRequests.storyInstructions(), brief: brief,
+                                          imageIDs: storyImageIDs(story), maxTokens: 32000, onText: liveStoryText())
+            let draft = try StoryRequests.parseStory(raw, defaultDuration: story.sceneDuration)
+            updateStory(id) { story in
+                let previous = story.scenes
+                story.title = draft.title
+                story.summary = draft.summary
+                story.continuity = draft.continuity
+                story.referenceOrder = draft.referenceOrder
+                story.scenes = draft.scenes.enumerated().map { index, scene in
+                    // Keep links to videos already generated for unchanged scene numbers.
+                    let old = previous.indices.contains(index) ? previous[index] : nil
+                    return StoryScene(id: old?.id ?? UUID(), number: index + 1, title: scene.title, summary: scene.summary,
+                                      duration: scene.duration, prompt: scene.prompt, notes: scene.notes,
+                                      jobIDs: old?.prompt == scene.prompt ? (old?.jobIDs ?? []) : [])
+                }
+                story.messages.append(StoryMessage(role: .assistant, text: revising
+                    ? "Listo: actualicé la historia (\(draft.scenes.count) escenas)."
+                    : "Historia creada: \(draft.scenes.count) escenas, \(story.totalDuration) s en total."))
+            }
+            persist()
+        } catch {
+            storyError = error.localizedDescription
+            updateStory(id) { $0.messages.append(StoryMessage(role: .assistant, text: "No pude completar el pedido: \(error.localizedDescription)")) }
+        }
+    }
+
+    /// Rewrites one scene following the user's note.
+    func refineScene(story id: UUID, scene sceneID: UUID, feedback: String) async {
+        guard let story = stories.first(where: { $0.id == id }), let scene = story.scenes.first(where: { $0.id == sceneID }),
+              storyStatus == nil else { return }
+        let note = feedback.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !note.isEmpty else { return }
+        storyError = nil
+        storyStatus = "Ajustando la escena \(scene.number)…"
+        storyStreaming = ""
+        defer {
+            storyStatus = nil
+            storyStreaming = nil
+        }
+        updateStory(id) { $0.messages.append(StoryMessage(role: .user, text: note, sceneNumber: scene.number)) }
+        let brief = StoryRequests.sceneBrief(story, scene: scene, referenceLines: referenceLines(story),
+                                             skill: skillPayload(for: story.skillID), feedback: note)
+        do {
+            let raw = try await runEngine(instructions: StoryRequests.sceneInstructions(), brief: brief,
+                                          imageIDs: storyImageIDs(story), maxTokens: 12000, onText: liveStoryText())
+            let revised = try StoryRequests.parseSingleScene(raw, defaultDuration: scene.duration)
+            updateScene(story: id, scene: sceneID) {
+                $0.title = revised.title
+                $0.summary = revised.summary
+                $0.duration = revised.duration
+                $0.prompt = revised.prompt
+                $0.notes = revised.notes
+            }
+            updateStory(id) { $0.messages.append(StoryMessage(role: .assistant, text: "Escena \(scene.number) actualizada.", sceneNumber: scene.number)) }
+            persist()
+        } catch {
+            storyError = error.localizedDescription
+        }
+    }
+
+    /// Loads a scene into Create with its references in the story's fixed order.
+    /// With `generate`, sends it to Seedance right away.
+    func openScene(story id: UUID, scene sceneID: UUID, generate: Bool) async {
+        guard let story = stories.first(where: { $0.id == id }),
+              let sceneIndex = story.scenes.firstIndex(where: { $0.id == sceneID }) else { return }
+        let scene = story.scenes[sceneIndex]
+        var selected: [ReferenceKind: [UUID]] = [:]
+        for kind in ReferenceKind.allCases {
+            let needed = PromptLinter.highestTag(kind.tagPrefix, in: scene.prompt)
+            var ids: [UUID] = []
+            for slot in story.slots(kind).prefix(needed) {
+                if slot.isLastFrame {
+                    guard sceneIndex > 0,
+                          let previousJob = story.scenes[sceneIndex - 1].jobIDs.reversed()
+                            .compactMap({ jobID in jobs.first { $0.id == jobID && $0.status == .success } }).first
+                    else {
+                        show("\(story.tag(for: slot)) es el último fotograma de la escena anterior: generá primero la escena \(scene.number - 1).", .error)
+                        return
+                    }
+                    do {
+                        let frame = try await lastFrameReference(of: previousJob, name: "\(story.title) · último fotograma escena \(scene.number - 1)")
+                        ids.append(frame.id)
+                    } catch {
+                        show("No se pudo extraer el último fotograma: \(error.localizedDescription)", .error)
+                        return
+                    }
+                } else if let referenceID = slot.referenceID, references.contains(where: { $0.id == referenceID }) {
+                    ids.append(referenceID)
+                } else {
+                    show("Falta el archivo de \(story.tag(for: slot)). Elegilo en las referencias de la historia.", .error)
+                    return
+                }
+            }
+            selected[kind] = ids
+        }
+        mode = .video
+        prompt = scene.prompt
+        videoDuration = min(max(scene.duration, Presets.videoDurationRange.lowerBound), Presets.videoDurationRange.upperBound)
+        videoAspect = story.aspect
+        videoResolution = story.resolution
+        videoAudio = story.generateAudio
+        skillID = story.skillID
+        selectedImages = selected[.image] ?? []
+        selectedVideos = selected[.video] ?? []
+        selectedAudios = selected[.audio] ?? []
+        pendingSceneLink = (story.id, scene.id)
+        persist()
+        if generate {
+            await self.generate()
+            show("Escena \(scene.number) enviada a Seedance.", .success)
+        } else {
+            section = .create
+            show("Escena \(scene.number) cargada en Crear con sus referencias en orden.", .success)
+        }
+    }
+
+    func exportStory(_ id: UUID) {
+        guard let story = stories.first(where: { $0.id == id }) else { return }
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "\(story.title) - pack de prompts.txt"
+        panel.allowedContentTypes = [.plainText]
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            try StoryRequests.exportText(story, referenceLines: referenceLines(story)).write(to: url, atomically: true, encoding: .utf8)
+            show("Pack exportado.", .success)
+        } catch {
+            show("No se pudo exportar: \(error.localizedDescription)", .error)
+        }
+    }
+
+    func latestJob(for scene: StoryScene) -> Job? {
+        scene.jobIDs.reversed().compactMap { id in jobs.first { $0.id == id } }.first
     }
 }

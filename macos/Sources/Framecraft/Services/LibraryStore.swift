@@ -26,6 +26,8 @@ struct LibraryIndex: Codable {
     var jobs: [Job] = []
     var references: [ReferenceFile] = []
     var skills: [Skill] = []
+    /// Optional so libraries saved by older versions still load.
+    var stories: [Story]?
     var preferences = Preferences()
 }
 
