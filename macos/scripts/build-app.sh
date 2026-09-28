@@ -43,8 +43,16 @@ echo "▸ Firma ad-hoc…"
 # Replace "-" with a Developer ID identity to sign for distribution (and then notarize).
 IDENTITY="${SIGN_IDENTITY:--}"
 SIGN_OPTIONS=()
-if [ "$IDENTITY" != "-" ]; then SIGN_OPTIONS=(--options runtime --timestamp); fi
-codesign --force --deep ${SIGN_OPTIONS[@]+"${SIGN_OPTIONS[@]}"} --sign "$IDENTITY" "$APP"
+if [ "$IDENTITY" != "-" ]; then
+  # Developer ID: hardened runtime + secure timestamp, required for notarization.
+  SIGN_OPTIONS=(--options runtime --timestamp)
+  echo "  con identidad: $IDENTITY"
+fi
+# Sign nested executables first (bundled Codex CLI), then the app itself.
+if [ -f "$APP/Contents/MacOS/codex" ]; then
+  codesign --force ${SIGN_OPTIONS[@]+"${SIGN_OPTIONS[@]}"} --sign "$IDENTITY" "$APP/Contents/MacOS/codex"
+fi
+codesign --force ${SIGN_OPTIONS[@]+"${SIGN_OPTIONS[@]}"} --sign "$IDENTITY" "$APP"
 codesign --verify --deep --strict "$APP"
 
 echo "▸ DMG…"
@@ -54,6 +62,9 @@ cp -R "$APP" "$DMG_ROOT/"
 ln -s /Applications "$DMG_ROOT/Applications"
 hdiutil create -volname "Framecraft" -srcfolder "$DMG_ROOT" -ov -format UDZO "$OUT/Framecraft-$VERSION-macOS.dmg" >/dev/null
 rm -rf "$DMG_ROOT"
+if [ "$IDENTITY" != "-" ]; then
+  codesign --force --timestamp --sign "$IDENTITY" "$OUT/Framecraft-$VERSION-macOS.dmg"
+fi
 
 echo "✓ $APP"
 echo "✓ $OUT/Framecraft-$VERSION-macOS.dmg"
