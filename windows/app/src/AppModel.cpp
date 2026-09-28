@@ -1691,6 +1691,7 @@ winrt::fire_and_forget AppModel::refineScene(std::string storyID, std::string sc
     current->messages.push_back({fc::newUUID(), true, note, scene.number, fc::nowMs()});
     std::string brief = fc::stories::sceneBrief(*current, scene, referenceLines(*current), skillPayload(current->skillID), note);
     notify(Change::stories);
+    std::string continuity = current->continuity;
     auto dispatcher = dispatcher_;
     auto live = [this, dispatcher](std::string const& text) {
         dispatcher.TryEnqueue([this, text] {
@@ -1704,7 +1705,8 @@ winrt::fire_and_forget AppModel::refineScene(std::string storyID, std::string sc
     std::optional<std::string> failure;
     co_await winrt::resume_background();
     try {
-        revised = fc::stories::parseSingleScene(runEngine(engine, fc::stories::sceneInstructions(), brief, 12000, live), scene.duration);
+        revised = fc::stories::parseSingleScene(runEngine(engine, fc::stories::sceneInstructions(), brief, 12000, live), scene.duration,
+                                                  continuity);
     } catch (fc::Error const& error) {
         failure = error.what();
     } catch (winrt::hresult_error const& error) {

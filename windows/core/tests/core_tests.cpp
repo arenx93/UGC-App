@@ -311,6 +311,20 @@ static void testStories() {
     CHECK(throwsError([] { stories::parseStory("no json", 20); }));
     CHECK_EQ(stories::parseSingleScene("{\"title\":\"T\",\"summary\":\"S\",\"duration\":99,\"prompt\":\"P\"}", 10).duration, 30);
 
+    {  // The bible is written once and placed before every scene, never twice.
+        std::string bible = "FORMAT: Vertical 9:16.\n\nPACING — CRITICAL: dense dialogue.";
+        std::string packed = "{\"title\":\"T\",\"continuity\":\"FORMAT: Vertical 9:16.\\n\\nPACING — CRITICAL: dense dialogue.\",\"scenes\":["
+                             "{\"number\":1,\"duration\":30,\"prompt\":\"DURATION: 30 seconds.\"},"
+                             "{\"number\":2,\"duration\":25,\"prompt\":\"FORMAT: Vertical 9:16.\\n\\nPACING — CRITICAL: dense dialogue.\\n\\nDURATION: 25 seconds.\"}]}";
+        auto composed = stories::parseStory(packed, 20);
+        CHECK_EQ(composed.continuity, bible);
+        CHECK_EQ(composed.scenes[0].prompt, bible + "\n\nDURATION: 30 seconds.");
+        CHECK_EQ(composed.scenes[1].prompt, bible + "\n\nDURATION: 25 seconds.");
+        CHECK_EQ(stories::scenePart(bible, composed.scenes[0].prompt), std::string("DURATION: 30 seconds."));
+        CHECK_EQ(stories::parseSingleScene("{\"prompt\":\"DURATION: 20 seconds.\"}", 20, bible).prompt, bible + "\n\nDURATION: 20 seconds.");
+        CHECK(stories::storyInstructions().find("PACING — CRITICAL") != std::string::npos);
+    }
+
     Story story;
     story.id = newUUID();
     story.title = "Walter";

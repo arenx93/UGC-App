@@ -473,18 +473,38 @@ struct JobDetailView: View {
     }
 }
 
-/// Keeps one AVPlayer per file so re-renders don't restart playback.
-struct PlayerView: View {
+/// Full video player with controls. Uses AppKit's AVPlayerView instead of SwiftUI's `VideoPlayer`,
+/// which crashes the app when it is built as a SwiftPM executable (its `_AVKit_SwiftUI` overlay isn't
+/// reliably loaded outside Xcode app targets). One AVPlayer per file so re-renders don't restart playback.
+struct PlayerView: NSViewRepresentable {
     let url: URL
-    @State private var player: AVPlayer?
 
-    var body: some View {
-        VideoPlayer(player: player)
-            .task(id: url) {
-                player?.pause()
-                player = AVPlayer(url: url)
-            }
-            .onDisappear { player?.pause() }
+    func makeNSView(context: Context) -> AVPlayerView {
+        let view = AVPlayerView()
+        view.controlsStyle = .floating
+        view.videoGravity = .resizeAspect
+        view.showsFullScreenToggleButton = true
+        view.allowsPictureInPicturePlayback = true
+        load(url, into: view)
+        return view
+    }
+
+    func updateNSView(_ view: AVPlayerView, context: Context) {
+        if (view.player?.currentItem?.asset as? AVURLAsset)?.url != url {
+            load(url, into: view)
+        }
+    }
+
+    static func dismantleNSView(_ view: AVPlayerView, coordinator: ()) {
+        view.player?.pause()
+        view.player = nil
+    }
+
+    private func load(_ url: URL, into view: AVPlayerView) {
+        view.player?.pause()
+        let player = AVPlayer(url: url)
+        view.player = player
+        player.play()
     }
 }
 

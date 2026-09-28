@@ -215,6 +215,24 @@ final class StoryTests: XCTestCase {
         XCTAssertEqual(scene.duration, 30)
     }
 
+    func testBibleIsPlacedBeforeEveryScene() throws {
+        let bible = "FORMAT: Vertical 9:16.\n\nPACING — CRITICAL: dense dialogue."
+        let raw = """
+        {"title":"T","continuity":"FORMAT: Vertical 9:16.\\n\\nPACING — CRITICAL: dense dialogue.",
+         "scenes":[{"number":1,"duration":30,"prompt":"DURATION: 30 seconds.\\n\\n0–7s: P2: \\"Hey.\\""},
+                   {"number":2,"duration":25,"prompt":"FORMAT: Vertical 9:16.\\n\\nPACING — CRITICAL: dense dialogue.\\n\\nDURATION: 25 seconds."}]}
+        """
+        let draft = try StoryRequests.parseStory(raw, defaultDuration: 20)
+        XCTAssertEqual(draft.continuity, bible)
+        XCTAssertEqual(draft.scenes[0].prompt, bible + "\n\nDURATION: 30 seconds.\n\n0–7s: P2: \"Hey.\"")
+        // Already included by the assistant: not duplicated.
+        XCTAssertEqual(draft.scenes[1].prompt, bible + "\n\nDURATION: 25 seconds.")
+        XCTAssertEqual(StoryRequests.scenePart(continuity: bible, prompt: draft.scenes[0].prompt), "DURATION: 30 seconds.\n\n0–7s: P2: \"Hey.\"")
+        let single = try StoryRequests.parseSingleScene("{\"prompt\":\"DURATION: 20 seconds.\"}", defaultDuration: 20, continuity: bible)
+        XCTAssertEqual(single.prompt, bible + "\n\nDURATION: 20 seconds.")
+        XCTAssertTrue(StoryRequests.storyInstructions().contains("PACING — CRITICAL"))
+    }
+
     func testTagsAndExport() {
         let image = UUID(), audio = UUID()
         var story = Story(title: "Walter", brief: "b", slots: [

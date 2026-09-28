@@ -93,7 +93,11 @@ std::string storyBrief(const Story& story, const std::vector<std::string>& refer
 std::string sceneBrief(const Story& story, const StoryScene& scene, const std::vector<std::string>& referenceLines,
                        const std::optional<json>& skill, const std::string& feedback);
 StoryDraft parseStory(const std::string& raw, int defaultDuration);
-StoryDraft::Scene parseSingleScene(const std::string& raw, int defaultDuration);
+StoryDraft::Scene parseSingleScene(const std::string& raw, int defaultDuration, const std::string& continuity = "");
+/// Full prompt for one scene: the bible, a blank line, then the scene-specific part (never duplicated).
+std::string composeScenePrompt(const std::string& continuity, const std::string& scene);
+/// The scene-specific part of a stored prompt (without the bible placed before it).
+std::string scenePart(const std::string& continuity, const std::string& prompt);
 /// The whole pack as text, in the spirit of the Walter pack.
 std::string exportText(const Story& story, const std::vector<std::string>& referenceLines);
 

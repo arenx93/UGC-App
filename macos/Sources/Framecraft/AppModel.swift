@@ -1396,7 +1396,7 @@ extension AppModel {
         do {
             let raw = try await runEngine(instructions: StoryRequests.sceneInstructions(), brief: brief,
                                           imageIDs: storyImageIDs(story), maxTokens: 12000, onText: liveStoryText())
-            let revised = try StoryRequests.parseSingleScene(raw, defaultDuration: scene.duration)
+            let revised = try StoryRequests.parseSingleScene(raw, defaultDuration: scene.duration, continuity: story.continuity)
             updateScene(story: id, scene: sceneID) {
                 $0.title = revised.title
                 $0.summary = revised.summary
