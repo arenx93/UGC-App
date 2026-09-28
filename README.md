@@ -1,8 +1,12 @@
 # Framecraft · UGC Studio
 
-Estudio de escritorio para crear contenido UGC (imágenes y vídeos) con KIE
+Estudio para crear contenido UGC (imágenes y vídeos) con KIE
 (GPT Image 2, Nano Banana Pro, Seedance 2.5) y un asistente de prompts con IA.
-Funciona como **app nativa para macOS y Windows** y también en el navegador.
+
+- **macOS:** app nativa en Swift/SwiftUI → ver [`macos/README.md`](macos/README.md)
+  (descarga: Actions → *macOS app (Swift)* → Artifacts → *Framecraft-macOS*).
+- **Windows:** app de escritorio (Electron) → instrucciones abajo.
+- **Navegador:** la versión web original (Next.js/vinext).
 
 ![Estudio](docs/captura-estudio.png)
 
@@ -13,9 +17,10 @@ Las instaladoras se generan solas en GitHub cada vez que se suben cambios:
 1. En GitHub abre la pestaña **Actions** → workflow **Desktop apps**.
 2. Entra en la ejecución más reciente (con ✅ verde).
 3. Abajo, en **Artifacts**, descarga:
-   - `Framecraft-macOS-AppleSilicon` → Macs con chip M1/M2/M3/M4 (`.dmg`)
-   - `Framecraft-macOS-Intel` → Macs con procesador Intel (`.dmg`)
-   - `Framecraft-Windows` → Windows 10/11 (`.exe`, instalador)
+   - `Framecraft-Windows` → Windows 10/11 (`.exe`, instalador), desde el
+     workflow **Windows app (Electron)**.
+   - Para Mac usá la app nativa: workflow **macOS app (Swift)** →
+     `Framecraft-macOS` (`.dmg`, Apple Silicon e Intel).
 
 Si publicas una etiqueta de versión (`v1.0.1`, etc.), las instaladoras también
 se adjuntan a un borrador de *Release*.
