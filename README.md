@@ -86,7 +86,7 @@ original (Next.js/vinext), que también se puede usar en el navegador. Sigue dis
 **Actions → Windows app (Electron)**.
 
 **Primera apertura (Windows):** SmartScreen puede avisar porque los instaladores no
-está firmado: tocá **Más información → Ejecutar de todas formas**.
+están firmados: tocá **Más información → Ejecutar de todas formas**.
 
 ### Qué hace la app Electron
 
