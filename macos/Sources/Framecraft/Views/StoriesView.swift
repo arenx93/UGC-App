@@ -134,12 +134,12 @@ struct StoryDetail: View {
             Spacer()
             if !story.scenes.isEmpty {
                 Button { model.exportStory(storyID) } label: { Label("Exportar pack", systemImage: "square.and.arrow.up") }
-                    .glassButtonStyle()
+                    .buttonStyle(.bordered)
                     .help("Guardar todos los prompts en un .txt, como el pack de Walter")
                 Button {
                     model.copyToPasteboard(StoryRequests.exportText(story, referenceLines: model.displayLines(story)))
                 } label: { Label("Copiar todo", systemImage: "doc.on.doc") }
-                    .glassButtonStyle()
+                    .buttonStyle(.bordered)
             }
         }
     }
@@ -518,7 +518,7 @@ struct SceneCard: View {
                         Button { model.detailJobID = job.id } label: { Label("Ver video", systemImage: "play.circle") }
                     }
                 }
-                .glassButtonStyle()
+                .buttonStyle(.bordered)
                 HStack {
                     TextField("Ajustar esta escena: ej. “que Walter tarde más en responder”, “sacá la moza”…", text: $note, axis: .vertical)
                         .textFieldStyle(.roundedBorder)
@@ -611,7 +611,7 @@ struct StoryProduction: View {
                             Text(running.text).font(.callout).lineLimit(2)
                             Spacer()
                             Button("Detener") { model.cancelStoryRun() }
-                                .glassButtonStyle()
+                                .buttonStyle(.bordered)
                         } else {
                             Button {
                                 model.generateAllScenes(storyID)
@@ -632,7 +632,7 @@ struct StoryProduction: View {
                                     Label("Armar video final", systemImage: "film")
                                 }
                             }
-                            .glassButtonStyle()
+                            .buttonStyle(.bordered)
                             .controlSize(.large)
                             .disabled(ready < story.scenes.count || model.assemblingStoryID != nil)
                             .help(ready < story.scenes.count
@@ -644,7 +644,7 @@ struct StoryProduction: View {
                                 } label: {
                                     Label("Ver video final", systemImage: "play.rectangle.fill")
                                 }
-                                .glassButtonStyle()
+                                .buttonStyle(.bordered)
                                 .controlSize(.large)
                             }
                             Spacer()

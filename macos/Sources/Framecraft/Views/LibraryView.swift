@@ -355,7 +355,7 @@ struct JobDetailView: View {
                         HStack {
                             ForEach(urls.indices, id: \.self) { i in
                                 Button("\(i + 1)") { index = i }
-                                    .glassButtonStyle()
+                                    .buttonStyle(.bordered)
                                     .tint(i == index ? Theme.pink : nil)
                             }
                         }
@@ -443,7 +443,7 @@ struct JobDetailView: View {
                             }
                             .disabled(!job.status.isFinished)
                         }
-                        .glassButtonStyle()
+                        .buttonStyle(.bordered)
                         .controlSize(.large)
                     }
                     .padding(20)

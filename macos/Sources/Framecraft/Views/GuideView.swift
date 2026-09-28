@@ -28,14 +28,14 @@ struct GuideView: View {
                         } label: {
                             Label("Documento base (PDF)", systemImage: "doc.richtext")
                         }
-                        .glassButtonStyle()
+                        .buttonStyle(.bordered)
                         .controlSize(.large)
                         Button {
                             NSWorkspace.shared.open(resources.url("ugc-celular/EJEMPLO-WALTER.txt"))
                         } label: {
                             Label("Pack de Walter (8 escenas)", systemImage: "film.stack")
                         }
-                        .glassButtonStyle()
+                        .buttonStyle(.bordered)
                         .controlSize(.large)
                     }
                 }

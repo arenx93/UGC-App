@@ -137,7 +137,7 @@ struct AssistantView: View {
                 HStack(spacing: 6) {
                     ForEach(examples, id: \.self) { example in
                         Button(example) { model.idea = example }
-                            .glassButtonStyle()
+                            .buttonStyle(.bordered)
                             .controlSize(.small)
                             .help("Usar esta idea de ejemplo")
                     }
@@ -342,7 +342,7 @@ struct AssistantView: View {
                 } label: {
                     Image(systemName: "doc.on.doc")
                 }
-                .glassButtonStyle()
+                .buttonStyle(.bordered)
                 .controlSize(.large)
                 .help("Copiar el prompt")
                 .accessibilityLabel("Copiar el prompt")

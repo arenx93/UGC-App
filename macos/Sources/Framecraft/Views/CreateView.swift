@@ -75,7 +75,7 @@ struct CreateView: View {
                 Label("Buscar o hacer…", systemImage: "command")
                     .font(.callout)
             }
-            .glassButtonStyle()
+            .buttonStyle(.bordered)
             .help("Paleta de comandos (⌘K): acciones, plantillas, historias y creaciones")
         }
     }
@@ -190,7 +190,7 @@ struct PromptSection: View {
                         .foregroundStyle(model.prompt.count > limit ? Color.red : Color.secondary)
                         .accessibilityLabel("\(model.prompt.count) de \(limit) caracteres")
                 }
-                .glassButtonStyle()
+                .buttonStyle(.bordered)
                 .controlSize(.regular)
             }
         }
@@ -366,7 +366,7 @@ struct ReferencesSection: View {
                         } label: {
                             Label("Agregar archivos", systemImage: "plus")
                         }
-                        .glassButtonStyle()
+                        .buttonStyle(.bordered)
                         .keyboardShortcut("o")
                         .help("Elegir imágenes, videos o audios (⌘O). También podés arrastrarlos a la ventana.")
                     )
@@ -677,7 +677,7 @@ struct SettingsSection: View {
             HStack(spacing: 6) {
                 ForEach(Presets.videoDurationShortcuts, id: \.self) { seconds in
                     Button("\(seconds) s") { withAnimation(.snappy) { model.videoDuration = seconds } }
-                        .glassButtonStyle()
+                        .buttonStyle(.bordered)
                         .controlSize(.small)
                         .tint(model.videoDuration == seconds ? Theme.pink : nil)
                 }

@@ -143,11 +143,11 @@ struct SkillDetail: View {
                             select(copy.id)
                             edit(copy)
                         }
-                        .glassButtonStyle()
+                        .buttonStyle(.bordered)
                         .disabled(skill.id == SkillLibrary.jsonProfileID)
                     } else {
-                        Button("Editar") { edit(skill) }.glassButtonStyle()
-                        Button("Eliminar", role: .destructive) { confirmDelete = true }.glassButtonStyle()
+                        Button("Editar") { edit(skill) }.buttonStyle(.bordered)
+                        Button("Eliminar", role: .destructive) { confirmDelete = true }.buttonStyle(.bordered)
                     }
                 }
                 if skill.id == SkillLibrary.ugcID {
