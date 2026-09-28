@@ -60,7 +60,7 @@ Más detalles y capturas en [`macos/README.md`](macos/README.md) y [`docs/macos/
 
 ### Publicar una versión nueva de Mac
 
-Subí una etiqueta `mac-v<versión>` (por ejemplo `mac-v1.2.0`): GitHub Actions compila,
+En **Actions → macOS app (Swift) → Run workflow** escribí la versión en *release* (por ejemplo `1.2.0`), o subí una etiqueta `mac-v1.2.0`: GitHub Actions compila,
 prueba y publica la Release con el `.dmg` y el `.zip`. Si se cargan los secretos
 de Apple Developer (`MACOS_CERTIFICATE_P12`, `MACOS_CERTIFICATE_PASSWORD`,
 `MACOS_SIGN_IDENTITY` y `APPLE_API_KEY_*`), la app sale firmada y notarizada y
