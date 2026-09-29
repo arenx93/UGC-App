@@ -17,3 +17,5 @@ Framecraft-Data/
 windows/build/
 windows/packages/
 windows/dist/
+windows/.tools/
+build-core/

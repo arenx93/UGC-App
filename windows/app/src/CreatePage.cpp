@@ -618,6 +618,10 @@ public:
         ui::place(header, assistantToggle_, 2);
         content.Children().Append(header);
 
+        // "Where am I?" strip: each step with its state; a click scrolls to the section.
+        progress_ = ui::hstack(6);
+        content.Children().Append(progress_);
+
         templates_ = ui::vstack(10);
         content.Children().Append(templates_);
         modes_ = ui::columns({ui::star(), ui::star()}, 12);
@@ -633,6 +637,8 @@ public:
             refreshChecker();
             refreshBar();
             refreshCounter();
+            refreshStep1Header();
+            refreshProgress();
         });
         step1.Children().Append(prompt_);
         tags_ = ui::hstack(6);
@@ -654,17 +660,20 @@ public:
         counter_.VerticalAlignment(mux::VerticalAlignment::Center);
         ui::place(tools, counter_, 4);
         step1.Children().Append(tools);
-        content.Children().Append(ui::card(step1, 20));
+        step1Card_ = ui::card(step1, 20);
+        content.Children().Append(step1Card_);
 
         checker_ = ui::vstack(10);
         checkerCard_ = ui::card(checker_, 18);
         content.Children().Append(checkerCard_);
 
         references_ = ui::vstack(12);
-        content.Children().Append(ui::card(references_, 20));
+        referencesCard_ = ui::card(references_, 20);
+        content.Children().Append(referencesCard_);
 
         settings_ = ui::vstack(14);
-        content.Children().Append(ui::card(settings_, 20));
+        settingsCard_ = ui::card(settings_, 20);
+        content.Children().Append(settingsCard_);
 
         // Floating generate bar.
         muxc::Border bar;
@@ -751,7 +760,10 @@ public:
             refreshChecker();
             refreshSettings();
         }
-        if (all || change == Change::form || change == Change::references) refreshReferences();
+        if (all || change == Change::form || change == Change::references) {
+            refreshReferences();
+            refreshProgress();
+        }
         if (all || change == Change::form || change == Change::jobs || change == Change::account) refreshBar();
         ui::show(assistantHost_, model.showAssistant);
         assistant_.refresh(change);
@@ -875,9 +887,7 @@ private:
     void refreshStep1() {
         auto& model = AppModel::shared();
         bool video = model.mode() == fc::MediaKind::video;
-        ui::setChildren(step1Header_, {ui::stepHeader(1, "Describí tu idea",
-                                                      video ? "Qué pasa segundo a segundo, qué se dice y cómo se graba."
-                                                            : "Qué se ve, dónde y con qué luz. Si no sabés por dónde empezar, pedile ayuda al asistente.")});
+        refreshStep1Header();
         prompt_.PlaceholderText(video ? L"Ej.: 0–5 s: una chica levanta el frasco frente al espejo del baño y dice \"lo uso hace un mes\"…"
                                       : L"Ej.: selfie espontánea de una chica tomando café junto a una ventana con lluvia, luz de tarde, piel real…");
         prompt_.FontFamily(video ? muxm::FontFamily(L"Cascadia Mono, Consolas") : muxm::FontFamily(L"Segoe UI Variable Text"));
@@ -970,6 +980,91 @@ private:
         ui::setChildren(checker_, items);
     }
 
+    bool ideaReady() const {
+        auto const& prompt = AppModel::shared().prompt;
+        return prompt.find_first_not_of(" \t\r\n") != std::string::npos;
+    }
+
+    size_t selectedReferenceCount() const {
+        auto const& m = AppModel::shared();
+        return m.selectedImages.size() + m.selectedVideos.size() + m.selectedAudios.size();
+    }
+
+    void refreshStep1Header() {
+        auto& model = AppModel::shared();
+        bool video = model.mode() == fc::MediaKind::video;
+        bool done = ideaReady() && !model.generateBlocker().has_value();
+        ui::setChildren(step1Header_, {ui::stepHeader(1, "Describí tu idea",
+                                                      video ? "Qué pasa segundo a segundo, qué se dice y cómo se graba."
+                                                            : "Qué se ve, dónde y con qué luz. Si no sabés por dónde empezar, pedile ayuda al asistente.",
+                                                      done)});
+    }
+
+    enum class StepState { done, current, optional };
+
+    mux::UIElement progressChip(int number, std::string const& title, std::string const& detail, StepState state,
+                                mux::UIElement target) {
+        auto row = ui::hstack(8);
+        muxc::Border badge;
+        badge.Width(20);
+        badge.Height(20);
+        badge.CornerRadius(mux::CornerRadiusHelper::FromUniformRadius(10));
+        if (state == StepState::done) badge.Background(muxm::SolidColorBrush(ui::successColor()));
+        else if (state == StepState::current) badge.Background(ui::brandGradient());
+        else badge.Background(ui::resource(L"ControlFillColorSecondaryBrush"));
+        muxc::TextBlock mark;
+        mark.Text(state == StepState::done ? winrt::hstring(L"\u2713") : to_hstring(number));
+        mark.FontSize(11);
+        mark.FontWeight(winrt::Microsoft::UI::Text::FontWeights::Bold());
+        if (state != StepState::optional) mark.Foreground(muxm::SolidColorBrush(ui::rgb(255, 255, 255)));
+        mark.HorizontalAlignment(mux::HorizontalAlignment::Center);
+        mark.VerticalAlignment(mux::VerticalAlignment::Center);
+        badge.Child(mark);
+        badge.VerticalAlignment(mux::VerticalAlignment::Center);
+        row.Children().Append(badge);
+        auto labels = ui::vstack(0);
+        labels.Children().Append(ui::text(title, ui::Text::bodyStrong));
+        auto sub = ui::secondary(detail);
+        if (state == StepState::current) sub.Foreground(muxm::SolidColorBrush(ui::rgb(255, 61, 153)));
+        labels.Children().Append(sub);
+        row.Children().Append(labels);
+        muxc::Button chip;
+        chip.Content(row);
+        chip.Padding(ui::margin(10, 6, 12, 6));
+        chip.Background(state == StepState::current ? ui::resource(L"AccentFillColorTertiaryBrush") : ui::resource(L"SubtleFillColorTransparentBrush"));
+        chip.BorderThickness(mux::ThicknessHelper::FromUniformLength(0));
+        chip.Click([target](auto&&, auto&&) {
+            if (target) target.StartBringIntoView();
+        });
+        ui::tooltip(chip, "Ir a " + title);
+        ui::accessible(chip, "Paso " + std::to_string(number) + ", " + title + ": " + detail);
+        return chip;
+    }
+
+    void refreshProgress() {
+        if (!progress_) return;
+        auto& model = AppModel::shared();
+        bool video = model.mode() == fc::MediaKind::video;
+        size_t refs = selectedReferenceCount();
+        bool idea = ideaReady();
+        auto arrow = [] {
+            auto glyph = ui::secondary("\u203A", ui::Text::subtitle);
+            glyph.VerticalAlignment(mux::VerticalAlignment::Center);
+            return glyph;
+        };
+        std::vector<mux::UIElement> items;
+        items.push_back(progressChip(1, video ? "Video" : "Imagen", "Tipo", StepState::done, modes_));
+        items.push_back(arrow());
+        items.push_back(progressChip(2, "Tu idea", idea ? std::to_string(model.prompt.size()) + " caracteres" : "Falta escribirla",
+                                     idea ? StepState::done : StepState::current, step1Card_));
+        items.push_back(arrow());
+        items.push_back(progressChip(3, "Referencias", refs == 0 ? "Opcional" : std::to_string(refs) + (refs == 1 ? " elegida" : " elegidas"),
+                                     refs > 0 ? StepState::done : StepState::optional, referencesCard_));
+        items.push_back(arrow());
+        items.push_back(progressChip(4, "Ajustes", model.settingsSummary(), StepState::done, settingsCard_));
+        ui::setChildren(progress_, items);
+    }
+
     void refreshReferences() {
         auto& model = AppModel::shared();
         bool video = model.mode() == fc::MediaKind::video;
@@ -977,7 +1072,8 @@ private:
         auto header = ui::columns({ui::star(), ui::autoLength()});
         ui::place(header, ui::stepHeader(2, "Referencias (opcional)",
                                          video ? "Fotos, videos (≤30 s) o audios (≤30 s). El orden define @Image1, @Image2…"
-                                               : "Hasta 4 fotos: el modelo respeta producto, persona o estilo."),
+                                               : "Hasta 4 fotos: el modelo respeta producto, persona o estilo.",
+                                         selectedReferenceCount() > 0),
                   0);
         auto add = ui::button(model.isImporting ? "Importando…" : "Agregar archivos", L"", [] { AppModel::shared().pickAndImport(); });
         add.IsEnabled(!model.isImporting);
@@ -1227,7 +1323,18 @@ private:
     void refreshBar() {
         auto& model = AppModel::shared();
         summary_.Text(hs(model.settingsSummary()));
-        hint_.Text(model.hasKieKey ? L"Usa tus créditos de KIE · Ctrl+Enter para generar" : L"Conectá tu clave de KIE para generar");
+        // Say what is missing before generating, or that everything is ready.
+        auto missing = model.generateBlocker();
+        if (!model.hasKieKey) {
+            hint_.Text(L"\u26A0 Conectá tu clave de KIE para generar");
+            hint_.Foreground(muxm::SolidColorBrush(ui::rgb(230, 126, 34)));
+        } else if (missing && !model.isGenerating) {
+            hint_.Text(hs("\u2191 " + *missing));
+            hint_.Foreground(muxm::SolidColorBrush(ui::rgb(230, 126, 34)));
+        } else {
+            hint_.Text(L"\u2713 Todo listo · usa tus créditos de KIE · Ctrl+Enter");
+            hint_.Foreground(muxm::SolidColorBrush(ui::successColor()));
+        }
         auto active = model.activeJobs();
         ui::show(active_, !active.empty());
         ui::setLabel(active_, L"", std::to_string(active.size()) + " en curso");
@@ -1255,6 +1362,8 @@ private:
     muxc::ScrollViewer scroll_{nullptr};
     muxc::StackPanel templates_{nullptr}, step1Header_{nullptr}, tags_{nullptr}, checker_{nullptr}, references_{nullptr}, settings_{nullptr};
     muxc::Grid modes_{nullptr};
+    muxc::StackPanel progress_{nullptr};
+    mux::UIElement step1Card_{nullptr}, referencesCard_{nullptr}, settingsCard_{nullptr};
     muxc::Border checkerCard_{nullptr}, assistantHost_{nullptr};
     muxc::TextBox prompt_{nullptr};
     muxc::TextBlock counter_{nullptr}, summary_{nullptr}, hint_{nullptr}, durationLabel_{nullptr};

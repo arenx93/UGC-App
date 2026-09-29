@@ -41,7 +41,10 @@ mux::Thickness uniform(double value);
 /// Fluent card: layer fill, subtle stroke, rounded corners.
 muxc::Border card(mux::UIElement const& content, double padding = 18);
 /// Numbered step header ("1 · Describí tu idea").
-mux::UIElement stepHeader(int number, std::string const& title, std::string const& subtitle);
+/// Numbered step title; `done` shows a green check instead of the number.
+mux::UIElement stepHeader(int number, std::string const& title, std::string const& subtitle, bool done = false);
+/// Green used for "done" states.
+winrt::Windows::UI::Color successColor();
 /// "@Image1"-style pill with the brand gradient.
 muxc::Border pill(std::string const& value, bool gradient = true);
 /// Rounded square with the brand gradient and a white glyph.

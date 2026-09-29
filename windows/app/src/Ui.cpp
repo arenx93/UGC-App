@@ -158,15 +158,18 @@ muxc::Border card(mux::UIElement const& content, double padding) {
     return border;
 }
 
-mux::UIElement stepHeader(int number, std::string const& title, std::string const& subtitle) {
+winrt::Windows::UI::Color successColor() { return rgb(51, 189, 120); }
+
+mux::UIElement stepHeader(int number, std::string const& title, std::string const& subtitle, bool done) {
     auto row = hstack(12);
     muxc::Border badge;
     badge.Width(26);
     badge.Height(26);
     badge.CornerRadius(mux::CornerRadiusHelper::FromUniformRadius(13));
-    badge.Background(brandGradient());
+    if (done) badge.Background(muxm::SolidColorBrush(successColor()));
+    else badge.Background(brandGradient());
     muxc::TextBlock digit;
-    digit.Text(to_hstring(number));
+    digit.Text(done ? winrt::hstring(L"\u2713") : to_hstring(number));
     digit.FontWeight(winrt::Microsoft::UI::Text::FontWeights::Bold());
     digit.Foreground(muxm::SolidColorBrush(rgb(255, 255, 255)));
     digit.HorizontalAlignment(mux::HorizontalAlignment::Center);
@@ -179,7 +182,7 @@ mux::UIElement stepHeader(int number, std::string const& title, std::string cons
     if (!subtitle.empty()) labels.Children().Append(secondary(subtitle, Text::body));
     row.Children().Append(badge);
     row.Children().Append(labels);
-    accessible(row, "Paso " + std::to_string(number) + ": " + title);
+    accessible(row, "Paso " + std::to_string(number) + ": " + title + (done ? ", listo" : ""));
     return row;
 }
 

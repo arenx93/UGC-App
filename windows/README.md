@@ -79,6 +79,16 @@ windows/
 
 Requisitos: Visual Studio 2022 o posterior con el workload de C++ de escritorio.
 
+La forma más simple, con un solo comando (tests del núcleo, NuGet, app, Codex y runtime):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File windows\scripts\build.ps1 -Run       # compila y abre
+powershell -ExecutionPolicy Bypass -File windows\scripts\build.ps1 -Package   # + .zip e instalador
+```
+
+Si compilás con Codex, `windows/AGENTS.md` le explica el proyecto y cómo resolver errores.
+Paso a paso, a mano:
+
 ```powershell
 # Núcleo y tests (cualquier sistema con CMake)
 cmake -S windows/core -B build-core
