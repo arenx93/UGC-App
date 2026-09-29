@@ -8,23 +8,28 @@ struct CreateView: View {
 
     var body: some View {
         @Bindable var model = model
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                header
-                TemplateGallery()
-                ModePicker()
-                PromptSection()
-                if model.mode == .video, let report = model.lintReport {
-                    CheckerCard(report: report)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    header
+                    ProgressGuide { anchor in
+                        withAnimation(.snappy) { proxy.scrollTo(anchor, anchor: .top) }
+                    }
+                    TemplateGallery()
+                    ModePicker().id(CreateAnchor.mode)
+                    PromptSection().id(CreateAnchor.prompt)
+                    if model.mode == .video, let report = model.lintReport {
+                        CheckerCard(report: report)
+                    }
+                    ReferencesSection().id(CreateAnchor.references)
+                    SettingsSection().id(CreateAnchor.settings)
                 }
-                ReferencesSection()
-                SettingsSection()
+                .padding(.horizontal, 28)
+                .padding(.top, 24)
+                .padding(.bottom, 110)
+                .frame(maxWidth: 880)
+                .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal, 28)
-            .padding(.top, 24)
-            .padding(.bottom, 110)
-            .frame(maxWidth: 880)
-            .frame(maxWidth: .infinity)
         }
         .background(alignment: .top) { AuraBackground().frame(height: 420).ignoresSafeArea() }
         .overlay(alignment: .bottom) { GenerateBar() }
@@ -81,6 +86,101 @@ struct CreateView: View {
     }
 }
 
+// MARK: - Progress guide
+
+enum CreateAnchor: Hashable { case mode, prompt, references, settings }
+
+/// "Where am I?" strip: the four steps with their state. Each chip jumps to its section.
+struct ProgressGuide: View {
+    @Environment(AppModel.self) private var model
+    let scrollTo: (CreateAnchor) -> Void
+
+    var body: some View {
+        let refs = model.selectedImages.count + model.selectedVideos.count + model.selectedAudios.count
+        let ideaReady = !model.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        HStack(spacing: 6) {
+            chip(1, model.mode == .image ? "Imagen" : "Video", detail: "Tipo", state: .done, anchor: .mode)
+            arrow
+            chip(2, "Tu idea", detail: ideaReady ? "\(model.prompt.count.formatted()) caracteres" : "Falta escribirla",
+                 state: ideaReady ? .done : .current, anchor: .prompt)
+            arrow
+            chip(3, "Referencias", detail: refs == 0 ? "Opcional" : "\(refs) elegida\(refs == 1 ? "" : "s")",
+                 state: refs > 0 ? .done : .optional, anchor: .references)
+            arrow
+            chip(4, "Ajustes", detail: model.mode == .image ? "\(model.imageResolution) · \(model.imageAspect)" : "\(model.videoDuration) s · \(model.videoAspect)",
+                 state: .done, anchor: .settings)
+            arrow
+            readyChip
+        }
+        .padding(8)
+        .glassSurface(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Progreso")
+    }
+
+    private enum StepState { case done, current, optional }
+
+    private var arrow: some View {
+        Image(systemName: "chevron.right")
+            .font(.caption2.weight(.bold))
+            .foregroundStyle(.tertiary)
+            .accessibilityHidden(true)
+    }
+
+    private func chip(_ number: Int, _ title: String, detail: String, state: StepState, anchor: CreateAnchor) -> some View {
+        Button {
+            scrollTo(anchor)
+        } label: {
+            HStack(spacing: 7) {
+                ZStack {
+                    switch state {
+                    case .done: Image(systemName: "checkmark").font(.system(size: 9, weight: .heavy))
+                    case .current, .optional: Text("\(number)").font(.system(size: 10, weight: .heavy, design: .rounded))
+                    }
+                }
+                .foregroundStyle(state == .optional ? AnyShapeStyle(Color.secondary) : AnyShapeStyle(Color.white))
+                .frame(width: 18, height: 18)
+                .background(state == .done ? AnyShapeStyle(Theme.success)
+                            : state == .current ? AnyShapeStyle(Theme.gradient) : AnyShapeStyle(Color.primary.opacity(0.08)),
+                            in: Circle())
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(title).font(.caption.weight(.semibold)).lineLimit(1)
+                    Text(detail).font(.caption2).foregroundStyle(state == .current ? AnyShapeStyle(Theme.pink) : AnyShapeStyle(Color.secondary)).lineLimit(1)
+                }
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(state == .current ? AnyShapeStyle(Theme.softGradient) : AnyShapeStyle(Color.clear),
+                        in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+            .contentShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .hoverLift(1.03)
+        .help("Ir a \(title.lowercased())")
+        .accessibilityLabel("Paso \(number), \(title): \(detail)")
+    }
+
+    private var readyChip: some View {
+        let ready = model.generateBlocker == nil
+        return Button {
+            Task { await model.generate() }
+        } label: {
+            Label(ready ? "Listo" : "Generar", systemImage: ready ? "sparkles" : "lock.fill")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(ready ? AnyShapeStyle(Color.white) : AnyShapeStyle(Color.secondary))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(ready ? AnyShapeStyle(Theme.gradient) : AnyShapeStyle(Color.primary.opacity(0.06)),
+                            in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .disabled(!ready)
+        .hoverLift(1.04)
+        .help(model.generateBlocker ?? "Todo listo: generar (⌘↩)")
+    }
+}
+
 // MARK: - Mode
 
 struct ModePicker: View {
@@ -124,6 +224,7 @@ struct ModePicker: View {
             .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
         .buttonStyle(.plain)
+        .hoverLift()
         .accessibilityLabel("Crear \(title.lowercased()): \(subtitle)")
         .accessibilityAddTraits(selected ? [.isSelected] : [])
         .keyboardShortcut(KeyEquivalent(kind == .image ? "1" : "2"), modifiers: [.command, .option])
@@ -144,7 +245,8 @@ struct PromptSection: View {
                     number: 1, title: "Describí tu idea",
                     subtitle: model.mode == .image
                         ? "Quién aparece, dónde, con qué luz y en qué estilo."
-                        : "Qué pasa segundo a segundo, qué se dice y cómo se graba."
+                        : "Qué pasa segundo a segundo, qué se dice y cómo se graba.",
+                    done: !model.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && model.prompt.count <= limit
                 )
                 PromptEditor(
                     text: $model.prompt,
@@ -369,7 +471,8 @@ struct ReferencesSection: View {
                         .buttonStyle(.bordered)
                         .keyboardShortcut("o")
                         .help("Elegir imágenes, videos o audios (⌘O). También podés arrastrarlos a la ventana.")
-                    )
+                    ),
+                    done: !(model.selectedImages.isEmpty && model.selectedVideos.isEmpty && model.selectedAudios.isEmpty)
                 )
                 if model.references.isEmpty {
                     DropHint { importing = true }
@@ -731,9 +834,7 @@ struct GenerateBar: View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 3) {
                 Text(model.settingsSummary).font(.callout.weight(.semibold)).lineLimit(1)
-                Text(model.hasKieKey ? "Usa tus créditos de KIE · ⌘↩ para generar" : "Conectá tu clave de KIE para generar")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                statusLine
             }
             Spacer()
             if !model.activeJobs.isEmpty {
@@ -771,6 +872,26 @@ struct GenerateBar: View {
         .padding(.horizontal, 20)
         .padding(.bottom, 14)
         .frame(maxWidth: 920)
+    }
+
+    /// Says what is missing before generating, or that everything is ready.
+    @ViewBuilder
+    private var statusLine: some View {
+        if !model.hasKieKey {
+            Label("Conectá tu clave de KIE para generar", systemImage: "key.fill")
+                .font(.caption)
+                .foregroundStyle(.orange)
+        } else if let blocker = model.generateBlocker, !model.isGenerating {
+            Label(blocker, systemImage: "arrow.up.circle")
+                .font(.caption)
+                .foregroundStyle(.orange)
+                .lineLimit(1)
+        } else {
+            Label("Todo listo · usa tus créditos de KIE · ⌘↩", systemImage: "checkmark.circle.fill")
+                .font(.caption)
+                .foregroundStyle(Theme.success)
+                .lineLimit(1)
+        }
     }
 
     private var buttonTitle: String {

@@ -39,15 +39,27 @@ struct StepHeader: View {
     let title: String
     var subtitle: String?
     var trailing: AnyView?
+    /// Shows a green check instead of the number once the step is complete.
+    var done: Bool = false
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Text("\(number)")
-                .font(.system(size: 12, weight: .heavy, design: .rounded))
-                .foregroundStyle(.white)
-                .frame(width: 22, height: 22)
-                .background(Theme.gradient, in: Circle())
-                .accessibilityHidden(true)
+            ZStack {
+                if done {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 11, weight: .heavy))
+                        .transition(.scale.combined(with: .opacity))
+                } else {
+                    Text("\(number)")
+                        .font(.system(size: 12, weight: .heavy, design: .rounded))
+                        .transition(.scale.combined(with: .opacity))
+                }
+            }
+            .foregroundStyle(.white)
+            .frame(width: 22, height: 22)
+            .background(done ? AnyShapeStyle(Theme.success) : AnyShapeStyle(Theme.gradient), in: Circle())
+            .animation(.spring(duration: 0.35, bounce: 0.4), value: done)
+            .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.title3.weight(.semibold))
                 if let subtitle {
@@ -58,7 +70,7 @@ struct StepHeader: View {
             trailing
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Paso \(number): \(title)")
+        .accessibilityLabel("Paso \(number): \(title)\(done ? ", listo" : "")")
     }
 }
 
@@ -481,4 +493,22 @@ struct ScreenHeader: View {
             }
         }
     }
+}
+
+/// Subtle lift on hover: the element grows a little and casts a stronger shadow, so it reads as clickable.
+struct HoverLift: ViewModifier {
+    var scale: CGFloat = 1.015
+    @State private var hovering = false
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(hovering ? scale : 1)
+            .shadow(color: .black.opacity(hovering ? 0.12 : 0), radius: hovering ? 12 : 0, y: hovering ? 6 : 0)
+            .animation(.snappy(duration: 0.2), value: hovering)
+            .onHover { hovering = $0 }
+    }
+}
+
+extension View {
+    func hoverLift(_ scale: CGFloat = 1.015) -> some View { modifier(HoverLift(scale: scale)) }
 }
