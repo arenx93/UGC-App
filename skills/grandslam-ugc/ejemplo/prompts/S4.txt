@@ -1,0 +1,39 @@
+FORMAT: Vertical 9:16 smartphone video, 30 seconds. One continuous handheld phone recording of a real moment, filmed by someone who saw something happening and raised their phone. This is real footage, not an advertisement and not a production imitating UGC.
+
+FIRST FRAME — MANDATORY: @Image3 IS the first frame of this video. Frame 1 must be @Image3 itself, pixel for pixel: identical framing, composition, camera position and lens, lighting and color, subject positions, background. Do not reinterpret it, do not recompose it, do not change the distance or the angle. The video begins ON that image and all motion grows out of it. Treat @Image3 as the locked starting state of the scene, not as a style reference.
+
+VOICE DIRECTION: Text in parentheses before a spoken line is acting direction for delivery only — emotion, tone, pace, breath and volume. It is NEVER spoken aloud. Only the words inside the quotation marks are ever said.
+
+PACING — CRITICAL: This clip is DENSE with dialogue. Someone is speaking for almost the entire clip. Characters answer immediately, often overlapping the last word of the previous speaker. The gap between one line ending and the next beginning is about half a second — a breath, never a hold. There is NO moment in this clip where nobody speaks for longer than one second. Do not stretch the delivery to fill time and do not insert reflective silences.
+
+POV: The camera IS P2's phone. P2 is never seen except his hands and forearms, which enter the frame naturally when he hands something over, points or gestures. P2's voice is louder and closer than everyone else's because the phone and its microphone are in his hand.
+
+CHARACTERS AND VOICES:
+P1 — 74-year-old white American woman from @Image1, small and slightly hunched, short curly grey hair, thin gold-rimmed glasses, sun-weathered pink skin with freckles and deep smile lines. Wearing a faded navy-blue polo shirt, a lime-green reflective delivery vest, light-wash jeans, white velcro sneakers and a black canvas fanny pack across her chest. A cheerful, stubborn woman who keeps working and makes jokes so nobody pities her. P1 looks exactly like @Image1 for the entire clip.
+P1's voice: match @Audio1 for timbre, age, accent and pitch only. Do not reproduce any words from @Audio1 and do not copy its emotion — the emotion of every line is set by the direction in parentheses.
+P2 — the person filming, a man in his thirties with light-brown skin, visible only as hands: a black silicone watch on the left wrist, sleeves of a heather-grey hoodie pushed up. Voice: match @Audio2 for timbre, age, accent and pitch only. Do not reproduce any words from @Audio2 and do not copy its emotion. P2 sounds warm, friendly and fully engaged, with real life and affection in his voice and an audible smile behind most of what he says. He must NEVER sound bored, tired, monotone, detached or like he is reading.
+P3 — P1's 7-year-old grandson, thin, messy light-brown hair, oversized red T-shirt, sitting in the back seat of her car with the door open, holding a small juice box. P3 never speaks.
+
+LOCATION: A supermarket parking lot at 1 p.m. in the desert Southwest, matching @Image2: wide grey asphalt with faded white lines, rows of ordinary parked cars, a low beige supermarket building with cart corrals, a few young palm trees. P1's car is a silver 2009 Toyota Corolla with a dented rear bumper, trunk open, full of brown paper grocery bags. Store signs are out of frame. The location matches @Image2.
+
+CAMERA: Rear phone camera on the 0.5x ultra-wide lens (about 13–16 mm equivalent) with visible barrel distortion at the edges, held in one hand at chest height, 0.6 to 1.5 m from P1, so her face and upper body are large in frame and the background falls away. The arm breathes and trembles slightly. The operator reframes half a second LATE, always after the action, never anticipating it. Small pans of a few degrees follow the bodies. The horizon drifts and is not corrected. Natural motion blur on fast movements. Deep depth of field: the background is fully readable. At 18 s P1 unzips the fanny pack and takes out her phone; the operator steps closer and the frame drops to her hands. From 22 s the camera is 20–30 cm from her phone screen and the focus hunts for a moment before it locks.
+
+IMAGE: Practical light only: hard midday sun from almost straight above, a bright, almost blown-out sky, short hard shadows under the cars, heat shimmer over the asphalt. Mixed color temperatures are left uncorrected. Auto-exposure visibly adjusts when the phone moves from P1's face in the sun to the bright phone screen. Medium contrast, moderate saturation, natural smartphone color science, realistic skin texture with pores, wrinkles and sweat, no color grading.
+
+AUDIO: Diegetic sound only, recorded by the phone microphone: dialogue with natural outdoor distance, plus wind hitting the mic, paper bags crinkling, a distant cart rattling across the lot, far traffic. All dialogue is in English. No music, no score, no added sound effects.
+
+ACTING: Nobody poses. Nobody looks into the camera seeking approval. Reactions have latency: P1 sees → does not fully understand → checks with the other person → only then reacts. Emotion lives in micro-expressions — eyes, jaw, breathing — not in big gestures or pauses.
+
+ACTION:
+0–4 s — P1 is still wiping her eyes under her glasses with the back of her wrist. P2 (softly at first, then a little brighter, smiling): "There's one more thing I want to do for you."
+4–6 s — P1 (a wet laugh, waving her hand): "Honey, you've done enough."
+6–9 s — P2 nods at the silver Corolla with the dented bumper; the camera pans to it late and back. P2 (light, curious): "Is this your Corolla? What year is she?"
+9–12 s — P1 pats the trunk lid. P1 (fond, joking, a small laugh at the end): "Two thousand nine. She's older than him."
+12–15 s — P2 (casual, then direct): "What do you pay for insurance right now?"
+15–18 s — P1's face tightens. P1 (flat, tired, shaking her head once): "Two-forty a month. It keeps going up."
+18–22 s — P1 takes out her phone. P2 (leaning in, lowering his voice, smiling): "Pull out your phone. Select your car and the year."
+22–26 s — Extreme close-up: P1 holds her phone at chest height; the camera is 20–30 cm from the screen. P2's index finger enters and taps and scrolls the screen. The phone screen shows @Video1. Use @Video1 ONLY as the content of that screen, inset in the phone, following the phone's angle, with sun glare, a faint reflection of P1's face on the glass and focus that hunts for a moment. Do NOT let @Video1's style, color grading, framing, camera motion, pacing or subject matter influence the rest of the shot in any way. Any audio belonging to @Video1 is NOT heard — the phone screen plays silently. P2 (explaining, easy, pointing): "It's going through everything you overpaid since you bought her."
+26–28 s — P2's finger stops on a number; the camera rises late to P1's face. P2 (slow, letting it land): "Look. Sixteen hundred dollars back."
+28–30 s — P1 freezes, then looks up at P2 with her mouth open. P1 (a disbelieving laugh first, voice jumping up): "What? Shut up!"
+
+RESTRICTIONS: No on-screen text, no captions, no subtitles, no titles, no logos, no watermarks, no readable store signs. No music. No cuts, no transitions, one continuous take. No cinematic look, no shallow depth of field, no bokeh, no gimbal, no steadicam, no dolly, no slider, no crane, no drone, no orbit, no dramatic push-in, no rack focus, no teal and orange, no film grain, no LUT, no halation, no anamorphic flare, no beauty filter, no professional color grade, no studio lighting, no rim light, no slow motion. Faces and wardrobe stay identical for the whole clip. Hands have five fingers and hold objects naturally. Nobody says any word that is not inside quotation marks.

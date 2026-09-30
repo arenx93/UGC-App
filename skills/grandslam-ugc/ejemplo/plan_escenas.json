@@ -1,0 +1,19 @@
+{
+  "proyecto": "grandma-delivery",
+  "resolution": "480p",
+  "aspect_ratio": "9:16",
+  "refs": {
+    "P1": "refs/P1_triptico.png",
+    "LUGAR": "refs/parking_sheet.png",
+    "PANTALLA": "refs/pantalla_10s.mp4",
+    "VOZ_P1": "refs/voz_P1.mp3",
+    "VOZ_P2": "refs/voz_P2.mp3"
+  },
+  "escenas": [
+    {"id": "S1", "prompt": "prompts/S1.txt", "duration": 15, "images": ["P1", "LUGAR"], "audios": ["VOZ_P1", "VOZ_P2"]},
+    {"id": "S2", "prompt": "prompts/S2.txt", "duration": 25, "continua": "S1", "images": ["P1", "LUGAR"], "audios": ["VOZ_P1", "VOZ_P2"]},
+    {"id": "S3", "prompt": "prompts/S3.txt", "duration": 25, "continua": "S2", "images": ["P1", "LUGAR"], "audios": ["VOZ_P1", "VOZ_P2"]},
+    {"id": "S4", "prompt": "prompts/S4.txt", "duration": 30, "continua": "S3", "images": ["P1", "LUGAR"], "videos": ["PANTALLA"], "audios": ["VOZ_P1", "VOZ_P2"]},
+    {"id": "S5", "prompt": "prompts/S5.txt", "duration": 10, "continua": "S4", "images": ["P1", "LUGAR"], "audios": ["VOZ_P1", "VOZ_P2"], "return_last_frame": false}
+  ]
+}

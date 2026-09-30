@@ -1,0 +1,57 @@
+{
+  "_nota": "Frases literales de los 9 grand slams (con sus errores de tipeo). Usar tal cual. 'veces' = en cuántos ganadores aparece.",
+  "hook": [
+    {"texto": "73YO GOT STRANDED\nWITH HIS 2 GRANDKIDS\nSO I DID THIS FOR HIM", "emojis": "❤️🥺", "amarilla": [2], "estilo": "contorno"},
+    {"texto": "THIS SINGLE DAD SKIPPED\nMEALS FOR HIS SON\nSO I DID THIS FOR HIM", "emojis": "🥺❤️", "estilo": "contorno"},
+    {"texto": "71 Y/O STROKE SURVIVOR STILL\nDOORDASHING EVERYDAY\nUNTIL I DID THIS...", "emojis": "❤️‍🩹🥺", "amarilla": [2], "estilo": "contorno"},
+    {"texto": "WIDOWED DAD GOES VIRAL\nCOLLECTING CANS WITH HIS KIDS", "emojis": "❤️🥺", "estilo": "contorno"},
+    {"texto": "WIDOWED MOM RECEIVES THE\nPRESENT SHE DESERVES", "emojis": "🥺❤️", "estilo": "contorno"},
+    {"texto": "MILLIONAIRE GAVE GRANDPA A FRESH START 🥺❤️", "estilo": "caja_negra"},
+    {"texto": "Millionaire teaches valuable lesson...", "estilo": "caja_negra"}
+  ],
+  "encuentro": [
+    {"texto": "Watch this...", "veces": 4},
+    {"texto": "Watch his reaction...", "veces": 1},
+    {"texto": "she's not expecting this...", "veces": 1},
+    {"texto": "There's really no catch!!", "veces": 1}
+  ],
+  "revelacion": [
+    {"texto": "This broke my heart", "veces": 4},
+    {"texto": "This broke my heart...", "veces": 2},
+    {"texto": "This left me speechless...", "veces": 1},
+    {"texto": "i never expected him to say this... 💔", "veces": 1, "estilo": "caja_blanca"},
+    {"texto": "This blew my mind...", "veces": 1}
+  ],
+  "contexto": [
+    {"texto": "He really wanted to spend more time with his grandkids 💔🥺", "estilo": "caja_blanca"},
+    {"texto": "He does everything he can for his kids💔", "estilo": "caja_negra"},
+    {"texto": "His story is truly inspiring...❤️"},
+    {"texto": "He basically works for them, but i had to do something", "estilo": "caja_blanca"},
+    {"texto": "\"[cita textual del sujeto]\" 🥺", "nota": "sacarla del .srt, ej. \"I'm trying to get back on my feet\" 🥺"}
+  ],
+  "gesto": [
+    {"texto": "Wait fot it...", "nota": "typo real, no corregir"},
+    {"texto": "She kept her word..."},
+    {"texto": "So I'm gonna keep mine..."},
+    {"texto": "his reaction.. 🥺", "estilo": "caja_blanca"},
+    {"texto": "I gave him $500 so he could spend more time with them.. 💚", "estilo": "caja_blanca", "nota": "ideal sobre el abrazo que tapa el lente"}
+  ],
+  "pivot": [
+    {"texto": "I have a big surprise for him", "veces": 3},
+    {"texto": "But there is one last surprise...", "veces": 1},
+    {"texto": "I decided to do one last thing...", "veces": 1},
+    {"texto": "He didn't expect this...", "veces": 1},
+    {"texto": "I never expected this... Watch", "estilo": "caja_negra"},
+    {"texto": "I'm sure this will change his life", "veces": 1},
+    {"texto": "he just put basic information 🚗", "estilo": "caja_blanca"}
+  ],
+  "cta": [
+    {"texto": "If your bill is over $80 you can do this too", "veces": 4},
+    {"texto": "Give it a try if your bill is over $80/mo", "veces": 1},
+    {"texto": "Link below try this yourself!!", "estilo": "caja_negra"}
+  ],
+  "placa": [
+    {"texto": "IF YOU PAY MORE THAN $80MO CHECK BELOW ❤️🥺", "dur": 1.5}
+  ],
+  "emojis": {"💔": "duele", "🥺": "conmueve", "❤️": "cariño", "💚": "el narrador actúa", "🚗": "producto/auto", "👀": "se viene algo"}
+}

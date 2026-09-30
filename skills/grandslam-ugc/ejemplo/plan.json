@@ -1,0 +1,35 @@
+{
+  "clips": [
+    {"file": "clips/S1.mp4", "srt": "transcripciones/S1.srt", "in": 0, "out": 13.5},
+    {"file": "clips/S2.mp4", "srt": "transcripciones/S2.srt",
+     "tramos": [[0.4, 7.0], [7.0, 11.2, 1.15], [11.2, 19.0], [19.0, 24.9, 1.18]]},
+    {"file": "clips/S3.mp4", "srt": "transcripciones/S3.srt",
+     "tramos": [[0.3, 6.0], [6.0, 12.0, 1.12], [12.0, 18.0], [18.0, 21.0, 1.15], [21.0, 24.9, 1.2]]},
+    {"file": "clips/S4.mp4", "srt": "transcripciones/S4.srt",
+     "tramos": [[0.3, 6.0], [6.0, 12.0, 1.15], [12.0, 18.0], [18.0, 26.0], [26.0, 29.9, 1.15]]},
+    {"file": "clips/S5.mp4", "srt": "transcripciones/S5.srt", "in": 0, "out": 9.8}
+  ],
+  "recortar_silencios": true,
+  "silencio_db": -30,
+  "silencio_min": 0.3,
+  "placa_cta": {"text": "If you pay more than $80mo check below ❤️🥺", "dur": 1.5},
+  "cola": {"file": "cola/cola_52.90.mp4", "in": 0, "out": 20},
+  "voz_en_off": [
+    {"file": "vo/testimonio_52.90.mp3", "start": "cola", "duck": 0.0}
+  ],
+  "base": "base.mp4",
+
+  "hook": {"text": "74YO STILL DELIVERING GROCERIES\nTO RAISE HER GRANDSON\nSO I DID THIS FOR HER",
+           "amarilla": [2], "emojis": "❤️🥺", "start": 0, "end": 13, "y": 0.28, "estilo": "contorno"},
+  "comentarios": [
+    {"text": "Watch this...", "start": 13, "end": 21},
+    {"text": "This broke my heart", "start": 21, "end": 31},
+    {"text": "\"The car needs gas, he needs shoes\" 🥺", "start": 31, "end": 38, "estilo": "caja_blanca", "y": 0.45},
+    {"text": "I gave her $500 for today's orders.. 💚", "start": 38, "end": 44, "estilo": "caja_blanca", "y": 0.45},
+    {"text": "I have a big surprise for her", "start": 47, "end": 57},
+    {"text": "If your bill is over $80 you can do this too", "start": 72, "end": 79, "estilo": "caja_negra"}
+  ],
+  "color_subs": "blanco",
+  "fuentes": {"hook": "fuentes/Anton-Regular.ttf", "texto": "fuentes/Montserrat-SemiBold.ttf"},
+  "salida": "final.mp4"
+}

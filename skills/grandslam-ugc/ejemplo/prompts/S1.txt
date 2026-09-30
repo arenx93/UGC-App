@@ -1,0 +1,31 @@
+FORMAT: Vertical 9:16 smartphone video, 15 seconds. One continuous handheld phone recording of a real moment, filmed by someone who saw something happening and raised their phone. This is real footage, not an advertisement and not a production imitating UGC.
+
+VOICE DIRECTION: Text in parentheses before a spoken line is acting direction for delivery only — emotion, tone, pace, breath and volume. It is NEVER spoken aloud. Only the words inside the quotation marks are ever said.
+
+PACING: P2 narrates in a low, close, half-whispered voice for almost the entire clip, as someone who does not want to be noticed. The gap between his sentences is a breath, never a hold. P1 is too far away to be heard; only ambience reaches the mic from her side.
+
+POV: The camera IS P2's phone. P2 is never seen except his hands and forearms, which enter the frame naturally when he opens the car door or gestures. P2's voice is louder and closer than everything else because the phone and its microphone are in his hand.
+
+CHARACTERS AND VOICES:
+P1 — 74-year-old white American woman from @Image1, small and slightly hunched, short curly grey hair, thin gold-rimmed glasses, sun-weathered pink skin with freckles and deep smile lines. Wearing a faded navy-blue polo shirt, a lime-green reflective delivery vest, light-wash jeans, white velcro sneakers and a black canvas fanny pack across her chest. A cheerful, stubborn woman who keeps working and makes jokes so nobody pities her. P1 looks exactly like @Image1 for the entire clip.
+P1's voice: match @Audio1 for timbre, age, accent and pitch only. Do not reproduce any words from @Audio1 and do not copy its emotion — the emotion of every line is set by the direction in parentheses.
+P2 — the person filming, a man in his thirties with light-brown skin, visible only as hands: a black silicone watch on the left wrist, sleeves of a heather-grey hoodie pushed up. Voice: match @Audio2 for timbre, age, accent and pitch only. Do not reproduce any words from @Audio2 and do not copy its emotion. P2 sounds warm, friendly and fully engaged, with real life and affection in his voice and an audible smile behind most of what he says. He must NEVER sound bored, tired, monotone, detached or like he is reading.
+P3 — P1's 7-year-old grandson, thin, messy light-brown hair, oversized red T-shirt, sitting in the back seat of her car with the door open, holding a small juice box. P3 never speaks in this clip.
+
+LOCATION: A supermarket parking lot at 1 p.m. in the desert Southwest, matching @Image2: wide grey asphalt with faded white lines, rows of ordinary parked cars, a low beige supermarket building with cart corrals, a few young palm trees. P1's car is a silver 2009 Toyota Corolla with a dented rear bumper, trunk open, full of brown paper grocery bags. Store signs are out of frame. The location matches @Image2.
+
+CAMERA: P2 is filming secretly from inside his parked car, 20 m away, through the windshield: the dark hood and the edge of the dashboard are visible at the bottom of the frame and the glass adds a faint reflection. The phone is on 2x digital zoom, so the image is slightly soft and noisy. P1 is small in frame and never perfectly centered. The phone rests on his hand almost still, with tiny drifts. At 11 s P2 opens his door: the frame swings down, catches the door edge and his sneaker hitting the asphalt, the zoom drops to 1x and the frame bounces with each step as he starts walking toward P1.
+
+IMAGE: Practical light only: hard midday sun from almost straight above, a bright, almost blown-out sky, short hard shadows under the cars, heat shimmer over the asphalt. The windshield slightly lowers contrast. Auto-exposure visibly jumps brighter when the door opens at 11 s. Medium contrast, moderate saturation, natural smartphone color science, realistic skin texture, no color grading.
+
+AUDIO: Diegetic sound only, recorded by the phone microphone inside the car: P2's close narration, the car's air conditioning hum, a distant cart rattling across the lot, a car door slamming far away; at 11 s the door opens and the outdoor heat, wind and traffic come in. All dialogue is in English. No music, no score, no added sound effects.
+
+ACTING: Nobody poses. Nobody looks into the camera. P1 does not know she is being filmed: she lifts heavy bags one by one, stops to press a hand on her lower back, wipes her forehead with her wrist and says something to the boy with a tired smile.
+
+ACTION:
+0–4 s — P1 lifts two heavy paper bags from a cart and swings them into the trunk; she stops and presses a hand on her lower back. P2 (low, close to the mic, disbelieving, almost to himself): "Man, it is a hundred and five degrees out here."
+4–8 s — P1 wipes her forehead with her wrist and checks a list on her phone. P2 (quieter, slower, the breath catching on the word grandson): "Look at her. Seventy-something, loading groceries with her grandson in the back."
+8–11 s — P3 holds the juice box out to P1 through the open door; she takes a sip and hands it back. P2 (a small sigh, deciding): "She's been doing this since I got here."
+11–15 s — P2 opens his door; the frame swings down and then up as he walks. P2 (a firmer whisper, already moving, a little out of breath): "Alright, I gotta go help her. Come on, come on."
+
+RESTRICTIONS: No on-screen text, no captions, no subtitles, no titles, no logos, no watermarks, no readable store signs. No music. No cuts, no transitions, one continuous take. No cinematic look, no shallow depth of field, no bokeh, no gimbal, no steadicam, no dolly, no slider, no crane, no drone, no orbit, no dramatic push-in, no rack focus, no teal and orange, no film grain, no LUT, no halation, no anamorphic flare, no beauty filter, no professional color grade, no studio lighting, no rim light, no slow motion. Faces and wardrobe stay identical for the whole clip. Hands have five fingers and hold objects naturally. Nobody says any word that is not inside quotation marks.
