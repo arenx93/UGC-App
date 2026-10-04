@@ -91,7 +91,10 @@ if ($Package) {
     New-Item -ItemType Directory -Force windows\dist | Out-Null
     Get-ChildItem $out -Include *.pdb,*.lib,*.exp,*.ilk -Recurse | Remove-Item -Force
     Compress-Archive -Path "$out\*" -DestinationPath "windows\dist\Framecraft-$Version-Windows-x64.zip" -Force
-    $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+    $iscc = @(
+        "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+        (Join-Path $env:LOCALAPPDATA "Programs\Inno Setup 6\ISCC.exe")
+    ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
     if (Test-Path $iscc) {
         & $iscc /Qp "/DAppVersion=$Version" "/DSourceDir=..\build\Release" windows\installer\Framecraft.iss
         if ($LASTEXITCODE -ne 0) { Fail "Inno Setup falló" }

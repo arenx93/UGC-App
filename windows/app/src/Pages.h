@@ -18,6 +18,7 @@ public:
 };
 
 std::unique_ptr<Page> makeCreatePage();
+std::unique_ptr<Page> makeChatPage();
 std::unique_ptr<Page> makeStoriesPage();
 std::unique_ptr<Page> makeLibraryPage();
 std::unique_ptr<Page> makeReferencesPage();

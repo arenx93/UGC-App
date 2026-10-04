@@ -74,6 +74,8 @@ integrada, navegación de Fluent y tema claro/oscuro. Tiene las mismas pantallas
 (Crear con plantillas y asistente, revisión del prompt, Historias con storyboard y video final,
 Biblioteca, Referencias, Skills y Guía) y los motores KIE y ChatGPT (Codex incluido).
 El instalador no pide permisos de administrador. Detalles en [`windows/README.md`](windows/README.md).
+Los cambios recientes y su guía de equivalencia para SwiftUI están documentados en
+[`docs/WINDOWS_TO_MACOS_PORTING.md`](docs/WINDOWS_TO_MACOS_PORTING.md).
 
 | Crear | Historias (oscuro) |
 |---|---|

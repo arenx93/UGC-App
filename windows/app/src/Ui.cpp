@@ -151,7 +151,7 @@ muxc::Border card(mux::UIElement const& content, double padding) {
     muxc::Border border;
     border.Child(content);
     border.Padding(uniform(padding));
-    border.CornerRadius(mux::CornerRadiusHelper::FromUniformRadius(12));
+    border.CornerRadius(mux::CornerRadiusHelper::FromUniformRadius(14));
     border.Background(resource(L"CardBackgroundFillColorDefaultBrush"));
     border.BorderBrush(resource(L"CardStrokeColorDefaultBrush"));
     border.BorderThickness(uniform(1));

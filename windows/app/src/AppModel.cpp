@@ -42,6 +42,7 @@ std::vector<std::string> uploadAll(KieService const& client, std::vector<UploadI
 std::string sectionTitle(Section section) {
     switch (section) {
     case Section::create: return "Crear";
+    case Section::chat: return "ChatGPT";
     case Section::stories: return "Historias";
     case Section::library: return "Biblioteca";
     case Section::references: return "Referencias";
@@ -55,6 +56,7 @@ std::string sectionTitle(Section section) {
 std::wstring sectionGlyph(Section section) {
     switch (section) {
     case Section::create: return L"";      // Edit (magic pencil)
+    case Section::chat: return L"";        // Message
     case Section::stories: return L"";     // Movies
     case Section::library: return L"";     // Photo library
     case Section::references: return L"";  // Attach
@@ -92,6 +94,7 @@ AppModel::AppModel(winrt::Microsoft::UI::Dispatching::DispatcherQueue dispatcher
         indexFile = knownFolder(FOLDERID_LocalAppData) / L"Framecraft Studio" / L"library.json";
         mediaRoot = knownFolder(FOLDERID_Pictures) / L"Framecraft";
     }
+    chatsFile_ = indexFile.parent_path() / L"chats.json";
     std::error_code error;
     fs::create_directories(generationsDir(), error);
     fs::create_directories(referencesDir(), error);
@@ -109,6 +112,7 @@ AppModel::AppModel(winrt::Microsoft::UI::Dispatching::DispatcherQueue dispatcher
     stories = index.stories;
     std::sort(stories.begin(), stories.end(), [](auto const& a, auto const& b) { return a.updated > b.updated; });
     preferences = index.preferences;
+    loadChats();
 
     // Sanitize preferences saved by older versions.
     if (!fc::presets::imageModel(preferences.imageModel)) preferences.imageModel = "gpt-image-2";
@@ -545,9 +549,9 @@ void AppModel::moveSelection(fc::ReferenceKind kind, std::string const& id, int 
     auto& list = selection(kind);
     auto it = std::find(list.begin(), list.end(), id);
     if (it == list.end()) return;
-    long index = it - list.begin();
-    long target = index + offset;
-    if (target < 0 || target >= static_cast<long>(list.size())) return;
+    auto index = std::distance(list.begin(), it);
+    auto target = index + static_cast<decltype(index)>(offset);
+    if (target < 0 || target >= static_cast<decltype(target)>(list.size())) return;
     std::swap(list[index], list[target]);
     notify(Change::form);
 }
@@ -1408,6 +1412,195 @@ void AppModel::restoreDraft(size_t index) {
     if (index >= draftHistory.size()) return;
     draft = draftHistory[index];
     notify(Change::assistant);
+}
+
+// MARK: - ChatGPT
+
+ChatConversation* AppModel::selectedChat() {
+    auto it = std::find_if(chats.begin(), chats.end(), [this](auto const& chat) { return chat.id == selectedChatID; });
+    return it == chats.end() ? nullptr : &*it;
+}
+
+ChatConversation const* AppModel::selectedChat() const {
+    auto it = std::find_if(chats.begin(), chats.end(), [this](auto const& chat) { return chat.id == selectedChatID; });
+    return it == chats.end() ? nullptr : &*it;
+}
+
+void AppModel::loadChats() {
+    chats.clear();
+    try {
+        std::string bytes = readFileBytes(chatsFile_);
+        if (!bytes.empty()) {
+            auto root = json::parse(bytes);
+            for (auto const& item : root.value("chats", json::array())) {
+                ChatConversation chat;
+                chat.id = item.value("id", "");
+                chat.title = item.value("title", "Nuevo chat");
+                chat.created = item.value("created", int64_t{0});
+                chat.updated = item.value("updated", chat.created);
+                for (auto const& raw : item.value("messages", json::array())) {
+                    std::string text = raw.value("text", "");
+                    if (text.empty()) continue;
+                    chat.messages.push_back({raw.value("role", "user") == "assistant" ? ChatMessage::Role::assistant
+                                                                                       : ChatMessage::Role::user,
+                                             std::move(text)});
+                }
+                if (!chat.id.empty()) chats.push_back(std::move(chat));
+            }
+        }
+    } catch (...) {
+        chats.clear();
+    }
+    std::sort(chats.begin(), chats.end(), [](auto const& a, auto const& b) { return a.updated > b.updated; });
+    if (chats.empty()) {
+        int64_t now = fc::nowMs();
+        chats.push_back({fc::newUUID(), "Nuevo chat", {}, now, now});
+    }
+    selectedChatID = chats.front().id;
+}
+
+void AppModel::persistChats() const {
+    json list = json::array();
+    for (auto const& chat : chats) {
+        json messages = json::array();
+        for (auto const& message : chat.messages) {
+            messages.push_back({{"role", message.role == ChatMessage::Role::assistant ? "assistant" : "user"}, {"text", message.text}});
+        }
+        list.push_back({{"id", chat.id}, {"title", chat.title}, {"messages", std::move(messages)},
+                        {"created", chat.created}, {"updated", chat.updated}});
+    }
+    // Replace atomically so an interrupted write cannot destroy existing history.
+    auto temporary = chatsFile_;
+    temporary += L".tmp";
+    if (writeFileBytes(temporary, json{{"version", 1}, {"chats", std::move(list)}}.dump(2))) {
+        if (!MoveFileExW(temporary.c_str(), chatsFile_.c_str(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
+            DeleteFileW(temporary.c_str());
+    }
+}
+
+void AppModel::newChat() {
+    if (isChatting) return;
+    if (auto* current = selectedChat(); current && current->messages.empty()) {
+        chatError.reset();
+        notify(Change::chat);
+        return;
+    }
+    int64_t now = fc::nowMs();
+    ChatConversation chat{fc::newUUID(), "Nuevo chat", {}, now, now};
+    selectedChatID = chat.id;
+    chats.insert(chats.begin(), std::move(chat));
+    chatError.reset();
+    persistChats();
+    notify(Change::chat);
+}
+
+void AppModel::selectChat(std::string const& id) {
+    if (isChatting || id == selectedChatID) return;
+    auto it = std::find_if(chats.begin(), chats.end(), [&](auto const& chat) { return chat.id == id; });
+    if (it == chats.end()) return;
+    selectedChatID = id;
+    chatError.reset();
+    notify(Change::chat);
+}
+
+void AppModel::deleteChat(std::string const& id) {
+    if (isChatting) return;
+    auto it = std::find_if(chats.begin(), chats.end(), [&](auto const& chat) { return chat.id == id; });
+    if (it == chats.end()) return;
+    bool selected = it->id == selectedChatID;
+    chats.erase(it);
+    if (chats.empty()) {
+        int64_t now = fc::nowMs();
+        chats.push_back({fc::newUUID(), "Nuevo chat", {}, now, now});
+    }
+    if (selected) selectedChatID = chats.front().id;
+    chatError.reset();
+    persistChats();
+    notify(Change::chat);
+}
+
+void AppModel::clearChat() {
+    newChat();
+}
+
+winrt::fire_and_forget AppModel::sendChat(std::string message) {
+    message = fc::trim(message);
+    if (message.empty() || isChatting) co_return;
+    if (fc::characterCount(message) > 12000) {
+        chatError = "El mensaje puede tener hasta 12.000 caracteres.";
+        notify(Change::chat);
+        co_return;
+    }
+    if (codexStatus.state != codex::State::loggedIn) {
+        chatError = "Iniciá sesión con ChatGPT para conversar.";
+        notify(Change::chat);
+        co_return;
+    }
+
+    auto* chat = selectedChat();
+    if (!chat) {
+        newChat();
+        chat = selectedChat();
+    }
+    if (!chat) co_return;
+    std::string chatID = chat->id;
+    chat->messages.push_back({ChatMessage::Role::user, std::move(message)});
+    chat->updated = fc::nowMs();
+    if (chat->title == "Nuevo chat") {
+        std::string title = chat->messages.back().text;
+        std::replace(title.begin(), title.end(), '\n', ' ');
+        std::replace(title.begin(), title.end(), '\r', ' ');
+        chat->title = fc::prefixCharacters(fc::trim(title), 46);
+        if (fc::characterCount(fc::trim(title)) > 46) chat->title += "…";
+    }
+    chatError.reset();
+    isChatting = true;
+    persistChats();
+    notify(Change::chat);
+
+    // Keep enough recent context for a natural conversation without letting the
+    // command grow without bound. Codex receives no access to the user's files.
+    std::string conversation;
+    size_t first = chat->messages.size() > 16 ? chat->messages.size() - 16 : 0;
+    for (size_t i = first; i < chat->messages.size(); ++i) {
+        auto const& item = chat->messages[i];
+        conversation += item.role == ChatMessage::Role::user ? "\nUsuario:\n" : "\nAsistente:\n";
+        conversation += item.text;
+        conversation += "\n";
+    }
+    std::string request =
+        "Actuá como ChatGPT dentro de Framecraft, una app creativa para Windows. "
+        "Respondé la última consulta del usuario de forma útil, clara y natural. "
+        "Usá español rioplatense salvo que el usuario pida otro idioma. "
+        "Podés ayudar con ideas, escritura, análisis y programación, pero no ejecutes acciones ni modifiques archivos. "
+        "Tomá la conversación previa solo como contexto y devolvé únicamente tu respuesta, sin prefijos de rol.\n" +
+        conversation;
+
+    std::optional<std::string> answer;
+    std::optional<std::string> failure;
+    co_await winrt::resume_background();
+    try {
+        answer = codex::generate(request, {});
+    } catch (fc::Error const& error) {
+        failure = error.what();
+    } catch (winrt::hresult_error const& error) {
+        failure = narrow(error.message());
+    } catch (std::exception const& error) {
+        failure = error.what();
+    }
+    co_await wil::resume_foreground(dispatcher_);
+    isChatting = false;
+    auto target = std::find_if(chats.begin(), chats.end(), [&](auto const& item) { return item.id == chatID; });
+    if (answer && !fc::trim(*answer).empty() && target != chats.end()) {
+        target->messages.push_back({ChatMessage::Role::assistant, fc::trim(*answer)});
+        target->updated = fc::nowMs();
+        if (target->messages.size() > 40) target->messages.erase(target->messages.begin(), target->messages.begin() + (target->messages.size() - 40));
+        chatError.reset();
+    } else {
+        chatError = failure.value_or("ChatGPT no devolvió una respuesta. Probá de nuevo.");
+    }
+    persistChats();
+    notify(Change::chat);
 }
 
 // MARK: - Skills

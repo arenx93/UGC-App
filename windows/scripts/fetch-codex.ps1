@@ -3,8 +3,8 @@
 # Source: github.com/openai/codex releases, with the @openai/codex npm package as a fallback.
 param([Parameter(Mandatory = $true)][string]$Destination)
 $ErrorActionPreference = "Stop"
-$work = Join-Path $env:RUNNER_TEMP "codex-download"
-if (-not $env:RUNNER_TEMP) { $work = Join-Path $env:TEMP "codex-download" }
+$workRoot = if ($env:RUNNER_TEMP) { $env:RUNNER_TEMP } elseif ($env:TEMP) { $env:TEMP } else { [System.IO.Path]::GetTempPath() }
+$work = Join-Path $workRoot "codex-download"
 Remove-Item $work -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force $work | Out-Null
 

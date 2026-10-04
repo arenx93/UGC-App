@@ -589,25 +589,19 @@ public:
 
         muxc::Grid left;
         scroll_ = muxc::ScrollViewer();
-        auto content = ui::vstack(20);
-        content.MaxWidth(900);
+        auto content = ui::vstack(16);
+        content.MaxWidth(960);
         content.Padding(ui::margin(32, 24, 32, 130));
         content.HorizontalAlignment(mux::HorizontalAlignment::Stretch);
         scroll_.Content(content);
         left.Children().Append(scroll_);
 
         // Header.
-        auto header = ui::columns({ui::star(), ui::autoLength(), ui::autoLength()}, 8);
+        auto header = ui::columns({ui::star(), ui::autoLength()}, 8);
         auto titles = ui::vstack(4);
-        titles.Children().Append(ui::gradientTitle("¿Qué querés crear hoy?", 32));
-        titles.Children().Append(ui::secondary("Elegí imagen o video, describí la escena y generá. Todo se guarda en Imágenes ▸ Framecraft.", ui::Text::body));
+        titles.Children().Append(ui::gradientTitle("Crear", 32));
+        titles.Children().Append(ui::secondary("Describí tu idea. Los detalles opcionales quedan a mano cuando los necesitás.", ui::Text::body));
         ui::place(header, titles, 0);
-        auto search = ui::button("Buscar o hacer…", L"", [] {
-            if (AppModel::shared().openPalette) AppModel::shared().openPalette();
-        });
-        search.VerticalAlignment(mux::VerticalAlignment::Top);
-        ui::tooltip(search, "Acciones, plantillas, historias y creaciones (Ctrl+K)");
-        ui::place(header, search, 1);
         assistantToggle_ = ui::button("Asistente", L"", [] {
             auto& m = AppModel::shared();
             m.showAssistant = !m.showAssistant;
@@ -615,16 +609,12 @@ public:
         });
         assistantToggle_.VerticalAlignment(mux::VerticalAlignment::Top);
         ui::tooltip(assistantToggle_, "Mostrar u ocultar el asistente (Ctrl+Alt+I)");
-        ui::place(header, assistantToggle_, 2);
+        ui::place(header, assistantToggle_, 1);
         content.Children().Append(header);
-
-        // "Where am I?" strip: each step with its state; a click scrolls to the section.
-        progress_ = ui::hstack(6);
-        content.Children().Append(progress_);
 
         templates_ = ui::vstack(10);
         content.Children().Append(templates_);
-        modes_ = ui::columns({ui::star(), ui::star()}, 12);
+        modes_ = ui::columns({ui::autoLength(), ui::star()}, 14);
         content.Children().Append(modes_);
 
         // Step 1: prompt.
@@ -668,12 +658,58 @@ public:
         content.Children().Append(checkerCard_);
 
         references_ = ui::vstack(12);
-        referencesCard_ = ui::card(references_, 20);
-        content.Children().Append(referencesCard_);
+        references_.Padding(ui::margin(2, 8, 2, 4));
+        references_.Visibility(mux::Visibility::Collapsed);
+        referencesSummary_ = ui::secondary("Opcional");
+        auto referencesHeader = ui::vstack(1);
+        referencesHeader.Children().Append(ui::text("Referencias", ui::Text::bodyStrong));
+        referencesHeader.Children().Append(referencesSummary_);
+        auto referencesHeaderGrid = ui::columns({ui::star(), ui::autoLength()});
+        ui::place(referencesHeaderGrid, referencesHeader, 0);
+        referencesChevron_ = ui::icon(L"\uE70D", 12);
+        referencesChevron_.VerticalAlignment(mux::VerticalAlignment::Center);
+        ui::place(referencesHeaderGrid, referencesChevron_, 1);
+        referencesToggle_ = ui::subtleButton("", L"", {});
+        referencesToggle_.HorizontalAlignment(mux::HorizontalAlignment::Stretch);
+        referencesToggle_.HorizontalContentAlignment(mux::HorizontalAlignment::Stretch);
+        referencesToggle_.Content(referencesHeaderGrid);
+        referencesToggle_.Click([this](auto&&, auto&&) {
+            referencesOpen_ = !referencesOpen_;
+            references_.Visibility(referencesOpen_ ? mux::Visibility::Visible : mux::Visibility::Collapsed);
+            referencesChevron_.Glyph(referencesOpen_ ? L"\uE70E" : L"\uE70D");
+        });
+        auto referencesSection = ui::vstack(0);
+        referencesSection.Children().Append(referencesToggle_);
+        referencesSection.Children().Append(references_);
+        referencesCard_ = referencesSection;
+        content.Children().Append(referencesSection);
 
         settings_ = ui::vstack(14);
-        settingsCard_ = ui::card(settings_, 20);
-        content.Children().Append(settingsCard_);
+        settings_.Padding(ui::margin(2, 8, 2, 4));
+        settings_.Visibility(mux::Visibility::Collapsed);
+        settingsSummary_ = ui::secondary("");
+        auto settingsHeader = ui::vstack(1);
+        settingsHeader.Children().Append(ui::text("Ajustes avanzados", ui::Text::bodyStrong));
+        settingsHeader.Children().Append(settingsSummary_);
+        auto settingsHeaderGrid = ui::columns({ui::star(), ui::autoLength()});
+        ui::place(settingsHeaderGrid, settingsHeader, 0);
+        settingsChevron_ = ui::icon(L"\uE70D", 12);
+        settingsChevron_.VerticalAlignment(mux::VerticalAlignment::Center);
+        ui::place(settingsHeaderGrid, settingsChevron_, 1);
+        settingsToggle_ = ui::subtleButton("", L"", {});
+        settingsToggle_.HorizontalAlignment(mux::HorizontalAlignment::Stretch);
+        settingsToggle_.HorizontalContentAlignment(mux::HorizontalAlignment::Stretch);
+        settingsToggle_.Content(settingsHeaderGrid);
+        settingsToggle_.Click([this](auto&&, auto&&) {
+            settingsOpen_ = !settingsOpen_;
+            settings_.Visibility(settingsOpen_ ? mux::Visibility::Visible : mux::Visibility::Collapsed);
+            settingsChevron_.Glyph(settingsOpen_ ? L"\uE70E" : L"\uE70D");
+        });
+        auto settingsSection = ui::vstack(0);
+        settingsSection.Children().Append(settingsToggle_);
+        settingsSection.Children().Append(settings_);
+        settingsCard_ = settingsSection;
+        content.Children().Append(settingsSection);
 
         // Floating generate bar.
         muxc::Border bar;
@@ -790,98 +826,46 @@ private:
 
     void refreshTemplates() {
         auto& model = AppModel::shared();
-        bool expanded = model.preferences.templatesExpanded;
         std::vector<mux::UIElement> items;
-        muxc::Button toggle;
-        if (auto s = ui::style(L"SubtleButtonStyle")) toggle.Style(s);
-        toggle.Padding(ui::uniform(4));
-        auto row = ui::hstack(8);
-        auto grid = ui::icon(L"", 16);
-        grid.Foreground(ui::pinkBrush());
-        row.Children().Append(grid);
-        row.Children().Append(ui::text("Empezá con una plantilla", ui::Text::bodyStrong));
-        row.Children().Append(ui::secondary(std::to_string(fc::templates::creative().size())));
-        row.Children().Append(ui::icon(expanded ? L"" : L"", 10));
-        toggle.Content(row);
-        toggle.Click([](auto&&, auto&&) {
-            auto& m = AppModel::shared();
-            m.preferences.templatesExpanded = !m.preferences.templatesExpanded;
-            m.persist();
-            m.notify(Change::form);
-        });
-        items.push_back(toggle);
-        if (expanded) {
-            auto strip = ui::hstack(10);
-            std::vector<fc::CreativeTemplate> sorted;
-            for (auto const& t : fc::templates::creative())
-                if (t.media == model.mode()) sorted.push_back(t);
-            for (auto const& t : fc::templates::creative())
-                if (t.media != model.mode()) sorted.push_back(t);
-            for (auto const& t : sorted) {
-                muxc::Button card;
-                card.Width(180);
-                card.Height(118);
-                card.Padding(ui::uniform(12));
-                card.CornerRadius(mux::CornerRadiusHelper::FromUniformRadius(14));
-                card.HorizontalContentAlignment(mux::HorizontalAlignment::Stretch);
-                card.VerticalContentAlignment(mux::VerticalAlignment::Top);
-                card.Background(ui::resource(L"CardBackgroundFillColorDefaultBrush"));
-                auto body = ui::vstack(6);
-                auto top = ui::columns({ui::autoLength(), ui::star()});
-                ui::place(top, ui::glyphBadge(hs(t.glyph).c_str(), 30), 0);
-                auto meta = ui::secondary(t.media == fc::MediaKind::video ? std::to_string(t.duration.value_or(10)) + " s · video" : t.aspect + " · imagen");
-                meta.HorizontalAlignment(mux::HorizontalAlignment::Right);
-                ui::place(top, meta, 1);
-                body.Children().Append(top);
-                body.Children().Append(ui::text(t.title, ui::Text::bodyStrong));
-                auto subtitle = ui::secondary(t.subtitle);
-                subtitle.MaxLines(2);
-                body.Children().Append(subtitle);
-                card.Content(body);
-                ui::tooltip(card, t.idea);
-                ui::accessible(card, "Plantilla " + t.title + ": " + t.subtitle);
-                card.Click([t](auto&&, auto&&) { AppModel::shared().applyTemplate(t); });
-                strip.Children().Append(card);
+        auto row = ui::hstack(10);
+        auto button = ui::button("Usar una plantilla", L"\uE8F1", {});
+        muxc::MenuFlyout menu;
+        std::vector<fc::CreativeTemplate> sorted;
+        for (auto const& t : fc::templates::creative())
+            if (t.media == model.mode()) sorted.push_back(t);
+        for (auto const& t : fc::templates::creative())
+            if (t.media != model.mode()) sorted.push_back(t);
+        bool switchedKind = false;
+        for (auto const& t : sorted) {
+            if (!switchedKind && t.media != model.mode()) {
+                menu.Items().Append(muxc::MenuFlyoutSeparator());
+                switchedKind = true;
             }
-            muxc::ScrollViewer scroller;
-            scroller.HorizontalScrollBarVisibility(muxc::ScrollBarVisibility::Auto);
-            scroller.HorizontalScrollMode(muxc::ScrollMode::Enabled);
-            scroller.VerticalScrollMode(muxc::ScrollMode::Disabled);
-            scroller.VerticalScrollBarVisibility(muxc::ScrollBarVisibility::Disabled);
-            scroller.Padding(ui::margin(0, 0, 0, 10));
-            scroller.Content(strip);
-            items.push_back(scroller);
+            muxc::MenuFlyoutItem option;
+            option.Text(hs(t.title + " · " + (t.media == fc::MediaKind::video ? "video" : "imagen")));
+            option.Click([t](auto&&, auto&&) { AppModel::shared().applyTemplate(t); });
+            menu.Items().Append(option);
         }
+        button.Flyout(menu);
+        row.Children().Append(button);
+        auto hint = ui::secondary("Punto de partida opcional");
+        hint.VerticalAlignment(mux::VerticalAlignment::Center);
+        row.Children().Append(hint);
+        items.push_back(row);
         ui::setChildren(templates_, items);
     }
 
     void refreshModes() {
         auto& model = AppModel::shared();
         modes_.Children().Clear();
-        auto add = [&](fc::MediaKind kind, int column, std::string const& title, std::string const& subtitle, std::wstring const& glyph) {
-            bool selected = model.mode() == kind;
-            muxc::Button card;
-            card.HorizontalAlignment(mux::HorizontalAlignment::Stretch);
-            card.HorizontalContentAlignment(mux::HorizontalAlignment::Stretch);
-            card.Padding(ui::uniform(14));
-            card.CornerRadius(mux::CornerRadiusHelper::FromUniformRadius(16));
-            card.Background(selected ? ui::softGradient() : ui::resource(L"CardBackgroundFillColorDefaultBrush"));
-            card.BorderBrush(selected ? ui::pinkBrush() : ui::resource(L"CardStrokeColorDefaultBrush"));
-            card.BorderThickness(ui::uniform(selected ? 2 : 1));
-            auto grid = ui::columns({ui::autoLength(), ui::star()}, 14);
-            ui::place(grid, ui::glyphBadge(glyph, 48, selected), 0);
-            auto labels = ui::vstack(2);
-            labels.VerticalAlignment(mux::VerticalAlignment::Center);
-            labels.Children().Append(ui::text(title, ui::Text::subtitle));
-            labels.Children().Append(ui::secondary(subtitle, ui::Text::body));
-            ui::place(grid, labels, 1);
-            card.Content(grid);
-            ui::accessible(card, "Crear " + title + ": " + subtitle + (selected ? " (elegido)" : ""));
-            card.Click([kind](auto&&, auto&&) { AppModel::shared().setMode(kind); });
-            ui::place(modes_, card, column);
-        };
-        add(fc::MediaKind::image, 0, "Imagen", "Fotos de producto, selfies y posts", L"");
-        add(fc::MediaKind::video, 1, "Video", "Clips UGC con Seedance 2.5, con voz y sonido", L"");
+        auto label = ui::text("Tipo", ui::Text::bodyStrong);
+        label.VerticalAlignment(mux::VerticalAlignment::Center);
+        ui::place(modes_, label, 0);
+        int selected = model.mode() == fc::MediaKind::image ? 0 : 1;
+        auto selector = ui::segmented({"Imagen", "Video"}, selected, [](int index) {
+            AppModel::shared().setMode(index == 0 ? fc::MediaKind::image : fc::MediaKind::video);
+        });
+        ui::place(modes_, selector, 1);
     }
 
     void refreshStep1() {
@@ -993,11 +977,11 @@ private:
     void refreshStep1Header() {
         auto& model = AppModel::shared();
         bool video = model.mode() == fc::MediaKind::video;
-        bool done = ideaReady() && !model.generateBlocker().has_value();
-        ui::setChildren(step1Header_, {ui::stepHeader(1, "Describí tu idea",
-                                                      video ? "Qué pasa segundo a segundo, qué se dice y cómo se graba."
-                                                            : "Qué se ve, dónde y con qué luz. Si no sabés por dónde empezar, pedile ayuda al asistente.",
-                                                      done)});
+        auto labels = ui::vstack(2);
+        labels.Children().Append(ui::text("Tu idea", ui::Text::subtitle));
+        labels.Children().Append(ui::secondary(video ? "Contá qué pasa, qué se dice y cómo se graba."
+                                                     : "Contá qué se ve, dónde y con qué luz."));
+        ui::setChildren(step1Header_, {labels});
     }
 
     enum class StepState { done, current, optional };
@@ -1070,11 +1054,11 @@ private:
         bool video = model.mode() == fc::MediaKind::video;
         std::vector<mux::UIElement> items;
         auto header = ui::columns({ui::star(), ui::autoLength()});
-        ui::place(header, ui::stepHeader(2, "Referencias (opcional)",
-                                         video ? "Fotos, videos (≤30 s) o audios (≤30 s). El orden define @Image1, @Image2…"
-                                               : "Hasta 4 fotos: el modelo respeta producto, persona o estilo.",
-                                         selectedReferenceCount() > 0),
-                  0);
+        auto labels = ui::vstack(2);
+        labels.Children().Append(ui::text("Archivos de referencia", ui::Text::bodyStrong));
+        labels.Children().Append(ui::secondary(video ? "Fotos, videos o audios. El orden define @Image1, @Image2…"
+                                                     : "Hasta 4 fotos para conservar producto, persona o estilo."));
+        ui::place(header, labels, 0);
         auto add = ui::button(model.isImporting ? "Importando…" : "Agregar archivos", L"", [] { AppModel::shared().pickAndImport(); });
         add.IsEnabled(!model.isImporting);
         add.VerticalAlignment(mux::VerticalAlignment::Top);
@@ -1126,6 +1110,9 @@ private:
             drop.Child(hint);
             items.push_back(drop);
         }
+        size_t count = selectedReferenceCount();
+        referencesSummary_.Text(hs(count == 0 ? "Opcional · agregá fotos, videos o audio si los necesitás"
+                                              : std::to_string(count) + (count == 1 ? " referencia elegida" : " referencias elegidas")));
         ui::setChildren(references_, items);
     }
 
@@ -1196,7 +1183,7 @@ private:
         auto& model = AppModel::shared();
         auto& p = model.preferences;
         std::vector<mux::UIElement> items;
-        items.push_back(ui::stepHeader(3, "Ajustes", model.mode() == fc::MediaKind::image ? "Modelo, calidad, formato y estilo." : "Calidad, formato, duración y sonido."));
+        settingsSummary_.Text(hs(model.settingsSummary()));
         if (model.mode() == fc::MediaKind::image) {
             items.push_back(fieldTitle("Modelo"));
             auto grid = ui::columns({ui::star(), ui::star()}, 10);
@@ -1366,11 +1353,15 @@ private:
     mux::UIElement step1Card_{nullptr}, referencesCard_{nullptr}, settingsCard_{nullptr};
     muxc::Border checkerCard_{nullptr}, assistantHost_{nullptr};
     muxc::TextBox prompt_{nullptr};
-    muxc::TextBlock counter_{nullptr}, summary_{nullptr}, hint_{nullptr}, durationLabel_{nullptr};
-    muxc::Button generate_{nullptr}, active_{nullptr}, assistantToggle_{nullptr};
+    muxc::TextBlock counter_{nullptr}, summary_{nullptr}, hint_{nullptr}, durationLabel_{nullptr}, referencesSummary_{nullptr},
+        settingsSummary_{nullptr};
+    muxc::Button generate_{nullptr}, active_{nullptr}, assistantToggle_{nullptr}, referencesToggle_{nullptr}, settingsToggle_{nullptr};
+    muxc::FontIcon referencesChevron_{nullptr}, settingsChevron_{nullptr};
     AssistantPane assistant_;
     bool updating_ = false;
     bool narrow_ = false;
+    bool referencesOpen_ = false;
+    bool settingsOpen_ = false;
 };
 
 }  // namespace

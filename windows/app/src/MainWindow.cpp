@@ -270,6 +270,7 @@ void MainWindow::select(Section section) {
         std::unique_ptr<Page> page;
         switch (section) {
         case Section::create: page = makeCreatePage(); break;
+        case Section::chat: page = makeChatPage(); break;
         case Section::stories: page = makeStoriesPage(); break;
         case Section::library: page = makeLibraryPage(); break;
         case Section::references: page = makeReferencesPage(); break;
@@ -404,7 +405,7 @@ void MainWindow::runSuggestion(std::string const& id) {
     } else if (id == "new-story") {
         model.newStory();
     } else if (id == "assistant") {
-        model.showAssistant = true;
+        model.showAssistant = false;
         model.go(Section::create);
         model.notify(Change::assistant);
     } else if (id == "generate") {
@@ -514,7 +515,7 @@ winrt::fire_and_forget MainWindow::runSnapshots() {
         model.idea = "Chica recomienda su sérum frente al espejo del baño";
         model.draft = demoVideoPrompt();
         model.notes = "Cargá @Image1 (el frasco) y @Image2 (el baño) en ese orden. Diálogo: 34 de ~37 palabras para 15 s.";
-        model.showAssistant = true;
+        model.showAssistant = false;
         model.go(Section::create);
         model.notify(Change::all);
     };
@@ -542,6 +543,32 @@ winrt::fire_and_forget MainWindow::runSnapshots() {
         {"01-crear-imagen", false, configureImage},
         {"02-crear-video", false, configureVideo},
         {"03-crear-video-oscuro", true, configureVideo},
+        {"03b-chatgpt", false, [&model] {
+             int64_t now = fc::nowMs();
+             model.chats = {{"demo-chat-1", "Ideas para un video UGC de skincare",
+                             {{ChatMessage::Role::user, "Ayudame a pensar tres ideas para un video UGC de skincare."},
+                              {ChatMessage::Role::assistant,
+                               "Claro. Podés probar un antes y después honesto, una rutina rápida de mañana o una reseña tipo “lo compré por curiosidad”. En los tres casos, arrancá con el resultado y después mostrás cómo llegaste ahí."}},
+                             now, now},
+                            {"demo-chat-2", "Guion para lanzamiento", {{ChatMessage::Role::user, "Armemos un guion breve para un lanzamiento."}},
+                             now - 3600000, now - 3600000}};
+             model.selectedChatID = "demo-chat-1";
+             model.codexStatus = {codex::State::loggedIn, "Sesión iniciada con ChatGPT"};
+             model.go(Section::chat);
+         }},
+        {"03c-chatgpt-oscuro", true, [&model] {
+             int64_t now = fc::nowMs();
+             model.chats = {{"demo-chat-1", "Ideas para un video UGC de skincare",
+                             {{ChatMessage::Role::user, "Ayudame a pensar tres ideas para un video UGC de skincare."},
+                              {ChatMessage::Role::assistant,
+                               "Claro. Podés probar un antes y después honesto, una rutina rápida de mañana o una reseña tipo “lo compré por curiosidad”. En los tres casos, arrancá con el resultado y después mostrás cómo llegaste ahí."}},
+                             now, now},
+                            {"demo-chat-2", "Guion para lanzamiento", {{ChatMessage::Role::user, "Armemos un guion breve para un lanzamiento."}},
+                             now - 3600000, now - 3600000}};
+             model.selectedChatID = "demo-chat-1";
+             model.codexStatus = {codex::State::loggedIn, "Sesión iniciada con ChatGPT"};
+             model.go(Section::chat);
+         }},
         {"04-biblioteca", false, [&model] { model.filter = LibraryFilter::all; model.go(Section::library); }},
         {"05-biblioteca-oscuro", true, [&model] { model.filter = LibraryFilter::all; model.go(Section::library); }},
         {"05b-referencias-oscuro", true, [&model] { model.go(Section::references); }},

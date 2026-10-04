@@ -20,17 +20,31 @@
 
 namespace fcapp {
 
-enum class Section { create, stories, library, references, skills, guide, settings };
+enum class Section { create, chat, stories, library, references, skills, guide, settings };
 std::string sectionTitle(Section section);
 std::wstring sectionGlyph(Section section);
-inline const Section kSidebarSections[] = {Section::create, Section::stories, Section::library,
+inline const Section kSidebarSections[] = {Section::create, Section::chat, Section::stories, Section::library,
                                            Section::references, Section::skills, Section::guide};
 
 enum class LibraryFilter { all, images, videos, active, favorites, failed };
 std::string filterTitle(LibraryFilter filter);
 
 /// What changed, so each screen refreshes only what it shows.
-enum class Change { jobs, references, skills, stories, account, form, assistant, storyRun, banner, navigation, codex, all };
+enum class Change { jobs, references, skills, stories, account, form, assistant, chat, storyRun, banner, navigation, codex, all };
+
+struct ChatMessage {
+    enum class Role { user, assistant };
+    Role role = Role::user;
+    std::string text;
+};
+
+struct ChatConversation {
+    std::string id;
+    std::string title;
+    std::vector<ChatMessage> messages;
+    int64_t created = 0;
+    int64_t updated = 0;
+};
 
 struct Banner {
     enum class Style { success, info, error };
@@ -70,7 +84,7 @@ public:
 
     // MARK: Navigation
     Section section = Section::create;
-    bool showAssistant = true;
+    bool showAssistant = false;
     std::optional<Banner> banner;
     void go(Section target);
     void show(std::string const& text, Banner::Style style = Banner::Style::info);
@@ -188,6 +202,19 @@ public:
     void useDraftText();
     void restoreDraft(size_t index);
 
+    // MARK: ChatGPT
+    std::vector<ChatConversation> chats;
+    std::string selectedChatID;
+    bool isChatting = false;
+    std::optional<std::string> chatError;
+    ChatConversation* selectedChat();
+    ChatConversation const* selectedChat() const;
+    void newChat();
+    void selectChat(std::string const& id);
+    void deleteChat(std::string const& id);
+    winrt::fire_and_forget sendChat(std::string message);
+    void clearChat();
+
     // MARK: Skills
     std::optional<std::string> importSkill(std::filesystem::path const& file);
     void saveSkill(fc::Skill const& skill);
@@ -234,6 +261,7 @@ private:
     std::optional<std::pair<std::string, std::string>> pendingSceneLink_;
     std::vector<Listener> listeners_;
     std::map<std::wstring, std::string> demoKeys_;
+    std::filesystem::path chatsFile_;
 
     std::optional<std::string> key(wchar_t const* account) const;
     bool writeKey(wchar_t const* account, std::string const& value);
@@ -249,6 +277,8 @@ private:
     winrt::Windows::Foundation::IAsyncOperation<bool> lastFrameReference(std::string jobID, std::string name,
                                                                           std::shared_ptr<std::string> referenceID);
     void loadDemoData();
+    void loadChats();
+    void persistChats() const;
 };
 
 }  // namespace fcapp
